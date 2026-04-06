@@ -13,12 +13,18 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Dashboard />} />
-        {/* Placeholders for other routes */}
         <Route path="patients" element={<Patients />} />
         <Route path="patients/:id" element={<PatientDetail />} />
         <Route path="appointments" element={<Appointments />} />
         <Route path="messages" element={<Messages />} />
-        <Route path="settings" element={<div className="page-header"><h1 className="page-title">Cài đặt hệ thống</h1></div>} />
+        <Route
+          path="settings"
+          element={
+            <div className="page-header">
+              <h1 className="page-title">Cài đặt hệ thống</h1>
+            </div>
+          }
+        />
       </Route>
     </Routes>
   );

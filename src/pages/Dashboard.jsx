@@ -6,31 +6,30 @@ export default function Dashboard() {
   const stats = [
     { title: 'Bệnh nhân đang theo dõi', value: '124', icon: Users, color: 'blue' },
     { title: 'Lịch khám hôm nay', value: '8', icon: Calendar, color: 'success' },
-    { title: 'Báo động đỏ (Cần xử lý)', value: '3', icon: AlertCircle, color: 'danger' },
-    { title: 'Tuân thủ thực đơn > 80%', value: '68%', icon: TrendingUp, color: 'warning' },
+    { title: 'Báo động đỏ cần xử lý', value: '3', icon: AlertCircle, color: 'danger' },
+    { title: 'Tuân thủ thực đơn trên 80%', value: '68%', icon: TrendingUp, color: 'warning' },
   ];
 
   const priorityPatients = [
-    { id: 'BN001', name: 'Nguyễn Thị Hoa', issue: 'Không log bữa ăn 3 ngày liên tiếp', tag: 'Báo động đỏ' },
+    { id: 'BN001', name: 'Nguyễn Thị Hoa', issue: 'Không ghi bữa ăn 3 ngày liên tiếp', tag: 'Báo động đỏ' },
     { id: 'BN002', name: 'Trần Văn Nam', issue: 'Đường huyết tăng cao (120 mg/dL)', tag: 'Báo động đỏ' },
-    { id: 'BN003', name: 'Lê Hoàng Anh', issue: 'Ngừng dùng thuốc bổ sung Calcium', tag: 'Cần theo dõi' },
+    { id: 'BN003', name: 'Lê Hoàng Anh', issue: 'Ngừng dùng thuốc bổ sung calcium', tag: 'Cần theo dõi' },
   ];
 
   return (
     <div className="dashboard">
       <div className="page-header">
         <h1 className="page-title">Tổng quan hệ thống</h1>
-        <p className="page-subtitle">Chào mừng Dr. Nguyễn, hôm nay bạn có 8 lịch hẹn.</p>
+        <p className="page-subtitle">Chào mừng Dr. Nguyễn, hôm nay bạn có 8 lịch hẹn cần theo dõi.</p>
       </div>
 
-      {/* Stats Grid */}
       <div className="stats-grid">
-        {stats.map((stat, idx) => {
+        {stats.map((stat) => {
           const Icon = stat.icon;
           return (
-            <div className="card stat-card" key={idx}>
+            <div className="card stat-card" key={stat.title}>
               <div className={`stat-icon-wrapper bg-${stat.color}-light text-${stat.color}`}>
-                <Icon size={24} />
+                <Icon size={24} aria-hidden="true" />
               </div>
               <div className="stat-info">
                 <p className="stat-title">{stat.title}</p>
@@ -42,7 +41,6 @@ export default function Dashboard() {
       </div>
 
       <div className="dashboard-content">
-        {/* Priority List */}
         <div className="card priority-section">
           <div className="card-header">
             <h3 className="card-title">Bệnh nhân cần chú ý hôm nay</h3>
@@ -50,24 +48,25 @@ export default function Dashboard() {
           </div>
           <div className="card-body">
             <ul className="priority-list">
-              {priorityPatients.map((p, i) => (
-                <li className="priority-item" key={i}>
-                  <div className="priority-avatar">{p.name.charAt(0)}</div>
+              {priorityPatients.map((patient) => (
+                <li className="priority-item" key={patient.id}>
+                  <div className="priority-avatar">{patient.name.charAt(0)}</div>
                   <div className="priority-details">
-                    <h4 className="priority-name">{p.name} <span className="text-muted">({p.id})</span></h4>
-                    <p className="priority-issue">{p.issue}</p>
+                    <h4 className="priority-name">
+                      {patient.name} <span className="text-muted">({patient.id})</span>
+                    </h4>
+                    <p className="priority-issue">{patient.issue}</p>
                   </div>
-                  <div className={`badge ${p.tag === 'Báo động đỏ' ? 'badge-danger' : 'badge-warning'}`}>
-                    {p.tag}
+                  <div className={`badge ${patient.tag === 'Báo động đỏ' ? 'badge-danger' : 'badge-warning'}`}>
+                    {patient.tag}
                   </div>
-                  <button className="btn-primary" style={{marginLeft: '1rem'}}>Xem hồ sơ</button>
+                  <button className="btn-primary priority-cta">Xem hồ sơ</button>
                 </li>
               ))}
             </ul>
           </div>
         </div>
 
-        {/* Schedule */}
         <div className="card schedule-section">
           <div className="card-header">
             <h3 className="card-title">Lịch khám hôm nay (8)</h3>

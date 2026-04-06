@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { Search, Filter, MoreVertical, Eye, CalendarClock } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import './Patients.css';
-import { useNavigate } from 'react-router-dom';
 
 export default function Patients() {
-  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
-  
+
   const patients = [
     { id: 'BN001', name: 'Nguyễn Thị Hoa', age: 34, gender: 'Nữ', phone: '0901234567', doctor: 'Dr. Nguyễn Văn A', lastVisit: '10/10/2023', nextVisit: '24/10/2023', status: 'Đang theo dõi' },
     { id: 'BN002', name: 'Trần Văn Nam', age: 45, gender: 'Nam', phone: '0912345678', doctor: 'Dr. Lê Thị B', lastVisit: '12/10/2023', nextVisit: '26/10/2023', status: 'Cần chú ý' },
@@ -16,12 +15,17 @@ export default function Patients() {
   ];
 
   const getStatusBadge = (status) => {
-    switch(status) {
-      case 'Đang theo dõi': return 'badge-success';
-      case 'Cần chú ý': return 'badge-danger';
-      case 'Mới khám': return 'badge-blue';
-      case 'Tạm ngưng': return 'badge-warning';
-      default: return '';
+    switch (status) {
+      case 'Đang theo dõi':
+        return 'badge-success';
+      case 'Cần chú ý':
+        return 'badge-danger';
+      case 'Mới khám':
+        return 'badge-blue';
+      case 'Tạm ngưng':
+        return 'badge-warning';
+      default:
+        return '';
     }
   };
 
@@ -29,46 +33,47 @@ export default function Patients() {
     <div className="patients-page">
       <div className="page-header flex-between">
         <div>
-          <h1 className="page-title">Danh sách Bệnh nhân</h1>
-          <p className="page-subtitle">Quản lý và thống kê 124 bệnh nhân trong danh sách</p>
+          <h1 className="page-title">Danh sách bệnh nhân</h1>
+          <p className="page-subtitle">Quản lý và theo dõi 124 bệnh nhân đang hoạt động trong hệ thống</p>
         </div>
         <button className="btn-primary">+ Thêm bệnh nhân</button>
       </div>
 
       <div className="card table-card">
-        {/* Toolbar */}
         <div className="table-toolbar">
           <div className="search-bar table-search">
-            <Search size={18} className="search-icon" />
-            <input 
-              type="text" 
-              placeholder="Tìm theo Tên, SĐT, Mã BN..." 
+            <Search size={18} className="search-icon" aria-hidden="true" />
+            <input
+              type="text"
+              name="patients-search"
+              autoComplete="off"
+              aria-label="Tìm bệnh nhân theo tên, số điện thoại hoặc mã bệnh nhân"
+              placeholder="Tìm theo Tên, SĐT, Mã BN…"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(event) => setSearchTerm(event.target.value)}
             />
           </div>
-          
+
           <div className="toolbar-actions">
-            <select className="filter-select">
+            <select className="filter-select" aria-label="Lọc theo bác sĩ phụ trách">
               <option value="all">Bác sĩ phụ trách: Tất cả</option>
               <option value="dr1">Dr. Nguyễn Văn A</option>
               <option value="dr2">Dr. Lê Thị B</option>
             </select>
-            
+
             <button className="btn-secondary icon-text-btn">
-              <Filter size={18} />
+              <Filter size={18} aria-hidden="true" />
               <span>Bộ lọc thêm</span>
             </button>
           </div>
         </div>
 
-        {/* Table */}
         <div className="table-responsive">
           <table className="data-table">
             <thead>
               <tr>
                 <th>Mã BN</th>
-                <th>Họ Tên</th>
+                <th>Họ tên</th>
                 <th>Tuổi / Giới</th>
                 <th>SĐT</th>
                 <th>Bác sĩ</th>
@@ -79,32 +84,32 @@ export default function Patients() {
               </tr>
             </thead>
             <tbody>
-              {patients.map((p) => (
-                <tr key={p.id} onClick={() => navigate(`/patients/${p.id}`)} className="cursor-pointer">
-                  <td className="font-medium">{p.id}</td>
+              {patients.map((patient) => (
+                <tr key={patient.id}>
+                  <td className="font-medium">{patient.id}</td>
                   <td>
-                    <div className="patient-name-cell">
-                      <div className="patient-avatar-sm">{p.name.charAt(0)}</div>
-                      <span>{p.name}</span>
-                    </div>
+                    <Link to={`/patients/${patient.id}`} className="patient-link">
+                      <div className="patient-avatar-sm">{patient.name.charAt(0)}</div>
+                      <span>{patient.name}</span>
+                    </Link>
                   </td>
-                  <td>{p.age} / {p.gender}</td>
-                  <td>{p.phone}</td>
-                  <td>{p.doctor}</td>
-                  <td>{p.lastVisit}</td>
-                  <td className={p.nextVisit === 'Quá hạn' ? 'text-danger font-medium' : ''}>{p.nextVisit}</td>
+                  <td>{patient.age} / {patient.gender}</td>
+                  <td>{patient.phone}</td>
+                  <td>{patient.doctor}</td>
+                  <td>{patient.lastVisit}</td>
+                  <td className={patient.nextVisit === 'Quá hạn' ? 'text-danger font-medium' : ''}>{patient.nextVisit}</td>
                   <td>
-                    <span className={`badge ${getStatusBadge(p.status)}`}>{p.status}</span>
+                    <span className={`badge ${getStatusBadge(patient.status)}`}>{patient.status}</span>
                   </td>
                   <td className="text-right actions-cell">
-                    <button className="btn-icon" title="Xem hồ sơ" onClick={(e) => { e.stopPropagation(); navigate(`/patients/${p.id}`); }}>
-                      <Eye size={18} />
+                    <Link className="btn-icon" to={`/patients/${patient.id}`} aria-label={`Xem hồ sơ của ${patient.name}`}>
+                      <Eye size={18} aria-hidden="true" />
+                    </Link>
+                    <button className="btn-icon" type="button" aria-label={`Đặt lịch cho ${patient.name}`}>
+                      <CalendarClock size={18} aria-hidden="true" />
                     </button>
-                    <button className="btn-icon" title="Đặt lịch" onClick={(e) => e.stopPropagation()}>
-                      <CalendarClock size={18} />
-                    </button>
-                    <button className="btn-icon" onClick={(e) => e.stopPropagation()}>
-                      <MoreVertical size={18} />
+                    <button className="btn-icon" type="button" aria-label={`Mở thêm thao tác cho ${patient.name}`}>
+                      <MoreVertical size={18} aria-hidden="true" />
                     </button>
                   </td>
                 </tr>
@@ -112,10 +117,9 @@ export default function Patients() {
             </tbody>
           </table>
         </div>
-        
-        {/* Pagination placeholder */}
+
         <div className="pagination">
-          <span className="text-muted text-sm">Hiển thị 1 - 5 trong số 124 bệnh nhân</span>
+          <span className="text-muted text-sm">Hiển thị 1 - 5 trong tổng số 124 bệnh nhân</span>
           <div className="pagination-controls">
             <button className="btn-secondary btn-sm" disabled>Trước</button>
             <button className="btn-primary btn-sm">1</button>

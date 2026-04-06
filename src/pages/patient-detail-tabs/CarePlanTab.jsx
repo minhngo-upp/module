@@ -1,148 +1,255 @@
 import React, { useState } from 'react';
-import { Save, Pill, Utensils, Dumbbell, PlusCircle, X } from 'lucide-react';
+import { PlusCircle, Save, X } from 'lucide-react';
 import { carePlanMockDB } from '../../mockData';
 
-export default function CarePlanTab({ showToast }) {
-  // States
-  const [selectedMeals, setSelectedMeals] = useState({
-    breakfast: [], lunch: [], dinner: [], snack: []
-  });
+function SelectionBlock({ title, list, dbItems, onAdd, onRemove }) {
+  const [selectVal, setSelectVal] = useState('');
+
+  return (
+    <section className="selection-block">
+      <div className="selection-block-header">
+        <h3>{title}</h3>
+      </div>
+
+      <div className="selection-block-controls">
+        <select
+          className="selection-select"
+          value={selectVal}
+          onChange={(event) => setSelectVal(event.target.value)}
+          aria-label={`Chọn mục cho ${title}`}
+        >
+          <option value="">Chọn một mục</option>
+          {dbItems.map((item) => (
+            <option key={item.id} value={item.id}>
+              {item.name}
+              {item.calories ? ` (${item.calories} kcal)` : ''}
+            </option>
+          ))}
+        </select>
+
+        <button
+          className="btn-secondary btn-square"
+          type="button"
+          aria-label={`Thêm mục cho ${title}`}
+          onClick={() => {
+            const item = dbItems.find((candidate) => candidate.id === selectVal);
+            if (item) {
+              onAdd(item);
+              setSelectVal('');
+            }
+          }}
+        >
+          <PlusCircle size={16} aria-hidden="true" />
+        </button>
+      </div>
+
+      {list.length > 0 ? (
+        <ul className="selection-list">
+          {list.map((item, index) => (
+            <li key={`${item.id}-${index}`} className="selection-item">
+              <div>
+                <strong>{item.name}</strong>
+                <p>{item.desc || item.usage || (item.calories && `${item.calories} kcal`)}</p>
+              </div>
+              <button
+                className="btn-icon"
+                type="button"
+                aria-label={`Xóa ${item.name}`}
+                onClick={() => onRemove(index)}
+              >
+                <X size={16} aria-hidden="true" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="empty-copy">Chưa chọn nội dung cho phần này.</p>
+      )}
+    </section>
+  );
+}
+
+export default function CarePlanTab({ patient, showToast }) {
+  const [selectedMeals, setSelectedMeals] = useState({ breakfast: [], lunch: [], dinner: [], snack: [] });
   const [selectedMeds, setSelectedMeds] = useState([]);
   const [selectedExercises, setSelectedExercises] = useState([]);
 
-  // Generic Add Item
   const addItem = (category, subCategory, item) => {
     if (!item) return;
     if (category === 'meals') {
-       setSelectedMeals({...selectedMeals, [subCategory]: [...selectedMeals[subCategory], item]});
-    } else if (category === 'meds') {
-       setSelectedMeds([...selectedMeds, item]);
-    } else if (category === 'exercises') {
-       setSelectedExercises([...selectedExercises, item]);
+      setSelectedMeals({ ...selectedMeals, [subCategory]: [...selectedMeals[subCategory], item] });
+      return;
     }
+    if (category === 'meds') {
+      setSelectedMeds([...selectedMeds, item]);
+      return;
+    }
+    setSelectedExercises([...selectedExercises, item]);
   };
 
   const removeItem = (category, subCategory, index) => {
     if (category === 'meals') {
-       const newList = [...selectedMeals[subCategory]];
-       newList.splice(index, 1);
-       setSelectedMeals({...selectedMeals, [subCategory]: newList});
-    } else if (category === 'meds') {
-       const newList = [...selectedMeds];
-       newList.splice(index, 1);
-       setSelectedMeds(newList);
-    } else if (category === 'exercises') {
-       const newList = [...selectedExercises];
-       newList.splice(index, 1);
-       setSelectedExercises(newList);
+      const nextItems = [...selectedMeals[subCategory]];
+      nextItems.splice(index, 1);
+      setSelectedMeals({ ...selectedMeals, [subCategory]: nextItems });
+      return;
     }
-  };
 
-  // Helper render selection block
-  const SelectionBlock = ({ title, list, dbItems, onAdd, onRemove }) => {
-    const [selectVal, setSelectVal] = useState('');
-    return (
-      <div className="mb-4 bg-slate-50 p-3 outline outline-1 outline-slate-200 rounded-md">
-         <h4 className="font-bold text-main mb-2 tracking-wide text-sm">{title}</h4>
-         <div className="flex gap-2 mb-2">
-            <select className="flex-1 p-2 border rounded" value={selectVal} onChange={(e) => setSelectVal(e.target.value)}>
-               <option value="">-- Chọn một mục --</option>
-               {dbItems.map(item => <option key={item.id} value={item.id}>{item.name} {item.calories ? `(${item.calories} kcal)` : ''}</option>)}
-            </select>
-            <button className="btn-secondary" onClick={() => {
-                const item = dbItems.find(i => i.id === selectVal);
-                if (item) { onAdd(item); setSelectVal(''); }
-            }}>
-               <PlusCircle size={16}/>
-            </button>
-         </div>
-         {list.length > 0 && (
-           <ul className="space-y-2 mt-3">
-              {list.map((item, idx) => (
-                 <li key={idx} className="flex justify-between items-center p-2 bg-white border rounded">
-                    <span>{item.name} <span className="text-muted text-sm ml-2">{item.desc || item.usage || (item.calories && `${item.calories} kcal`)}</span></span>
-                    <button className="text-red-500 hover:bg-red-50 p-1 rounded transition" onClick={() => onRemove(idx)}><X size={16}/></button>
-                 </li>
-              ))}
-           </ul>
-         )}
-      </div>
-    );
+    if (category === 'meds') {
+      const nextItems = [...selectedMeds];
+      nextItems.splice(index, 1);
+      setSelectedMeds(nextItems);
+      return;
+    }
+
+    const nextItems = [...selectedExercises];
+    nextItems.splice(index, 1);
+    setSelectedExercises(nextItems);
   };
 
   return (
-    <div className="care-plan-tab">
-      <div className="card">
-        <div className="p-4" style={{borderBottom: '1px solid hsl(var(--border))', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-          <h2 className="text-xl font-bold">Kế hoạch Điều trị & Phác đồ</h2>
-          <button className="btn-primary" onClick={() => showToast('Đã lưu và Gửi phác đồ cho bệnh nhân!')}>
-            <Save size={16} className="inline mr-2"/> Lưu và Gửi
-          </button>
-        </div>
-        
-        <div className="p-4 space-y-6">
-          <div className="form-section">
-             <h3 className="text-lg font-bold flex items-center gap-2 mb-3 text-secondary"><Utensils size={20}/> 1. Hướng dẫn Thực đơn</h3>
-             <div className="grid grid-cols-2 gap-4">
-                 <SelectionBlock 
-                    title="Bữa Sáng" 
-                    list={selectedMeals.breakfast} 
-                    dbItems={carePlanMockDB.meals} 
-                    onAdd={(i) => addItem('meals', 'breakfast', i)} 
-                    onRemove={(i) => removeItem('meals', 'breakfast', i)} 
-                 />
-                 <SelectionBlock 
-                    title="Bữa Trưa" 
-                    list={selectedMeals.lunch} 
-                    dbItems={carePlanMockDB.meals} 
-                    onAdd={(i) => addItem('meals', 'lunch', i)} 
-                    onRemove={(i) => removeItem('meals', 'lunch', i)} 
-                 />
-                 <SelectionBlock 
-                    title="Bữa Tối" 
-                    list={selectedMeals.dinner} 
-                    dbItems={carePlanMockDB.meals} 
-                    onAdd={(i) => addItem('meals', 'dinner', i)} 
-                    onRemove={(i) => removeItem('meals', 'dinner', i)} 
-                 />
-                 <SelectionBlock 
-                    title="Bữa Ăn Thêm (Snack)" 
-                    list={selectedMeals.snack} 
-                    dbItems={carePlanMockDB.meals} 
-                    onAdd={(i) => addItem('meals', 'snack', i)} 
-                    onRemove={(i) => removeItem('meals', 'snack', i)} 
-                 />
-             </div>
-          </div>
-          
-          <div className="form-section">
-             <h3 className="text-lg font-bold flex items-center gap-2 mb-3 text-green-600"><Pill size={20}/> 2. Thuốc & Giới thiệu TPCN</h3>
-             <SelectionBlock 
-                title="Đơn thuốc" 
-                list={selectedMeds} 
-                dbItems={carePlanMockDB.medicines} 
-                onAdd={(i) => addItem('meds', null, i)} 
-                onRemove={(i) => removeItem('meds', null, i)} 
-             />
-          </div>
-          
-          <div className="form-section">
-             <h3 className="text-lg font-bold flex items-center gap-2 mb-3 text-orange-500"><Dumbbell size={20}/> 3. Kế hoạch Vận động</h3>
-             <SelectionBlock 
-                title="Bài tập" 
-                list={selectedExercises} 
-                dbItems={carePlanMockDB.exercises} 
-                onAdd={(i) => addItem('exercises', null, i)} 
-                onRemove={(i) => removeItem('exercises', null, i)} 
-             />
-          </div>
+    <div className="tab-pane care-plan-tab">
+      <section className="care-plan-layout">
+        <div className="care-plan-main">
+          <article className="card care-plan-panel">
+            <div className="care-plan-header">
+              <div className="section-heading">
+                <span className="eyebrow">Kế hoạch can thiệp</span>
+                <h2>Xây dựng phác đồ theo đúng căn cứ từ hồ sơ dinh dưỡng</h2>
+              </div>
+              <button
+                className="btn-primary"
+                type="button"
+                onClick={() => showToast('Đã lưu và gửi kế hoạch can thiệp cho bệnh nhân')}
+              >
+                <Save size={16} className="button-icon-inline" aria-hidden="true" />
+                Lưu kế hoạch
+              </button>
+            </div>
 
-          <div className="form-section pt-4" style={{borderTop: '1px solid hsl(var(--border))'}}>
-             <h3 className="text-lg font-bold mb-3">Dặn dò thêm</h3>
-             <textarea className="w-full" rows="3" placeholder="Các lưu ý đặc biệt, lịch hẹn tái khám..."></textarea>
-          </div>
+            <div className="care-plan-rationale">
+              <section className="care-plan-copy-block">
+                <h3>Căn cứ can thiệp</h3>
+                <ul className="detail-list">
+                  {patient.interventionPlan.basis.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </section>
+
+              <section className="care-plan-copy-block">
+                <h3>Mục tiêu trong ngắn hạn</h3>
+                <ul className="detail-list">
+                  {patient.interventionPlan.goals.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </section>
+            </div>
+          </article>
+
+          <article className="card care-plan-panel">
+            <div className="section-heading">
+              <span className="eyebrow">Thực đơn và hỗ trợ</span>
+              <h2>Điều chỉnh thành phần bữa ăn, bổ sung và vận động</h2>
+            </div>
+
+            <div className="selection-grid">
+              <SelectionBlock
+                title="Bữa sáng"
+                list={selectedMeals.breakfast}
+                dbItems={carePlanMockDB.meals}
+                onAdd={(item) => addItem('meals', 'breakfast', item)}
+                onRemove={(index) => removeItem('meals', 'breakfast', index)}
+              />
+              <SelectionBlock
+                title="Bữa trưa"
+                list={selectedMeals.lunch}
+                dbItems={carePlanMockDB.meals}
+                onAdd={(item) => addItem('meals', 'lunch', item)}
+                onRemove={(index) => removeItem('meals', 'lunch', index)}
+              />
+              <SelectionBlock
+                title="Bữa tối"
+                list={selectedMeals.dinner}
+                dbItems={carePlanMockDB.meals}
+                onAdd={(item) => addItem('meals', 'dinner', item)}
+                onRemove={(index) => removeItem('meals', 'dinner', index)}
+              />
+              <SelectionBlock
+                title="Bữa phụ"
+                list={selectedMeals.snack}
+                dbItems={carePlanMockDB.meals}
+                onAdd={(item) => addItem('meals', 'snack', item)}
+                onRemove={(index) => removeItem('meals', 'snack', index)}
+              />
+            </div>
+
+            <div className="selection-grid selection-grid-secondary">
+              <SelectionBlock
+                title="Bổ sung dinh dưỡng"
+                list={selectedMeds}
+                dbItems={carePlanMockDB.medicines}
+                onAdd={(item) => addItem('meds', null, item)}
+                onRemove={(index) => removeItem('meds', null, index)}
+              />
+              <SelectionBlock
+                title="Vận động gợi ý"
+                list={selectedExercises}
+                dbItems={carePlanMockDB.exercises}
+                onAdd={(item) => addItem('exercises', null, item)}
+                onRemove={(index) => removeItem('exercises', null, index)}
+              />
+            </div>
+          </article>
         </div>
-      </div>
+
+        <aside className="care-plan-side">
+          <article className="card care-plan-panel">
+            <div className="section-heading">
+              <span className="eyebrow">Khuyến nghị</span>
+              <h2>Nội dung cần nhấn mạnh với bệnh nhân và người nhà</h2>
+            </div>
+
+            <div className="care-plan-aside-group">
+              <h3>Nên ưu tiên</h3>
+              <ul className="detail-list">
+                {patient.interventionPlan.foodsToPrefer.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="care-plan-aside-group">
+              <h3>Cần hạn chế</h3>
+              <ul className="detail-list">
+                {patient.interventionPlan.foodsToLimit.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="care-plan-aside-group">
+              <h3>Hướng dẫn cho người nhà</h3>
+              <ul className="detail-list">
+                {patient.interventionPlan.caregiverGuidance.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="care-plan-aside-group">
+              <h3>Ghi chú thêm</h3>
+              <textarea
+                className="care-plan-note"
+                rows="5"
+                placeholder="Ghi chú thêm cho đợt can thiệp này..."
+                defaultValue={patient.interventionPlan.recommendations.join('\n')}
+              />
+            </div>
+          </article>
+        </aside>
+      </section>
     </div>
   );
 }

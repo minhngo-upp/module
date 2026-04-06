@@ -1,79 +1,137 @@
 import React, { useState } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, Legend } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
 import { anthropometricRecordsMock } from '../../mockData';
 
-export default function AnthropometricsTab({ showToast }) {
-  const [metricType, setMetricType] = useState('weight'); // 'weight' or 'bmi'
+export default function AnthropometricsTab({ patient, showToast }) {
+  const [metricType, setMetricType] = useState('weight');
+  const { anthropometrics } = patient;
 
   return (
-    <div className="tab-pane">
-      <div className="card mb-4">
-        <div className="card-header flex-between">
-          <div style={{display: 'flex', gap: '1rem', alignItems: 'center'}}>
-            <h3 className="card-title">Biểu đồ Xu hướng</h3>
-            <select 
-              className="filter-select" 
-              value={metricType} 
-              onChange={(e) => setMetricType(e.target.value)}
-              style={{padding: '0.25rem 0.5rem', minWidth: '150px'}}
-            >
-              <option value="weight">Cân nặng (kg)</option>
-              <option value="bmi">BMI</option>
-            </select>
-          </div>
-          <button className="btn-secondary" onClick={() => showToast('Chức năng Nhập tay đang trống')}>Thêm chỉ số</button>
+    <div className="tab-pane anthropometrics-tab">
+      <section className="metric-grid">
+        <div className="metric-card">
+          <span>Chiều cao</span>
+          <strong>{anthropometrics.height}</strong>
         </div>
-        <div className="card-body">
-          <div className="chart-container" style={{height: 300}}>
+        <div className="metric-card">
+          <span>Cân nặng hiện tại</span>
+          <strong>{anthropometrics.currentWeight}</strong>
+        </div>
+        <div className="metric-card">
+          <span>BMI</span>
+          <strong>{anthropometrics.bmi}</strong>
+        </div>
+        <div className="metric-card">
+          <span>Biến động gần đây</span>
+          <strong>{anthropometrics.weightChange}</strong>
+        </div>
+      </section>
+
+      <section className="chart-layout">
+        <article className="card chart-panel">
+          <div className="chart-toolbar">
+            <div className="section-heading">
+              <span className="eyebrow">Nhân trắc</span>
+              <h2>Xu hướng thay đổi theo từng mốc đánh giá</h2>
+            </div>
+
+            <div className="chart-toolbar-actions">
+              <select
+                className="filter-select"
+                value={metricType}
+                onChange={(event) => setMetricType(event.target.value)}
+                aria-label="Chọn loại chỉ số để xem biểu đồ"
+              >
+                <option value="weight">Cân nặng</option>
+                <option value="bmi">BMI</option>
+              </select>
+              <button className="btn-secondary" type="button" onClick={() => showToast('Đã mở luồng nhập chỉ số nhân trắc')}>
+                Thêm mốc đo
+              </button>
+            </div>
+          </div>
+
+          <div className="chart-container">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={anthropometricRecordsMock} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+              <LineChart data={anthropometricRecordsMock} margin={{ top: 8, right: 12, bottom: 0, left: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
                 <XAxis dataKey="date" />
-                <YAxis domain={['dataMin - 1', 'dataMax + 1']} />
+                <YAxis />
                 <RechartsTooltip />
-                <Legend />
-                <Line 
-                  type="monotone" 
-                  dataKey={metricType} 
-                  name={metricType === 'weight' ? 'Cân nặng (kg)' : 'Chỉ số BMI'}
-                  stroke="hsl(var(--primary))" 
-                  strokeWidth={3} 
-                  dot={{r: 5}} 
-                  activeDot={{r: 8}} 
+                <Line
+                  type="monotone"
+                  dataKey={metricType}
+                  stroke="hsl(var(--primary))"
+                  strokeWidth={3}
+                  dot={{ r: 4 }}
+                  activeDot={{ r: 6 }}
                 />
               </LineChart>
             </ResponsiveContainer>
           </div>
-        </div>
-      </div>
+        </article>
 
-      <div className="card">
-         <div className="card-header">
-           <h3 className="card-title">Lịch sử Đo lường</h3>
-         </div>
-         <div className="table-responsive">
-           <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Ngày đo</th>
-                  <th>Cân nặng (kg)</th>
-                  <th>BMI</th>
-                  <th>Nguồn dữ liệu</th>
-                </tr>
-              </thead>
-              <tbody>
-                {anthropometricRecordsMock.slice().reverse().map(record => (
+        <aside className="card chart-side-panel">
+          <div className="section-heading">
+            <span className="eyebrow">Đọc nhanh</span>
+            <h2>Ý nghĩa lâm sàng cần chú ý</h2>
+          </div>
+
+          <ul className="detail-list">
+            <li>Cân nặng giảm dần, cần bảo vệ khối cơ và tránh giảm thêm trong đợt điều trị này.</li>
+            <li>BMI vẫn trong vùng chấp nhận được nhưng xu hướng đi xuống cần được can thiệp sớm.</li>
+            <li>Ưu tiên tăng đạm phân bố đều trong ngày thay vì dồn vào một bữa.</li>
+          </ul>
+
+          <div className="mini-stat-stack">
+            <div>
+              <span>Khối cơ</span>
+              <strong>{anthropometrics.muscleStatus}</strong>
+            </div>
+            <div>
+              <span>Phù</span>
+              <strong>{anthropometrics.edema}</strong>
+            </div>
+            <div>
+              <span>Cân nặng thường lệ</span>
+              <strong>{anthropometrics.usualWeight}</strong>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <article className="card table-panel">
+        <div className="section-heading">
+          <span className="eyebrow">Lịch sử đo</span>
+          <h2>Danh sách các mốc nhân trắc gần nhất</h2>
+        </div>
+
+        <div className="table-responsive">
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th>Ngày đo</th>
+                <th>Cân nặng</th>
+                <th>BMI</th>
+                <th>Nguồn dữ liệu</th>
+              </tr>
+            </thead>
+            <tbody>
+              {anthropometricRecordsMock
+                .slice()
+                .reverse()
+                .map((record) => (
                   <tr key={record.id}>
                     <td className="font-medium">{record.date}</td>
-                    <td>{record.weight}</td>
+                    <td>{record.weight} kg</td>
                     <td>{record.bmi}</td>
-                    <td><span className="badge" style={{border: '1px solid currentColor', background:'transparent', color: 'hsl(var(--text-muted))'}}>{record.source}</span></td>
+                    <td>{record.source}</td>
                   </tr>
                 ))}
-              </tbody>
-           </table>
-         </div>
-      </div>
+            </tbody>
+          </table>
+        </div>
+      </article>
     </div>
   );
 }

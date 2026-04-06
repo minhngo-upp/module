@@ -1,31 +1,62 @@
 import React from 'react';
-import { UploadCloud, FileText, AlertCircle } from 'lucide-react';
+import { AlertCircle, FileText, UploadCloud } from 'lucide-react';
 import { labReportsMock } from '../../mockData';
 
-export default function LabsTab({ showToast }) {
-  return (
-    <div className="tab-pane">
-      <div className="card mb-4" style={{borderStyle: 'dashed', backgroundColor: 'transparent'}}>
-        <div className="card-body" style={{display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem'}}>
-          <UploadCloud size={48} color="hsl(var(--text-muted))" style={{marginBottom: '1rem'}}/>
-          <h3 className="font-bold mb-2">Tải lên kết quả xét nghiệm</h3>
-          <p className="text-muted text-sm mb-4">Hỗ trợ PDF, JPG, PNG (Tối đa 10MB)</p>
-          <button className="btn-primary" onClick={() => showToast('Mock: Giả lập mở cửa sổ chọn file')}>Chọn tệp</button>
-        </div>
-      </div>
+function getHighlights(reports) {
+  return reports.map((report) => {
+    const abnormalCount = report.items.filter((item) => item.abnormal).length;
 
-      <div className="lab-reports-list">
-        {labReportsMock.map(report => (
-          <div className="card mb-4" key={report.id}>
-            <div className="card-header flex-between" style={{backgroundColor: 'hsl(var(--background))'}}>
-              <div style={{display: 'flex', alignItems: 'center', gap: '0.75rem'}}>
-                 <FileText size={20} className="text-main" />
-                 <div>
-                    <h3 className="card-title" style={{fontSize: '1rem'}}>{report.reportType} <span className="text-muted text-sm ml-2">({report.reportDate})</span></h3>
-                    <a href="#" className="text-primary text-sm">Xem file gốc: {report.attachmentUrl}</a>
-                 </div>
+    return {
+      id: report.id,
+      title: report.group,
+      summary: abnormalCount > 0 ? `${abnormalCount} chỉ số cần chú ý` : 'Ổn định',
+    };
+  });
+}
+
+export default function LabsTab({ showToast }) {
+  const highlights = getHighlights(labReportsMock);
+
+  return (
+    <div className="tab-pane labs-tab">
+      <section className="lab-highlight-grid">
+        {highlights.map((highlight) => (
+          <article key={highlight.id} className="metric-card">
+            <span>{highlight.title}</span>
+            <strong>{highlight.summary}</strong>
+          </article>
+        ))}
+      </section>
+
+      <article className="card upload-panel">
+        <div className="upload-panel-copy">
+          <UploadCloud size={28} aria-hidden="true" />
+          <div>
+            <h2>Tải lên kết quả xét nghiệm mới</h2>
+            <p>Giữ file xét nghiệm ngay tại bệnh án để đối chiếu với kế hoạch can thiệp.</p>
+          </div>
+        </div>
+        <button className="btn-primary" type="button" onClick={() => showToast('Đã mở luồng tải file xét nghiệm')}>
+          Chọn tệp
+        </button>
+      </article>
+
+      <section className="lab-report-list">
+        {labReportsMock.map((report) => (
+          <article key={report.id} className="card lab-report-card">
+            <div className="lab-report-header">
+              <div className="lab-report-title">
+                <FileText size={18} aria-hidden="true" />
+                <div>
+                  <h2>{report.reportType}</h2>
+                  <p>{report.reportDate}</p>
+                </div>
               </div>
+              <button className="btn-secondary" type="button" onClick={() => showToast(`Đã mở file ${report.attachmentUrl}`)}>
+                Xem file gốc
+              </button>
             </div>
+
             <div className="table-responsive">
               <table className="data-table">
                 <thead>
@@ -37,20 +68,21 @@ export default function LabsTab({ showToast }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {report.items.map((item, i) => (
-                    <tr key={i} className={item.abnormal ? 'bg-danger-light' : ''}>
+                  {report.items.map((item) => (
+                    <tr key={item.name}>
                       <td className="font-medium">{item.name}</td>
-                      <td>
-                        <span className={item.abnormal ? 'text-danger font-bold' : ''}>
-                          {item.value} {item.unit}
-                        </span>
+                      <td className={item.abnormal ? 'text-danger font-bold' : ''}>
+                        {item.value} {item.unit}
                       </td>
-                      <td className="text-muted">{item.refRange}</td>
+                      <td>{item.refRange}</td>
                       <td>
                         {item.abnormal ? (
-                          <span className="badge badge-danger"><AlertCircle size={12} style={{marginRight: '4px'}}/> Bất thường</span>
+                          <span className="badge badge-danger">
+                            <AlertCircle size={12} className="inline-icon" aria-hidden="true" />
+                            {item.note}
+                          </span>
                         ) : (
-                          <span className="badge badge-success">Bình thường</span>
+                          <span className="badge badge-success">{item.note}</span>
                         )}
                       </td>
                     </tr>
@@ -58,9 +90,9 @@ export default function LabsTab({ showToast }) {
                 </tbody>
               </table>
             </div>
-          </div>
+          </article>
         ))}
-      </div>
+      </section>
     </div>
   );
 }

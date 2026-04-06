@@ -1,44 +1,97 @@
 import React from 'react';
-import { CalendarClock, User } from 'lucide-react';
-import { visitRecordsMock } from '../../mockData';
+import { followUpsMock, visitRecordsMock } from '../../mockData';
 
 export default function HistoryTab({ showToast }) {
   return (
-    <div className="tab-pane">
-       <div className="card">
-         <div className="card-header flex-between">
-           <h3 className="card-title">Lịch sử Khám (Timeline)</h3>
-         </div>
-         <div className="card-body">
-           <div className="timeline-container" style={{position: 'relative', paddingLeft: '2rem', borderLeft: '2px solid hsl(var(--border))', marginLeft: '1rem'}}>
-              {visitRecordsMock.map((record, i) => (
-                 <div key={record.id} style={{position: 'relative', marginBottom: '2rem'}}>
-                    <div style={{
-                       position: 'absolute', 
-                       left: '-2.4rem', 
-                       top: '0', 
-                       width: '16px', 
-                       height: '16px', 
-                       borderRadius: '50%', 
-                       backgroundColor: i === 0 ? 'hsl(var(--primary))' : 'hsl(var(--text-muted))',
-                       border: '3px solid hsl(var(--surface))'
-                    }}></div>
-                    <div style={{marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
-                      <span className="font-bold text-lg" style={{color: i === 0 ? 'hsl(var(--primary))' : 'inherit'}}>{record.visitDate}</span>
-                      <span className="badge badge-blue">{record.visitType}</span>
+    <div className="tab-pane history-tab">
+      <section className="history-layout">
+        <div className="history-main">
+          <article className="card history-panel">
+            <div className="section-heading">
+              <span className="eyebrow">Theo dõi & lịch sử</span>
+              <h2>Nhận định chuyên môn và diễn tiến can thiệp</h2>
+            </div>
+
+            <div className="history-form-grid">
+              <label className="history-field">
+                <span>Nhận định hiện tại</span>
+                <textarea
+                  rows="4"
+                  defaultValue="Bệnh nhân hợp tác tốt, vẫn cần nhắc đều bữa phụ chiều và nước uống. Ưu tiên can thiệp đơn giản, dễ làm theo."
+                />
+              </label>
+
+              <label className="history-field">
+                <span>Điểm cần theo dõi tiếp</span>
+                <textarea
+                  rows="4"
+                  defaultValue="Theo dõi khả năng dung nạp khi tăng bữa phụ chiều, tổng nước uống và mức mệt về cuối ngày."
+                />
+              </label>
+            </div>
+
+            <div className="history-actions">
+              <button className="btn-secondary" type="button" onClick={() => showToast('Đã lưu ghi chú chuyên môn')}>
+                Lưu ghi chú
+              </button>
+              <button className="btn-primary" type="button" onClick={() => showToast('Đã tạo follow-up mới')}>
+                Tạo follow-up
+              </button>
+            </div>
+          </article>
+
+          <article className="card history-panel">
+            <div className="section-heading">
+              <span className="eyebrow">Diễn tiến can thiệp</span>
+              <h2>Các mốc đánh giá và cập nhật chuyên môn</h2>
+            </div>
+
+            <div className="timeline-list">
+              {visitRecordsMock.map((record) => (
+                <article key={record.id} className="timeline-entry">
+                  <div className="timeline-dot" aria-hidden="true"></div>
+                  <div className="timeline-content">
+                    <div className="timeline-heading">
+                      <div>
+                        <strong>{record.visitType}</strong>
+                        <p>
+                          {record.visitDate} • {record.doctor}
+                        </p>
+                      </div>
+                      <span className="badge badge-blue">Mốc đánh giá</span>
                     </div>
-                    <div style={{padding: '1rem', backgroundColor: 'hsl(var(--background))', borderRadius: '4px', border: '1px solid hsl(var(--border))'}}>
-                       <div style={{display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: 'hsl(var(--text-muted))', fontSize: '0.875rem'}}>
-                         <User size={14}/> <span>Người phụ trách: {record.doctor}</span>
-                       </div>
-                       <p style={{marginBottom: '1rem'}}>{record.summary}</p>
-                       <button className="btn-secondary btn-sm" onClick={() => showToast('Mở chi tiết báo cáo Visit Record')}>Xem chi tiết</button>
-                    </div>
-                 </div>
+                    <p>{record.summary}</p>
+                  </div>
+                </article>
               ))}
-           </div>
-         </div>
-       </div>
+            </div>
+          </article>
+        </div>
+
+        <aside className="history-side">
+          <article className="card history-panel">
+            <div className="section-heading">
+              <span className="eyebrow">Follow-up</span>
+              <h2>Các lần nhắc và phản hồi gần nhất</h2>
+            </div>
+
+            <div className="compact-list">
+              {followUpsMock.map((item) => (
+                <div key={item.id} className="compact-row compact-row-top">
+                  <div>
+                    <strong>
+                      {item.channel} • {item.owner}
+                    </strong>
+                    <p>{item.dateTime}</p>
+                    <p>{item.summary}</p>
+                  </div>
+                  <span className={`badge ${item.status === 'Đã xử lý' ? 'badge-success' : 'badge-warning'}`}>{item.status}</span>
+                </div>
+              ))}
+            </div>
+          </article>
+        </aside>
+      </section>
     </div>
   );
 }

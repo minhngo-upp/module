@@ -16,23 +16,28 @@ export default function Layout() {
 
   return (
     <div className="app-container">
-      {/* Sidebar */}
       <aside className="sidebar">
         <div className="sidebar-header">
           <div className="logo-icon">M</div>
           <h2>The Meal Clinic</h2>
         </div>
-        
-        <nav className="sidebar-nav">
+
+        <nav className="sidebar-nav" aria-label="Điều hướng chính">
           <ul>
             {navItems.map((item) => {
               const Icon = item.icon;
-              const isActive = location.pathname === item.path || 
-                              (item.path !== '/' && location.pathname.startsWith(item.path));
+              const isActive =
+                location.pathname === item.path ||
+                (item.path !== '/' && location.pathname.startsWith(item.path));
+
               return (
                 <li key={item.path}>
-                  <Link to={item.path} className={`nav-link ${isActive ? 'active' : ''}`}>
-                    <Icon size={20} />
+                  <Link
+                    to={item.path}
+                    className={`nav-link ${isActive ? 'active' : ''}`}
+                    aria-current={isActive ? 'page' : undefined}
+                  >
+                    <Icon size={20} aria-hidden="true" />
                     <span>{item.label}</span>
                   </Link>
                 </li>
@@ -42,32 +47,37 @@ export default function Layout() {
         </nav>
       </aside>
 
-      {/* Main Content */}
       <div className="main-content">
-        {/* Header */}
         <header className="top-header">
           <div className="search-bar">
-            <Search size={18} className="search-icon" />
-            <input type="text" placeholder="Tìm kiếm bệnh nhân (Tên, SĐT, Mã)..." />
+            <Search size={18} className="search-icon" aria-hidden="true" />
+            <input
+              type="text"
+              name="global-patient-search"
+              autoComplete="off"
+              aria-label="Tìm kiếm bệnh nhân theo tên, số điện thoại hoặc mã bệnh nhân"
+              placeholder="Tìm kiếm bệnh nhân (Tên, SĐT, Mã)…"
+            />
           </div>
+
           <div className="header-actions">
-            <button className="btn-icon header-btn">
-              <Bell size={20} />
-              <span className="badge-indicator"></span>
+            <button className="btn-icon header-btn" type="button" aria-label="Mở thông báo">
+              <Bell size={20} aria-hidden="true" />
+              <span className="badge-indicator" aria-hidden="true"></span>
             </button>
-            <div className="user-profile">
+
+            <button className="user-profile" type="button" aria-label="Mở hồ sơ tài khoản bác sĩ">
               <div className="user-avatar">
-                <UserCircle size={32} />
+                <UserCircle size={32} aria-hidden="true" />
               </div>
               <div className="user-info">
                 <span className="user-name">Dr. Nguyễn Văn A</span>
                 <span className="user-role">Trưởng khoa Dinh dưỡng</span>
               </div>
-            </div>
+            </button>
           </div>
         </header>
 
-        {/* Page Content */}
         <main className="page-container">
           <Outlet />
         </main>

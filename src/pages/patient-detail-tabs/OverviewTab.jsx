@@ -1,133 +1,164 @@
 import React from 'react';
-import { Utensils, Pill, Dumbbell, AlertTriangle, Activity } from 'lucide-react';
-import { patientOverviewMock } from '../../mockData';
+import { AlertTriangle, ArrowRight, CalendarClock, ClipboardList, Droplets, FlaskConical, Salad } from 'lucide-react';
 
-export default function OverviewTab({ showToast }) {
-  const { mainDiagnosis, currentGoal, adherenceAlerts, latestMetrics, activePlans } = patientOverviewMock;
+function RiskCard({ risk }) {
+  return (
+    <article className={`risk-card risk-${risk.level}`}>
+      <div className="risk-card-icon">
+        <AlertTriangle size={16} aria-hidden="true" />
+      </div>
+      <div>
+        <h3>{risk.title}</h3>
+        <p>{risk.detail}</p>
+      </div>
+    </article>
+  );
+}
+
+function QuickAction({ icon, title, description, onClick }) {
+  const Icon = icon;
 
   return (
-    <div className="tab-pane">
-      <div className="overview-grid">
-        {/* Khối A: Tình trạng & Mục tiêu */}
-        <div className="card">
-          <div className="card-header"><h3 className="card-title">Mục tiêu & Tình trạng</h3></div>
-          <div className="card-body">
-            <div className="info-group">
-              <label>Chẩn đoán chính</label>
-              <p className="font-bold text-main">{mainDiagnosis}</p>
-            </div>
-            <div className="info-group">
-              <label>Mục tiêu hiện tại</label>
-              <p>{currentGoal}</p>
-            </div>
-            <div className="info-group mb-0">
-              <label>Cảnh báo tuân thủ (Tuần qua)</label>
-              <ul className="alert-list">
-                {adherenceAlerts.map((alert, i) => (
-                  <li key={i} className={alert.level === 'high' ? 'text-danger' : 'text-warning'}>
-                    <AlertTriangle size={14} style={{marginRight: '6px', verticalAlign: 'middle'}}/>
-                    {alert.message}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
+    <button className="quick-action-card" type="button" onClick={onClick}>
+      <div className="quick-action-icon">
+        <Icon size={18} aria-hidden="true" />
+      </div>
+      <div className="quick-action-copy">
+        <strong>{title}</strong>
+        <span>{description}</span>
+      </div>
+      <ArrowRight size={16} aria-hidden="true" />
+    </button>
+  );
+}
 
-        {/* Khối B: Chỉ số gần nhất */}
-        <div className="card">
-          <div className="card-header"><h3 className="card-title">Chỉ số gần nhất</h3></div>
-          <div className="card-body">
-            <div className="latest-vitals">
-              {latestMetrics.map((metric, i) => (
-                <div className="vital-item" key={i}>
-                  <span className="vital-label">{metric.label}</span>
-                  <span className={`vital-value ${metric.status === 'warning' ? 'text-danger' : ''}`}>
-                    {metric.value}
-                  </span>
+export default function OverviewTab({ patient, onNavigate, showToast }) {
+  const { nutritionAssessment, riskFlags, currentState, nextInterventionSummary, dietLogSummary } = patient;
+
+  return (
+    <div className="tab-pane patient-summary-tab">
+      <section className="summary-layout">
+        <div className="summary-main">
+          <article className="card summary-panel summary-intro">
+            <div className="section-heading">
+              <span className="eyebrow">Tóm tắt lâm sàng</span>
+              <h2>{nutritionAssessment.mainDiagnosis}</h2>
+              <p>{nutritionAssessment.summary}</p>
+            </div>
+
+            <div className="summary-kpis">
+              {currentState.map((item) => (
+                <div key={item.label} className="summary-kpi">
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-      </div>
+          </article>
 
-      {/* Khối Thông tin Người bệnh tự điền (ABCDEF) */}
-      <div className="card mt-4 mb-4">
-        <div className="card-header"><h3 className="card-title">Thông tin Hồ sơ (Thu thập trước khám - ABCEF)</h3></div>
-        <div className="p-4" style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem'}}>
-          <div className="space-y-4">
-            <div className="form-group">
-                <label className="font-bold text-main block mb-1">A. Anthropometry (Nhân trắc)</label>
-                <div className="p-3 bg-slate-50 border rounded text-sm text-muted">
-                  Cân nặng 62.5kg, Chiều cao 160cm, BMI 24.5. Phù nề nhẹ ở chân.
-                </div>
+          <article className="card summary-panel">
+            <div className="section-heading">
+              <span className="eyebrow">Cờ cần chú ý</span>
+              <h2>Điểm cần theo dõi ngay trong ca làm việc này</h2>
             </div>
-            <div className="form-group">
-                <label className="font-bold text-main block mb-1">B. Biochemistry (Sinh hóa)</label>
-                <div className="p-3 bg-slate-50 border rounded text-sm text-muted">
-                  Đường huyết đói 95 mg/dL. HbA1c 5.9%. Chưa có chỉ số mới xét nghiệm tháng này.
-                </div>
+            <div className="risk-grid">
+              {riskFlags.map((risk) => (
+                <RiskCard key={risk.title} risk={risk} />
+              ))}
             </div>
-            <div className="form-group">
-                <label className="font-bold text-main block mb-1">C. Clinical (Khám lâm sàng)</label>
-                <div className="p-3 bg-slate-50 border rounded text-sm text-muted">
-                  Da khô, móng tay dễ gãy nứt. Hay mệt mỏi vào buổi chiều.
-                </div>
-            </div>
-          </div>
-          
-          <div className="space-y-4">
-            <div className="form-group">
-                <label className="font-bold text-main block mb-1">E. Environmental (Môi trường)</label>
-                <div className="p-3 bg-slate-50 border rounded text-sm text-muted">
-                  Ăn chủ yếu ở công ty, hay gọi đồ ngoài ăn trưa. Tối nấu ăn ở nhà cùng chồng.
-                </div>
-            </div>
-            <div className="form-group">
-                <label className="font-bold text-main block mb-1">F. Feeling (Tâm lý / Động lực)</label>
-                <div className="p-3 bg-slate-50 border rounded text-sm text-muted">
-                  Sợ tiểu đường nặng ảnh hưởng thai nhi nên rất muốn tuân thủ, nhưng thấy thực đơn trước khó ăn.
-                </div>
-            </div>
-          </div>
-        </div>
-      </div>
+          </article>
 
-      {/* Khối C: Kế hoạch lâm sàng hiện tại */}
-      <div className="card mt-4 mb-4">
-        <div className="card-header flex-between">
-          <h3 className="card-title">Kế hoạch lâm sàng hiện tại</h3>
-          <button className="btn-primary" onClick={() => showToast('Đang mở form tạo Visit Record...')}>
-            <Activity size={16} style={{marginRight: '6px'}}/> Tạo Visit Record
-          </button>
+          <article className="card summary-panel">
+            <div className="section-heading">
+              <span className="eyebrow">Tình trạng hiện tại</span>
+              <h2>Khả năng bám mục tiêu dinh dưỡng trong 7 ngày gần nhất</h2>
+              <p>{nutritionAssessment.adherence}</p>
+            </div>
+
+            <div className="status-grid">
+              <div className="status-block">
+                <div className="status-icon">
+                  <Salad size={18} aria-hidden="true" />
+                </div>
+                <div>
+                  <strong>Nhật ký khẩu phần</strong>
+                  <p>{dietLogSummary.completion}</p>
+                </div>
+              </div>
+              <div className="status-block">
+                <div className="status-icon">
+                  <Droplets size={18} aria-hidden="true" />
+                </div>
+                <div>
+                  <strong>Lượng nước trung bình</strong>
+                  <p>{dietLogSummary.hydration}</p>
+                </div>
+              </div>
+              <div className="status-block">
+                <div className="status-icon">
+                  <FlaskConical size={18} aria-hidden="true" />
+                </div>
+                <div>
+                  <strong>Điểm cần theo dõi xét nghiệm</strong>
+                  <p>Protein toàn phần, glucose đói, canxi</p>
+                </div>
+              </div>
+            </div>
+          </article>
         </div>
-        <div className="card-body">
-          <div className="plan-summary">
-            {activePlans.diet && (
-              <div className="plan-item">
-                <h4><Utensils size={16}/> Thực đơn</h4>
-                <p>{activePlans.diet}</p>
-                <span className="badge badge-success">Đang áp dụng</span>
-              </div>
-            )}
-            {activePlans.supplement && (
-              <div className="plan-item">
-                <h4><Pill size={16}/> Thuốc / Bổ sung</h4>
-                <p>{activePlans.supplement}</p>
-                <span className="badge badge-success">Đang áp dụng</span>
-              </div>
-            )}
-            {activePlans.exercise && (
-              <div className="plan-item">
-                <h4><Dumbbell size={16}/> Vận động</h4>
-                <p>{activePlans.exercise}</p>
-                <span className="badge badge-warning">Tuân thủ kém</span>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+
+        <aside className="summary-side">
+          <article className="card summary-panel">
+            <div className="section-heading">
+              <span className="eyebrow">Hành động nhanh</span>
+              <h2>Đi tới đúng thao tác trong một lần nhấn</h2>
+            </div>
+
+            <div className="quick-actions">
+              <QuickAction
+                icon={ClipboardList}
+                title="Mở nhật ký khẩu phần"
+                description="Xem bữa ăn, nước uống và hoạt động gần nhất"
+                onClick={() => onNavigate('daily-log')}
+              />
+              <QuickAction
+                icon={Salad}
+                title="Mở kế hoạch can thiệp"
+                description="Điều chỉnh khuyến nghị và thực đơn hiện tại"
+                onClick={() => onNavigate('intervention-followup')}
+              />
+              <QuickAction
+                icon={CalendarClock}
+                title="Ghi follow-up"
+                description="Chuyển sang theo dõi và lịch sử can thiệp"
+                onClick={() => {
+                  onNavigate('intervention-followup');
+                  showToast('Đã chuyển tới khu vực theo dõi và lịch sử');
+                }}
+              />
+              <QuickAction
+                icon={FlaskConical}
+                title="Xem xét nghiệm"
+                description="Đọc nhanh các chỉ số ảnh hưởng đến can thiệp"
+                onClick={() => onNavigate('assessment')}
+              />
+            </div>
+          </article>
+
+          <article className="card summary-panel intervention-preview">
+            <div className="section-heading">
+              <span className="eyebrow">Can thiệp tiếp theo</span>
+              <h2>{nextInterventionSummary.title}</h2>
+            </div>
+
+            <ul className="detail-list">
+              {nextInterventionSummary.items.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </article>
+        </aside>
+      </section>
     </div>
   );
 }

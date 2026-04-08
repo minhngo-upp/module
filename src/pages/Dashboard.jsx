@@ -13,7 +13,7 @@ export default function Dashboard() {
   const priorityPatients = [
     { id: 'BN001', name: 'Nguyễn Thị Hoa', issue: 'Không ghi bữa ăn 3 ngày liên tiếp', tag: 'Báo động đỏ' },
     { id: 'BN002', name: 'Trần Văn Nam', issue: 'Đường huyết tăng cao (120 mg/dL)', tag: 'Báo động đỏ' },
-    { id: 'BN003', name: 'Lê Hoàng Anh', issue: 'Ngừng dùng thuốc bổ sung calcium', tag: 'Cần theo dõi' },
+    { id: 'BN003', name: 'Lê Hoàng Anh', issue: 'Ngừng dùng thuốc bổ sung canxi', tag: 'Cần theo dõi' },
   ];
 
   return (
@@ -57,9 +57,7 @@ export default function Dashboard() {
                     </h4>
                     <p className="priority-issue">{patient.issue}</p>
                   </div>
-                  <div className={`badge ${patient.tag === 'Báo động đỏ' ? 'badge-danger' : 'badge-warning'}`}>
-                    {patient.tag}
-                  </div>
+                  <div className={`badge ${patient.tag === 'Báo động đỏ' ? 'badge-danger' : 'badge-warning'}`}>{patient.tag}</div>
                   <button className="btn-primary priority-cta">Xem hồ sơ</button>
                 </li>
               ))}

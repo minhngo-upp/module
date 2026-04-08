@@ -45,7 +45,7 @@ export default function Messages() {
                 name="message-search"
                 autoComplete="off"
                 aria-label="Tìm kiếm hội thoại theo tên bệnh nhân"
-                placeholder="Tìm kiếm bệnh nhân…"
+                placeholder="Tìm kiếm bệnh nhân..."
               />
             </div>
           </div>
@@ -152,7 +152,7 @@ export default function Messages() {
                 type="text"
                 className="chat-text-input"
                 aria-label="Nhập nội dung tư vấn cho bệnh nhân"
-                placeholder="Nhập tin nhắn tư vấn…"
+                placeholder="Nhập tin nhắn tư vấn..."
                 value={messageText}
                 onChange={(event) => setMessageText(event.target.value)}
                 onKeyDown={(event) => event.key === 'Enter' && handleSend()}

@@ -13,6 +13,32 @@ function shiftDate(currentDate, direction, dates) {
   return dates[nextIndex].value;
 }
 
+function parseMacroValue(value) {
+  return Number.parseFloat(String(value).replace(/[^\d.]/g, '')) || 0;
+}
+
+function buildMacroRatio({ protein, fat, carbs }) {
+  const proteinKcal = parseMacroValue(protein) * 4;
+  const fatKcal = parseMacroValue(fat) * 9;
+  const carbKcal = parseMacroValue(carbs) * 4;
+  const totalKcal = proteinKcal + fatKcal + carbKcal;
+
+  if (!totalKcal) {
+    return { protein: 0, fat: 0, carbs: 0, label: '0:0:0' };
+  }
+
+  const proteinRatio = Math.round((proteinKcal / totalKcal) * 100);
+  const fatRatio = Math.round((fatKcal / totalKcal) * 100);
+  const carbsRatio = Math.max(0, 100 - proteinRatio - fatRatio);
+
+  return {
+    protein: proteinRatio,
+    fat: fatRatio,
+    carbs: carbsRatio,
+    label: `${proteinRatio}:${fatRatio}:${carbsRatio}`,
+  };
+}
+
 export default function DailyLogTab({ patient, onNavigate }) {
   const [selectedDate, setSelectedDate] = useState('2024-12-02');
 
@@ -22,6 +48,7 @@ export default function DailyLogTab({ patient, onNavigate }) {
   ];
 
   const currentLog = dailyLogEntriesMock[selectedDate];
+  const dailyRatio = buildMacroRatio(currentLog.totals);
 
   return (
     <div className="tab-pane daily-log-tab">
@@ -83,6 +110,18 @@ export default function DailyLogTab({ patient, onNavigate }) {
               <strong>{currentLog.totals.carbs}</strong>
             </div>
           </div>
+
+          <div className="ratio-inline-summary">
+            <div className="ratio-inline-heading">
+              <span>Tỷ lệ P:L:G</span>
+              <strong>{dailyRatio.label}</strong>
+            </div>
+            <div className="ratio-inline-breakdown">
+              <span className="ratio-pill ratio-pill-protein">P {dailyRatio.protein}%</span>
+              <span className="ratio-pill ratio-pill-fat">L {dailyRatio.fat}%</span>
+              <span className="ratio-pill ratio-pill-carb">G {dailyRatio.carbs}%</span>
+            </div>
+          </div>
         </article>
 
         <section className="daily-log-layout">
@@ -131,6 +170,11 @@ export default function DailyLogTab({ patient, onNavigate }) {
                           <span>Glucid</span>
                           <strong>{meal.carbs} g</strong>
                         </div>
+                      </div>
+
+                      <div className="meal-ratio-inline">
+                        <span>Tỷ lệ P:L:G</span>
+                        <strong>{buildMacroRatio(meal).label}</strong>
                       </div>
                     </div>
                   </article>
@@ -218,11 +262,7 @@ export default function DailyLogTab({ patient, onNavigate }) {
                 </div>
               </div>
 
-              <button
-                className="btn-primary full-width-btn"
-                type="button"
-                onClick={() => onNavigate('intervention-followup')}
-              >
+              <button className="btn-primary full-width-btn" type="button" onClick={() => onNavigate('intervention-followup')}>
                 Chuyển sang kế hoạch can thiệp
               </button>
             </article>

@@ -56,7 +56,7 @@ export default function Layout() {
               name="global-patient-search"
               autoComplete="off"
               aria-label="Tìm kiếm bệnh nhân theo tên, số điện thoại hoặc mã bệnh nhân"
-              placeholder="Tìm kiếm bệnh nhân (Tên, SĐT, Mã)…"
+              placeholder="Tìm kiếm bệnh nhân (Tên, SĐT, Mã)..."
             />
           </div>
 

@@ -1,0 +1,373 @@
+.settings-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.settings-header {
+  margin-bottom: 0;
+}
+
+.settings-grid {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.settings-panel {
+  padding: 1.25rem;
+}
+
+.doctor-profile-panel,
+.access-panel,
+.nurse-list-panel {
+  border-radius: 22px;
+  background: linear-gradient(180deg, hsl(var(--surface)) 0%, hsl(var(--background)) 100%);
+  box-shadow: 0 22px 42px -38px hsla(var(--foreground) / 0.35);
+}
+
+.settings-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.doctor-profile-top {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.7fr) minmax(0, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.doctor-avatar-card,
+.doctor-profile-summary,
+.access-overview-card,
+.permission-column {
+  padding: 1rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 18px;
+  background: hsl(var(--surface));
+}
+
+.doctor-avatar-card {
+  display: grid;
+  gap: 1rem;
+}
+
+.doctor-avatar-preview {
+  width: 96px;
+  height: 96px;
+  border-radius: 28px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: hsl(var(--primary-light));
+  color: hsl(var(--primary-dark));
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.doctor-avatar-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.doctor-profile-summary {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.settings-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid hsla(var(--border) / 0.7);
+}
+
+.settings-meta-row:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.settings-meta-row span,
+.permission-item p,
+.nurse-list-item-bottom span,
+.settings-inline-message {
+  color: hsl(var(--text-muted));
+  font-size: 0.875rem;
+}
+
+.settings-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.settings-add-form {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 18px;
+  background: hsl(var(--surface));
+}
+
+.settings-add-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.settings-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.settings-field span {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: hsl(var(--text-main));
+}
+
+.settings-field input,
+.settings-field textarea,
+.settings-search input,
+.settings-select {
+  width: 100%;
+  padding: 0.82rem 0.95rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 14px;
+  background: hsl(var(--surface));
+}
+
+.settings-field input:focus,
+.settings-field textarea:focus,
+.settings-search input:focus,
+.settings-select:focus {
+  outline: none;
+  border-color: hsla(var(--primary) / 0.4);
+  box-shadow: 0 0 0 4px hsla(var(--primary) / 0.12);
+}
+
+.settings-field textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.settings-field-full {
+  grid-column: 1 / -1;
+}
+
+.settings-actions,
+.settings-actions-group,
+.settings-search,
+.permission-column-header,
+.nurse-list-item-top,
+.nurse-list-item-bottom,
+.access-overview {
+  display: flex;
+  align-items: center;
+}
+
+.settings-actions,
+.nurse-list-item-bottom {
+  justify-content: space-between;
+}
+
+.settings-actions {
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid hsla(var(--border) / 0.8);
+}
+
+.settings-add-actions {
+  margin-top: 1rem;
+}
+
+.settings-actions-group,
+.settings-search,
+.permission-column-header,
+.access-overview {
+  gap: 0.75rem;
+}
+
+.settings-inline-message {
+  padding: 0.75rem 0.9rem;
+  border-radius: 14px;
+  background: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+}
+
+.settings-inline-message.success {
+  background: hsla(var(--success) / 0.08);
+  border-color: hsla(var(--success) / 0.2);
+  color: hsl(var(--success));
+}
+
+.settings-inline-message.warning {
+  background: hsla(var(--warning) / 0.08);
+  border-color: hsla(var(--warning) / 0.2);
+  color: hsl(var(--warning));
+}
+
+.settings-access-grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.4fr);
+  gap: 1.25rem;
+}
+
+.settings-search {
+  padding: 0.78rem 0.9rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 14px;
+  background: hsl(var(--surface));
+}
+
+.settings-search input {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.settings-search input:focus {
+  box-shadow: none;
+}
+
+.nurse-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.nurse-list-item {
+  width: 100%;
+  padding: 0.95rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 18px;
+  background: hsl(var(--surface));
+  text-align: left;
+  transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+}
+
+.nurse-list-item:hover,
+.nurse-list-item:focus-visible,
+.nurse-list-item.active {
+  border-color: hsla(var(--primary) / 0.3);
+  box-shadow: 0 16px 34px -28px hsla(var(--foreground) / 0.35);
+  transform: translateY(-1px);
+}
+
+.nurse-list-item-top {
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.nurse-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: hsl(var(--background));
+  color: hsl(var(--primary));
+}
+
+.nurse-list-copy {
+  flex: 1;
+  display: grid;
+  gap: 0.15rem;
+}
+
+.nurse-list-copy span {
+  color: hsl(var(--text-muted));
+  font-size: 0.8125rem;
+}
+
+.nurse-list-item-bottom {
+  gap: 1rem;
+}
+
+.nurse-list-item-bottom strong {
+  font-size: 0.875rem;
+}
+
+.access-overview {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 1rem;
+}
+
+.access-overview-card {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.access-overview-card span {
+  color: hsl(var(--text-muted));
+  font-size: 0.8125rem;
+}
+
+.permission-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.permission-column-header {
+  margin-bottom: 0.9rem;
+}
+
+.permission-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.permission-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.8rem 0.85rem;
+  border-radius: 14px;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--background));
+}
+
+.permission-item input {
+  margin-top: 0.2rem;
+}
+
+.permission-item strong {
+  display: block;
+  margin-bottom: 0.15rem;
+  font-size: 0.9375rem;
+}
+
+@media (max-width: 1200px) {
+  .settings-access-grid,
+  .doctor-profile-top,
+  .permission-columns,
+  .access-overview {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 880px) {
+  .settings-panel-header,
+  .settings-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .settings-form-grid,
+  .settings-add-grid {
+    grid-template-columns: 1fr;
+  }
+}

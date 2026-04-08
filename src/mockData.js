@@ -1,13 +1,107 @@
 export const carePlanMockDB = {
   meals: [
-    { id: 'm1', name: 'Cháo yến mạch thịt bằm', calories: 320 },
-    { id: 'm2', name: 'Cơm mềm cá hấp gừng', calories: 410 },
-    { id: 'm3', name: 'Súp bí đỏ ức gà', calories: 280 },
-    { id: 'm4', name: 'Sữa chua không đường', calories: 75 },
-    { id: 'm5', name: 'Chuối chín', calories: 95 },
-    { id: 'm6', name: 'Canh rau ngót thịt nạc', calories: 120 },
-    { id: 'm7', name: 'Cá hồi áp chảo phần nhỏ', calories: 260 },
-    { id: 'm8', name: 'Bánh mì nguyên cám với trứng', calories: 230 },
+    {
+      id: 'm1',
+      name: 'Cháo yến mạch thịt bằm',
+      image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=900&q=80',
+      calories: 320,
+      servingLabel: '1 tô',
+      mealTypes: ['breakfast', 'dinner'],
+      ingredients: [
+        { ingredientId: 'i1', name: 'Yến mạch', quantity: 60, unit: 'g', calories: 228 },
+        { ingredientId: 'i2', name: 'Thịt nạc xay', quantity: 70, unit: 'g', calories: 78 },
+        { ingredientId: 'i3', name: 'Cà rốt', quantity: 30, unit: 'g', calories: 14 },
+      ],
+    },
+    {
+      id: 'm2',
+      name: 'Cơm mềm cá hấp gừng',
+      image: 'https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=900&q=80',
+      calories: 410,
+      servingLabel: '1 phần',
+      mealTypes: ['lunch', 'dinner'],
+      ingredients: [
+        { ingredientId: 'i4', name: 'Cơm trắng', quantity: 180, unit: 'g', calories: 234 },
+        { ingredientId: 'i5', name: 'Cá phi lê', quantity: 120, unit: 'g', calories: 132 },
+        { ingredientId: 'i6', name: 'Bông cải luộc', quantity: 80, unit: 'g', calories: 22 },
+      ],
+    },
+    {
+      id: 'm3',
+      name: 'Súp bí đỏ ức gà',
+      image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=900&q=80',
+      calories: 280,
+      servingLabel: '1 tô',
+      mealTypes: ['dinner', 'snack'],
+      ingredients: [
+        { ingredientId: 'i7', name: 'Bí đỏ', quantity: 180, unit: 'g', calories: 64 },
+        { ingredientId: 'i8', name: 'Ức gà', quantity: 90, unit: 'g', calories: 140 },
+        { ingredientId: 'i9', name: 'Sữa tươi không đường', quantity: 100, unit: 'ml', calories: 76 },
+      ],
+    },
+    {
+      id: 'm4',
+      name: 'Sữa chua không đường',
+      image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=900&q=80',
+      calories: 75,
+      servingLabel: '1 hộp',
+      mealTypes: ['snack'],
+      ingredients: [{ ingredientId: 'i10', name: 'Sữa chua không đường', quantity: 1, unit: 'hộp', calories: 75 }],
+    },
+    {
+      id: 'm5',
+      name: 'Chuối chín',
+      image: 'https://images.unsplash.com/photo-1574226516831-e1dff420e37f?auto=format&fit=crop&w=900&q=80',
+      calories: 95,
+      servingLabel: '1 quả',
+      mealTypes: ['snack'],
+      ingredients: [{ ingredientId: 'i11', name: 'Chuối chín', quantity: 1, unit: 'quả', calories: 95 }],
+    },
+    {
+      id: 'm6',
+      name: 'Canh rau ngót thịt nạc',
+      image: 'https://images.unsplash.com/photo-1543332164-6e82f355badc?auto=format&fit=crop&w=900&q=80',
+      calories: 120,
+      servingLabel: '1 bát',
+      mealTypes: ['lunch', 'dinner'],
+      ingredients: [
+        { ingredientId: 'i12', name: 'Rau ngót', quantity: 120, unit: 'g', calories: 49 },
+        { ingredientId: 'i13', name: 'Thịt nạc', quantity: 60, unit: 'g', calories: 67 },
+      ],
+    },
+    {
+      id: 'm7',
+      name: 'Cá hồi áp chảo phần nhỏ',
+      image: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=900&q=80',
+      calories: 260,
+      servingLabel: '1 miếng',
+      mealTypes: ['lunch', 'dinner'],
+      ingredients: [
+        { ingredientId: 'i14', name: 'Cá hồi', quantity: 120, unit: 'g', calories: 233 },
+        { ingredientId: 'i15', name: 'Dầu olive', quantity: 5, unit: 'ml', calories: 45 },
+      ],
+    },
+    {
+      id: 'm8',
+      name: 'Bánh mì nguyên cám với trứng',
+      image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=900&q=80',
+      calories: 230,
+      servingLabel: '1 phần',
+      mealTypes: ['breakfast', 'snack'],
+      ingredients: [
+        { ingredientId: 'i16', name: 'Bánh mì nguyên cám', quantity: 2, unit: 'lát', calories: 140 },
+        { ingredientId: 'i17', name: 'Trứng gà', quantity: 1, unit: 'quả', calories: 90 },
+      ],
+    },
+    {
+      id: 'm9',
+      name: 'Sữa công thức năng lượng cao',
+      image: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=900&q=80',
+      calories: 220,
+      servingLabel: '1 chai',
+      mealTypes: ['snack'],
+      ingredients: [{ ingredientId: 'i18', name: 'Sữa công thức', quantity: 1, unit: 'chai', calories: 220 }],
+    },
   ],
   medicines: [
     { id: 'd1', name: 'Sữa công thức năng lượng cao', usage: '1 chai vào giữa buổi chiều' },
@@ -25,7 +119,7 @@ export const carePlanMockDB = {
 export const patientDetailMock = {
   id: 'pt_001',
   patientCode: 'BN001',
-  fullName: 'PHÙNG THỪA QUAN',
+  fullName: 'PHUNG THUA QUAN',
   gender: 'Nam',
   age: 47,
   occupation: 'Công nhân',
@@ -146,6 +240,257 @@ export const patientDetailMock = {
       'Theo dõi lượng ăn thực tế thay vì chỉ hỏi cảm giác no.',
     ],
   },
+  mealPlanRange: {
+    startDate: '2024-12-02',
+    durationDays: 7,
+    viewMode: 'week',
+  },
+  mealPlanDays: [
+    {
+      date: '2024-12-02',
+      label: 'T2, 02/12',
+      status: 'ready',
+      notes: 'Ngày mẫu tuần 1',
+      totals: { calories: 1710, targetCalories: 1850, filledMeals: 4 },
+      meals: [
+        {
+          mealType: 'breakfast',
+          title: 'Bữa sáng',
+          items: [
+            {
+              dishId: 'm1',
+              dishName: 'Cháo yến mạch thịt bằm',
+              serving: '1 tô',
+              calories: 320,
+              ingredients: [
+                { ingredientId: 'i1', name: 'Yến mạch', quantity: 60, unit: 'g', calories: 228 },
+                { ingredientId: 'i2', name: 'Thịt nạc xay', quantity: 70, unit: 'g', calories: 78 },
+                { ingredientId: 'i3', name: 'Cà rốt', quantity: 30, unit: 'g', calories: 14 },
+              ],
+              isCustomized: false,
+            },
+          ],
+        },
+        {
+          mealType: 'lunch',
+          title: 'Bua trua',
+          items: [
+            {
+              dishId: 'm2',
+              dishName: 'Com mem ca hap gung',
+              serving: '1 phan',
+              calories: 410,
+              ingredients: [
+                { ingredientId: 'i4', name: 'Com trang', quantity: 180, unit: 'g', calories: 234 },
+                { ingredientId: 'i5', name: 'Ca phi le', quantity: 120, unit: 'g', calories: 132 },
+                { ingredientId: 'i6', name: 'Bong cai luoc', quantity: 80, unit: 'g', calories: 22 },
+              ],
+              isCustomized: false,
+            },
+            {
+              dishId: 'm6',
+              dishName: 'Canh rau ngot thit nac',
+              serving: '1 bat',
+              calories: 120,
+              ingredients: [
+                { ingredientId: 'i12', name: 'Rau ngot', quantity: 120, unit: 'g', calories: 49 },
+                { ingredientId: 'i13', name: 'Thit nac', quantity: 60, unit: 'g', calories: 67 },
+              ],
+              isCustomized: false,
+            },
+          ],
+        },
+        {
+          mealType: 'dinner',
+          title: 'Bua toi',
+          items: [
+            {
+              dishId: 'm3',
+              dishName: 'Sup bi do uc ga',
+              serving: '1 to',
+              calories: 280,
+              ingredients: [
+                { ingredientId: 'i7', name: 'Bi do', quantity: 180, unit: 'g', calories: 64 },
+                { ingredientId: 'i8', name: 'Uc ga', quantity: 90, unit: 'g', calories: 140 },
+                { ingredientId: 'i9', name: 'Sua tuoi khong duong', quantity: 100, unit: 'ml', calories: 76 },
+              ],
+              isCustomized: false,
+            },
+          ],
+        },
+        {
+          mealType: 'snack',
+          title: 'Bua phu',
+          items: [
+            {
+              dishId: 'm9',
+              dishName: 'Sua cong thuc nang luong cao',
+              serving: '1 chai',
+              calories: 220,
+              ingredients: [{ ingredientId: 'i18', name: 'Sua cong thuc', quantity: 1, unit: 'chai', calories: 220 }],
+              isCustomized: false,
+            },
+            {
+              dishId: 'm5',
+              dishName: 'Chuoi chin',
+              serving: '1 qua',
+              calories: 95,
+              ingredients: [{ ingredientId: 'i11', name: 'Chuoi chin', quantity: 1, unit: 'qua', calories: 95 }],
+              isCustomized: false,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      date: '2024-12-03',
+      label: 'T3, 03/12',
+      status: 'warning',
+      notes: 'Thieu bua phu chieu',
+      totals: { calories: 1460, targetCalories: 1850, filledMeals: 3 },
+      meals: [
+        {
+          mealType: 'breakfast',
+          title: 'Bua sang',
+          items: [
+            {
+              dishId: 'm8',
+              dishName: 'Banh mi nguyen cam voi trung',
+              serving: '1 phan',
+              calories: 230,
+              ingredients: [
+                { ingredientId: 'i16', name: 'Banh mi nguyen cam', quantity: 2, unit: 'lat', calories: 140 },
+                { ingredientId: 'i17', name: 'Trung ga', quantity: 1, unit: 'qua', calories: 90 },
+              ],
+              isCustomized: false,
+            },
+          ],
+        },
+        {
+          mealType: 'lunch',
+          title: 'Bua trua',
+          items: [
+            {
+              dishId: 'm7',
+              dishName: 'Ca hoi ap chao phan nho',
+              serving: '1 mieng',
+              calories: 260,
+              ingredients: [
+                { ingredientId: 'i14', name: 'Ca hoi', quantity: 120, unit: 'g', calories: 233 },
+                { ingredientId: 'i15', name: 'Dau olive', quantity: 5, unit: 'ml', calories: 45 },
+              ],
+              isCustomized: false,
+            },
+            {
+              dishId: 'm6',
+              dishName: 'Canh rau ngot thit nac',
+              serving: '1 bat',
+              calories: 120,
+              ingredients: [
+                { ingredientId: 'i12', name: 'Rau ngot', quantity: 120, unit: 'g', calories: 49 },
+                { ingredientId: 'i13', name: 'Thit nac', quantity: 60, unit: 'g', calories: 67 },
+              ],
+              isCustomized: false,
+            },
+          ],
+        },
+        {
+          mealType: 'dinner',
+          title: 'Bua toi',
+          items: [
+            {
+              dishId: 'm3',
+              dishName: 'Sup bi do uc ga',
+              serving: '1 to',
+              calories: 280,
+              ingredients: [
+                { ingredientId: 'i7', name: 'Bi do', quantity: 200, unit: 'g', calories: 72 },
+                { ingredientId: 'i8', name: 'Uc ga', quantity: 100, unit: 'g', calories: 156 },
+                { ingredientId: 'i9', name: 'Sua tuoi khong duong', quantity: 100, unit: 'ml', calories: 76 },
+              ],
+              isCustomized: true,
+            },
+          ],
+        },
+        { mealType: 'snack', title: 'Bua phu', items: [] },
+      ],
+    },
+    {
+      date: '2024-12-04',
+      label: 'T4, 04/12',
+      status: 'draft',
+      notes: 'Chua xep bua toi',
+      totals: { calories: 980, targetCalories: 1850, filledMeals: 2 },
+      meals: [
+        { mealType: 'breakfast', title: 'Bua sang', items: [] },
+        {
+          mealType: 'lunch',
+          title: 'Bua trua',
+          items: [
+            {
+              dishId: 'm2',
+              dishName: 'Com mem ca hap gung',
+              serving: '1 phan',
+              calories: 410,
+              ingredients: [
+                { ingredientId: 'i4', name: 'Com trang', quantity: 180, unit: 'g', calories: 234 },
+                { ingredientId: 'i5', name: 'Ca phi le', quantity: 120, unit: 'g', calories: 132 },
+                { ingredientId: 'i6', name: 'Bong cai luoc', quantity: 80, unit: 'g', calories: 22 },
+              ],
+              isCustomized: false,
+            },
+          ],
+        },
+        { mealType: 'dinner', title: 'Bua toi', items: [] },
+        {
+          mealType: 'snack',
+          title: 'Bua phu',
+          items: [
+            {
+              dishId: 'm4',
+              dishName: 'Sua chua khong duong',
+              serving: '1 hop',
+              calories: 75,
+              ingredients: [{ ingredientId: 'i10', name: 'Sua chua khong duong', quantity: 1, unit: 'hop', calories: 75 }],
+              isCustomized: false,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      date: '2024-12-05',
+      label: 'T5, 05/12',
+      status: 'ready',
+      notes: 'Da nhan ban tu ngay mau',
+      totals: { calories: 1785, targetCalories: 1850, filledMeals: 4 },
+      meals: [],
+    },
+    {
+      date: '2024-12-06',
+      label: 'T6, 06/12',
+      status: 'ready',
+      notes: 'Theo phuong an tuan 1',
+      totals: { calories: 1810, targetCalories: 1850, filledMeals: 4 },
+      meals: [],
+    },
+    {
+      date: '2024-12-07',
+      label: 'T7, 07/12',
+      status: 'review',
+      notes: 'Kcal hoi cao so voi muc tieu',
+      totals: { calories: 1960, targetCalories: 1850, filledMeals: 4 },
+      meals: [],
+    },
+    {
+      date: '2024-12-08',
+      label: 'CN, 08/12',
+      status: 'draft',
+      notes: 'Chua co thuc don',
+      totals: { calories: 0, targetCalories: 1850, filledMeals: 0 },
+      meals: [],
+    },
+  ],
 };
 
 export const patientOverviewMock = {
@@ -153,24 +498,24 @@ export const patientOverviewMock = {
   currentGoal: patientDetailMock.nutritionAssessment.currentGoal,
   adherenceAlerts: patientDetailMock.riskFlags,
   latestMetrics: [
-    { label: 'Cân nặng hiện tại', value: patientDetailMock.anthropometrics.currentWeight },
+    { label: 'Can nang hien tai', value: patientDetailMock.anthropometrics.currentWeight },
     { label: 'BMI', value: patientDetailMock.anthropometrics.bmi },
-    { label: 'Nước uống TB', value: patientDetailMock.dietLogSummary.hydration, status: 'warning' },
-    { label: 'Mức hoàn thành nhật ký', value: patientDetailMock.dietLogSummary.completion },
+    { label: 'Nuoc uong TB', value: patientDetailMock.dietLogSummary.hydration, status: 'warning' },
+    { label: 'Muc hoan thanh nhat ky', value: patientDetailMock.dietLogSummary.completion },
   ],
   activePlans: {
-    diet: '3 bữa chính + 1 bữa phụ, ưu tiên món mềm giàu đạm',
-    supplement: 'Sữa công thức năng lượng cao vào buổi chiều',
-    exercise: 'Đi bộ chậm và kéo giãn nhẹ theo sức chịu đựng',
+    diet: '3 bua chinh + 1 bua phu, uu tien mon mem giau dam',
+    supplement: 'Sua cong thuc nang luong cao vao buoi chieu',
+    exercise: 'Di bo cham va keo gian nhe theo suc chiu dung',
   },
 };
 
 export const anthropometricRecordsMock = [
-  { id: 1, date: '12/10', weight: 63.0, bmi: 22.3, source: 'Khám ban đầu' },
-  { id: 2, date: '25/10', weight: 62.6, bmi: 22.1, source: 'Tái đánh giá' },
-  { id: 3, date: '08/11', weight: 62.0, bmi: 21.9, source: 'Buồng bệnh' },
-  { id: 4, date: '20/11', weight: 61.5, bmi: 21.8, source: 'Buồng bệnh' },
-  { id: 5, date: '02/12', weight: 61.2, bmi: 21.7, source: 'Đánh giá gần nhất' },
+  { id: 1, date: '12/10', weight: 63.0, bmi: 22.3, source: 'Kham ban dau' },
+  { id: 2, date: '25/10', weight: 62.6, bmi: 22.1, source: 'Tai danh gia' },
+  { id: 3, date: '08/11', weight: 62.0, bmi: 21.9, source: 'Buong benh' },
+  { id: 4, date: '20/11', weight: 61.5, bmi: 21.8, source: 'Buong benh' },
+  { id: 5, date: '02/12', weight: 61.2, bmi: 21.7, source: 'Danh gia gan nhat' },
 ];
 
 export const labReportsMock = [
@@ -214,14 +559,14 @@ export const labReportsMock = [
 
 export const dailyLogEntriesMock = {
   '2024-12-02': {
-    dateDisplay: 'Ngày 02/12',
+    dateDisplay: 'Ngay 02/12',
     totals: { calories: 1710, protein: '82 g', fat: '58 g', carbs: '205 g' },
-    insight: 'Bữa phụ chiều còn nhẹ, tổng nước uống mới đạt khoảng 1.5 lít.',
+    insight: 'Bua phu chieu con nhe, tong nuoc uong moi dat khoang 1.5 lit.',
     meals: [
       {
         id: 1,
-        type: 'Bữa sáng',
-        name: 'Cháo thịt bằm và sữa chua',
+        type: 'Bua sang',
+        name: 'Chao thit bam va sua chua',
         time: '07:15',
         img: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80',
         kcal: 410,
@@ -231,8 +576,8 @@ export const dailyLogEntriesMock = {
       },
       {
         id: 2,
-        type: 'Bữa trưa',
-        name: 'Cơm mềm, cá hấp, canh rau ngót',
+        type: 'Bua trua',
+        name: 'Com mem, ca hap, canh rau ngot',
         time: '11:45',
         img: 'https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=800&q=80',
         kcal: 630,
@@ -242,8 +587,8 @@ export const dailyLogEntriesMock = {
       },
       {
         id: 3,
-        type: 'Bữa phụ chiều',
-        name: 'Sữa công thức và chuối chín',
+        type: 'Bua phu chieu',
+        name: 'Sua cong thuc va chuoi chin',
         time: '15:40',
         img: 'https://images.unsplash.com/photo-1464306076886-da185f6a9d05?auto=format&fit=crop&w=800&q=80',
         kcal: 220,
@@ -253,8 +598,8 @@ export const dailyLogEntriesMock = {
       },
       {
         id: 4,
-        type: 'Bữa tối',
-        name: 'Súp bí đỏ ức gà',
+        type: 'Bua toi',
+        name: 'Sup bi do uc ga',
         time: '18:45',
         img: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80',
         kcal: 450,
@@ -264,20 +609,20 @@ export const dailyLogEntriesMock = {
       },
     ],
     supplements: [
-      { id: 1, name: 'Vitamin tổng hợp', dose: '1 viên', time: '08:00', status: 'Đã dùng' },
-      { id: 2, name: 'Canxi D3', dose: '1 viên', time: '13:00', status: 'Đã dùng' },
+      { id: 1, name: 'Vitamin tong hop', dose: '1 vien', time: '08:00', status: 'Da dung' },
+      { id: 2, name: 'Canxi D3', dose: '1 vien', time: '13:00', status: 'Da dung' },
     ],
-    activities: [{ id: 1, name: 'Đi bộ chậm', duration: '12 phút', note: 'Sau ăn tối, dung nạp tốt' }],
+    activities: [{ id: 1, name: 'Di bo cham', duration: '12 phut', note: 'Sau an toi, dung nap tot' }],
   },
   '2024-12-01': {
-    dateDisplay: 'Ngày 01/12',
+    dateDisplay: 'Ngay 01/12',
     totals: { calories: 1540, protein: '68 g', fat: '49 g', carbs: '192 g' },
-    insight: 'Bỏ bữa phụ chiều, lượng nước uống giảm do đau nhiều hơn.',
+    insight: 'Bo bua phu chieu, luong nuoc uong giam do dau nhieu hon.',
     meals: [
       {
         id: 1,
-        type: 'Bữa sáng',
-        name: 'Bánh mì nguyên cám và trứng',
+        type: 'Bua sang',
+        name: 'Banh mi nguyen cam va trung',
         time: '07:30',
         img: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80',
         kcal: 360,
@@ -287,8 +632,8 @@ export const dailyLogEntriesMock = {
       },
       {
         id: 2,
-        type: 'Bữa trưa',
-        name: 'Cơm, thịt nạc rim, canh bí',
+        type: 'Bua trua',
+        name: 'Com, thit nac rim, canh bi',
         time: '11:50',
         img: 'https://images.unsplash.com/photo-1516684732162-798a0062be99?auto=format&fit=crop&w=800&q=80',
         kcal: 640,
@@ -298,8 +643,8 @@ export const dailyLogEntriesMock = {
       },
       {
         id: 3,
-        type: 'Bữa tối',
-        name: 'Cháo cá và rau mềm',
+        type: 'Bua toi',
+        name: 'Chao ca va rau mem',
         time: '18:30',
         img: 'https://images.unsplash.com/photo-1604152135912-04a579a5d3f9?auto=format&fit=crop&w=800&q=80',
         kcal: 540,
@@ -308,7 +653,7 @@ export const dailyLogEntriesMock = {
         carbs: 70,
       },
     ],
-    supplements: [{ id: 1, name: 'Vitamin tổng hợp', dose: '1 viên', time: '08:10', status: 'Đã dùng' }],
+    supplements: [{ id: 1, name: 'Vitamin tong hop', dose: '1 vien', time: '08:10', status: 'Da dung' }],
     activities: [],
   },
 };
@@ -316,20 +661,20 @@ export const dailyLogEntriesMock = {
 export const mealLogsDaysMock = [
   {
     date: '02/12/2024',
-    status: 'đủ dữ liệu',
+    status: 'du du lieu',
     meals: [
-      { type: 'Bữa sáng', img: '', name: 'Cháo thịt bằm và sữa chua', cals: 410, macros: '56C/21P/10F', missing: false },
-      { type: 'Bữa trưa', img: '', name: 'Cơm mềm, cá hấp, canh rau ngót', cals: 630, macros: '77C/33P/18F', missing: false },
-      { type: 'Bữa phụ chiều', img: '', name: 'Sữa công thức và chuối chín', cals: 220, macros: '34C/10P/4F', missing: false },
+      { type: 'Bua sang', img: '', name: 'Chao thit bam va sua chua', cals: 410, macros: '56C/21P/10F', missing: false },
+      { type: 'Bua trua', img: '', name: 'Com mem, ca hap, canh rau ngot', cals: 630, macros: '77C/33P/18F', missing: false },
+      { type: 'Bua phu chieu', img: '', name: 'Sua cong thuc va chuoi chin', cals: 220, macros: '34C/10P/4F', missing: false },
     ],
   },
   {
     date: '01/12/2024',
-    status: 'thiếu bữa phụ',
+    status: 'thieu bua phu',
     meals: [
-      { type: 'Bữa sáng', img: '', name: 'Bánh mì nguyên cám và trứng', cals: 360, macros: '38C/18P/14F', missing: false },
-      { type: 'Bữa trưa', img: '', name: 'Cơm, thịt nạc rim, canh bí', cals: 640, macros: '84C/30P/17F', missing: false },
-      { type: 'Bữa phụ chiều', img: '', name: '', cals: 0, macros: '', missing: true },
+      { type: 'Bua sang', img: '', name: 'Banh mi nguyen cam va trung', cals: 360, macros: '38C/18P/14F', missing: false },
+      { type: 'Bua trua', img: '', name: 'Com, thit nac rim, canh bi', cals: 640, macros: '84C/30P/17F', missing: false },
+      { type: 'Bua phu chieu', img: '', name: '', cals: 0, macros: '', missing: true },
     ],
   },
 ];
@@ -338,18 +683,18 @@ export const followUpsMock = [
   {
     id: 'fu_1',
     dateTime: '03/12/2024 - 09:00',
-    channel: 'Gọi điện',
-    owner: 'Điều dưỡng Lan',
-    summary: 'Bệnh nhân báo bữa phụ chiều dễ thực hiện hơn nếu chuẩn bị sẵn sữa và trái cây.',
-    status: 'Đã xử lý',
+    channel: 'Goi dien',
+    owner: 'Dieu duong Lan',
+    summary: 'Benh nhan bao bua phu chieu de thuc hien hon neu chuan bi san sua va trai cay.',
+    status: 'Da xu ly',
   },
   {
     id: 'fu_2',
     dateTime: '02/12/2024 - 16:30',
-    channel: 'Nhắc tại buồng bệnh',
-    owner: 'CNDD Thu Hà',
-    summary: 'Đã hướng dẫn chia nhỏ nước uống theo mốc giờ và ghi nhận bệnh nhân hợp tác tốt.',
-    status: 'Đang theo dõi',
+    channel: 'Nhac tai buong benh',
+    owner: 'CNDD Thu Ha',
+    summary: 'Da huong dan chia nho nuoc uong theo moc gio va ghi nhan benh nhan hop tac tot.',
+    status: 'Dang theo doi',
   },
 ];
 
@@ -357,17 +702,67 @@ export const visitRecordsMock = [
   {
     id: 'vr_1',
     visitDate: '02/12/2024',
-    doctor: 'BS. Nguyễn Hồng Vân',
-    visitType: 'Đánh giá dinh dưỡng',
+    doctor: 'BS. Nguyen Hong Van',
+    visitType: 'Danh gia dinh duong',
     summary:
-      'Tổng năng lượng hiện tại thấp hơn mục tiêu, bệnh nhân ăn chậm và nhanh no. Chỉ định ưu tiên món mềm, tăng bữa phụ chiều và theo dõi lượng nước.',
+      'Tong nang luong hien tai thap hon muc tieu, benh nhan an cham va nhanh no. Chi dinh uu tien mon mem, tang bua phu chieu va theo doi luong nuoc.',
   },
   {
     id: 'vr_2',
     visitDate: '29/11/2024',
-    doctor: 'CNDD Thu Hà',
-    visitType: 'Khai thác khẩu phần 24 giờ',
+    doctor: 'CNDD Thu Ha',
+    visitType: 'Khai thac khau phan 24 gio',
     summary:
-      'Bữa sáng và bữa trưa tạm ổn, bữa tối ăn muộn và thiếu bữa phụ. Người nhà sẵn sàng hỗ trợ chuẩn bị món mềm.',
+      'Bua sang va bua trua tam on, bua toi an muon va thieu bua phu. Nguoi nha san sang ho tro chuan bi mon mem.',
+  },
+];
+
+export const doctorProfileMock = {
+  doctorId: 'BS001',
+  fullName: 'Dr. Nguyễn Văn A',
+  avatar: 'A',
+  title: 'Trưởng khoa Dinh dưỡng',
+  specialty: 'Dinh dưỡng lâm sàng',
+  departmentLabel: 'Khoa Dinh dưỡng',
+  phone: '0908 123 456',
+  email: 'nguyenvana@mealclinic.vn',
+  bio: 'Phụ trách xây dựng phác đồ dinh dưỡng nội trú và theo dõi các ca cần can thiệp chuyên sâu.',
+  accountStatus: 'Đang hoạt động',
+};
+
+export const nurseAccessPatientsMock = [
+  { id: 'BN001', name: 'Nguyễn Thị Hoa', status: 'Đang theo dõi' },
+  { id: 'BN002', name: 'Trần Văn Nam', status: 'Cần chú ý' },
+  { id: 'BN003', name: 'Thái Bình Dương', status: 'Mới khám' },
+  { id: 'BN004', name: 'Lê Hoàng Anh', status: 'Tạm ngưng' },
+  { id: 'BN005', name: 'Phạm Thị Lan', status: 'Đang theo dõi' },
+  { id: 'BN006', name: 'Vũ Minh Khánh', status: 'Đang theo dõi' },
+  { id: 'BN007', name: 'Đỗ Quỳnh Mai', status: 'Cần chú ý' },
+];
+
+export const nursesMock = [
+  {
+    nurseId: 'DD001',
+    fullName: 'Điều dưỡng Lan',
+    roleLabel: 'Điều dưỡng theo dõi buồng bệnh',
+    phone: '0912 456 001',
+    status: 'Đang hoạt động',
+    assignedPatientIds: ['BN001', 'BN003', 'BN006'],
+  },
+  {
+    nurseId: 'DD002',
+    fullName: 'Điều dưỡng Hương',
+    roleLabel: 'Điều dưỡng hỗ trợ khẩu phần',
+    phone: '0912 456 002',
+    status: 'Đang hoạt động',
+    assignedPatientIds: ['BN002', 'BN005'],
+  },
+  {
+    nurseId: 'DD003',
+    fullName: 'Điều dưỡng Minh',
+    roleLabel: 'Điều dưỡng điều phối chăm sóc',
+    phone: '0912 456 003',
+    status: 'Tạm khóa',
+    assignedPatientIds: ['BN004'],
   },
 ];

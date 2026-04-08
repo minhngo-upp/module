@@ -74,7 +74,7 @@ export default function Appointments() {
                   <button className="btn-icon" type="button" aria-label="Tháng trước">
                     <ChevronLeft size={16} aria-hidden="true" />
                   </button>
-                  <strong>Tháng 10 2023</strong>
+                  <strong>Tháng 10/2023</strong>
                   <button className="btn-icon" type="button" aria-label="Tháng sau">
                     <ChevronRight size={16} aria-hidden="true" />
                   </button>
@@ -162,7 +162,7 @@ export default function Appointments() {
                     </label>
                     <label className="radio-label">
                       <input type="radio" name="duration" />
-                      <span>60 phút (Khám mới & Lập phác đồ)</span>
+                      <span>60 phút (Khám mới & lập phác đồ)</span>
                     </label>
                   </div>
                 </div>

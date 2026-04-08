@@ -48,7 +48,7 @@ export default function Patients() {
               name="patients-search"
               autoComplete="off"
               aria-label="Tìm bệnh nhân theo tên, số điện thoại hoặc mã bệnh nhân"
-              placeholder="Tìm theo Tên, SĐT, Mã BN…"
+              placeholder="Tìm theo Tên, SĐT, Mã BN..."
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
             />

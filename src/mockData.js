@@ -766,3 +766,57 @@ export const nursesMock = [
     assignedPatientIds: ['BN004'],
   },
 ];
+
+export const messageConversationsMock = [
+  {
+    id: 'BN001',
+    name: 'Nguyễn Thị Hoa',
+    lastMsg: 'Bác sĩ cho hỏi em ăn phở thay bún được không?',
+    time: '10:30',
+    unread: 2,
+    pinned: true,
+    label: 'Dinh dưỡng',
+    contextGoal: 'Tăng mức dung nạp bữa chiều và nhắc ghi nhật ký nước uống',
+    contextAlert: 'Chưa log đủ bữa tối trong 2 ngày gần nhất',
+    latestReport: 'Sinh hóa máu (02/12)',
+    messages: [
+      { id: 101, sender: 'doctor', text: 'Chào chị Hoa, tuần này chị thấy đường huyết ổn định chứ?', time: '09:00' },
+      { id: 102, sender: 'patient', text: 'Chào bác sĩ, sáng nay em đo là 95 mg/dL. Hơi mệt xíu ạ.', time: '09:12' },
+      { id: 103, sender: 'doctor', text: 'Mức đường huyết đó là ổn định nhé. Chị nhớ uống đủ nước.', time: '09:15' },
+      { id: 104, sender: 'patient', text: 'Bác sĩ cho hỏi em ăn phở thay bún được không?', time: '10:30' },
+    ],
+  },
+  {
+    id: 'BN002',
+    name: 'Trần Văn Nam',
+    lastMsg: 'Dạ tôi đã cập nhật xét nghiệm máu.',
+    time: 'Hôm qua',
+    unread: 0,
+    pinned: false,
+    label: 'Hành chính',
+    contextGoal: 'Hoàn thành lịch tái khám và bổ sung kết quả xét nghiệm mới',
+    contextAlert: 'Cần rà soát lại glucose đói và protein toàn phần',
+    latestReport: 'Điện giải đồ (02/12)',
+    messages: [
+      { id: 201, sender: 'patient', text: 'Dạ tôi vừa gửi thêm kết quả xét nghiệm máu mới.', time: '15:10' },
+      { id: 202, sender: 'doctor', text: 'Tôi đã nhận được. Chiều nay tôi sẽ xem lại và phản hồi.', time: '15:24' },
+      { id: 203, sender: 'patient', text: 'Dạ tôi đã cập nhật xét nghiệm máu.', time: 'Hôm qua' },
+    ],
+  },
+  {
+    id: 'BN004',
+    name: 'Lê Hoàng Anh',
+    lastMsg: 'Tôi bị chóng mặt khi tập HIIT.',
+    time: 'Thứ 3',
+    unread: 0,
+    pinned: false,
+    label: 'Cảnh báo',
+    contextGoal: 'Giảm cường độ vận động và kiểm tra lại bữa phụ trước tập',
+    contextAlert: 'Có dấu hiệu chóng mặt khi vận động cường độ cao',
+    latestReport: 'Nhật ký khẩu phần tuần này',
+    messages: [
+      { id: 301, sender: 'doctor', text: 'Anh mô tả rõ hơn thời điểm bị chóng mặt giúp tôi nhé.', time: '08:20' },
+      { id: 302, sender: 'patient', text: 'Tôi bị chóng mặt khi tập HIIT.', time: 'Thứ 3' },
+    ],
+  },
+];

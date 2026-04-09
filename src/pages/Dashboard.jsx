@@ -96,8 +96,11 @@ export default function Dashboard() {
                 <p className="stat-title">{stat.title}</p>
                 <h3 className="stat-value">{stat.value}</h3>
                 <p className="stat-description">{stat.description}</p>
+                <span className="stat-cta">
+                  Mở chi tiết
+                  <ArrowRight size={16} aria-hidden="true" />
+                </span>
               </div>
-              <ArrowRight size={18} className="stat-arrow" aria-hidden="true" />
             </Link>
           );
         })}
@@ -155,9 +158,12 @@ export default function Dashboard() {
                       <h4>
                         {item.patientName} ({item.visitType})
                       </h4>
-                      <span className="schedule-open-link">Xem hồ sơ</span>
                     </div>
                     <p>{item.note}</p>
+                    <span className="schedule-open-link">
+                      Mở hồ sơ
+                      <ArrowRight size={14} aria-hidden="true" />
+                    </span>
                   </div>
                 </Link>
               ))}

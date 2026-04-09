@@ -70,10 +70,10 @@ export default function PatientDetail() {
         </Link>
 
         <div className="actions-right">
-          <button className="btn-secondary" type="button" onClick={() => showToast(`Đã mở chat với ${patient.fullName}`)}>
+          <Link className="btn-secondary" to={`/messages?patientId=${patient.patientCode}`}>
             <MessageSquare size={16} className="button-icon-inline" aria-hidden="true" />
             Nhắn tin
-          </button>
+          </Link>
           <button className="btn-primary" type="button" onClick={() => showToast('Đã mở form đặt lịch theo dõi')}>
             <CalendarPlus size={16} className="button-icon-inline" aria-hidden="true" />
             Tạo follow-up

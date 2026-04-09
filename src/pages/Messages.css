@@ -23,6 +23,14 @@
 
 .conversations-header h2 {
   font-size: 1.25rem;
+  margin-bottom: 0;
+}
+
+.messages-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
   margin-bottom: 1rem;
 }
 
@@ -121,6 +129,19 @@
   justify-content: space-between;
   align-items: center;
   gap: 0.5rem;
+}
+
+.chat-info-middle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.chat-patient-id {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: hsl(var(--text-muted));
 }
 
 .chat-last-msg {
@@ -353,6 +374,18 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+}
+
+.messages-empty,
+.chat-empty-state {
+  display: grid;
+  place-items: center;
+  color: hsl(var(--text-muted));
+}
+
+.messages-empty {
+  padding: 1.25rem 1rem;
+  font-size: 0.875rem;
 }
 
 @media (max-width: 1024px) {

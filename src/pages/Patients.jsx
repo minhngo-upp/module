@@ -1,33 +1,92 @@
-import React, { useState } from 'react';
-import { Search, Filter, MoreVertical, Eye, CalendarClock } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import { Search, Filter, MoreVertical, Eye, CalendarClock, MessageSquare } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import './Patients.css';
+
+const patients = [
+  {
+    id: 'BN001',
+    name: 'Nguyễn Thị Hoa',
+    age: 34,
+    gender: 'Nữ',
+    phone: '0901234567',
+    doctor: 'Dr. Nguyễn Văn A',
+    lastVisit: '10/10/2023',
+    nextVisit: '24/10/2023',
+    status: 'Đang theo dõi',
+  },
+  {
+    id: 'BN002',
+    name: 'Trần Văn Nam',
+    age: 45,
+    gender: 'Nam',
+    phone: '0912345678',
+    doctor: 'Dr. Lê Thị B',
+    lastVisit: '12/10/2023',
+    nextVisit: '26/10/2023',
+    status: 'Cần chú ý',
+  },
+  {
+    id: 'BN003',
+    name: 'Thái Bình Dương',
+    age: 28,
+    gender: 'Nam',
+    phone: '0987654321',
+    doctor: 'Dr. Nguyễn Văn A',
+    lastVisit: '15/10/2023',
+    nextVisit: '01/11/2023',
+    status: 'Mới khám',
+  },
+  {
+    id: 'BN004',
+    name: 'Lê Hoàng Anh',
+    age: 52,
+    gender: 'Nữ',
+    phone: '0909888777',
+    doctor: 'Dr. Lê Thị B',
+    lastVisit: '01/09/2023',
+    nextVisit: 'Quá hạn',
+    status: 'Tạm ngưng',
+  },
+  {
+    id: 'BN005',
+    name: 'Phạm Thị Lan',
+    age: 31,
+    gender: 'Nữ',
+    phone: '0933444555',
+    doctor: 'Dr. Nguyễn Văn A',
+    lastVisit: '18/10/2023',
+    nextVisit: '02/11/2023',
+    status: 'Đang theo dõi',
+  },
+];
+
+function getStatusBadge(status) {
+  switch (status) {
+    case 'Đang theo dõi':
+      return 'badge-success';
+    case 'Cần chú ý':
+      return 'badge-danger';
+    case 'Mới khám':
+      return 'badge-blue';
+    case 'Tạm ngưng':
+      return 'badge-warning';
+    default:
+      return '';
+  }
+}
 
 export default function Patients() {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const patients = [
-    { id: 'BN001', name: 'Nguyễn Thị Hoa', age: 34, gender: 'Nữ', phone: '0901234567', doctor: 'Dr. Nguyễn Văn A', lastVisit: '10/10/2023', nextVisit: '24/10/2023', status: 'Đang theo dõi' },
-    { id: 'BN002', name: 'Trần Văn Nam', age: 45, gender: 'Nam', phone: '0912345678', doctor: 'Dr. Lê Thị B', lastVisit: '12/10/2023', nextVisit: '26/10/2023', status: 'Cần chú ý' },
-    { id: 'BN003', name: 'Thái Bình Dương', age: 28, gender: 'Nam', phone: '0987654321', doctor: 'Dr. Nguyễn Văn A', lastVisit: '15/10/2023', nextVisit: '01/11/2023', status: 'Mới khám' },
-    { id: 'BN004', name: 'Lê Hoàng Anh', age: 52, gender: 'Nữ', phone: '0909888777', doctor: 'Dr. Lê Thị B', lastVisit: '01/09/2023', nextVisit: 'Quá hạn', status: 'Tạm ngưng' },
-    { id: 'BN005', name: 'Phạm Thị Lan', age: 31, gender: 'Nữ', phone: '0933444555', doctor: 'Dr. Nguyễn Văn A', lastVisit: '18/10/2023', nextVisit: '02/11/2023', status: 'Đang theo dõi' },
-  ];
+  const filteredPatients = useMemo(() => {
+    const normalizedSearch = searchTerm.trim().toLowerCase();
+    if (!normalizedSearch) return patients;
 
-  const getStatusBadge = (status) => {
-    switch (status) {
-      case 'Đang theo dõi':
-        return 'badge-success';
-      case 'Cần chú ý':
-        return 'badge-danger';
-      case 'Mới khám':
-        return 'badge-blue';
-      case 'Tạm ngưng':
-        return 'badge-warning';
-      default:
-        return '';
-    }
-  };
+    return patients.filter((patient) =>
+      [patient.id, patient.name, patient.phone, patient.doctor].some((value) => value.toLowerCase().includes(normalizedSearch)),
+    );
+  }, [searchTerm]);
 
   return (
     <div className="patients-page">
@@ -36,7 +95,7 @@ export default function Patients() {
           <h1 className="page-title">Danh sách bệnh nhân</h1>
           <p className="page-subtitle">Quản lý và theo dõi 124 bệnh nhân đang hoạt động trong hệ thống</p>
         </div>
-        <button className="btn-primary">+ Thêm bệnh nhân</button>
+        <button className="btn-primary" type="button">+ Thêm bệnh nhân</button>
       </div>
 
       <div className="card table-card">
@@ -61,7 +120,7 @@ export default function Patients() {
               <option value="dr2">Dr. Lê Thị B</option>
             </select>
 
-            <button className="btn-secondary icon-text-btn">
+            <button className="btn-secondary icon-text-btn" type="button">
               <Filter size={18} aria-hidden="true" />
               <span>Bộ lọc thêm</span>
             </button>
@@ -84,7 +143,7 @@ export default function Patients() {
               </tr>
             </thead>
             <tbody>
-              {patients.map((patient) => (
+              {filteredPatients.map((patient) => (
                 <tr key={patient.id}>
                   <td className="font-medium">{patient.id}</td>
                   <td>
@@ -105,6 +164,9 @@ export default function Patients() {
                     <Link className="btn-icon" to={`/patients/${patient.id}`} aria-label={`Xem hồ sơ của ${patient.name}`}>
                       <Eye size={18} aria-hidden="true" />
                     </Link>
+                    <Link className="btn-icon" to={`/messages?patientId=${patient.id}`} aria-label={`Nhắn tin với ${patient.name}`}>
+                      <MessageSquare size={18} aria-hidden="true" />
+                    </Link>
                     <button className="btn-icon" type="button" aria-label={`Đặt lịch cho ${patient.name}`}>
                       <CalendarClock size={18} aria-hidden="true" />
                     </button>
@@ -119,13 +181,13 @@ export default function Patients() {
         </div>
 
         <div className="pagination">
-          <span className="text-muted text-sm">Hiển thị 1 - 5 trong tổng số 124 bệnh nhân</span>
+          <span className="text-muted text-sm">Hiển thị 1 - {filteredPatients.length} trong tổng số 124 bệnh nhân</span>
           <div className="pagination-controls">
-            <button className="btn-secondary btn-sm" disabled>Trước</button>
-            <button className="btn-primary btn-sm">1</button>
-            <button className="btn-secondary btn-sm">2</button>
-            <button className="btn-secondary btn-sm">3</button>
-            <button className="btn-secondary btn-sm">Sau</button>
+            <button className="btn-secondary btn-sm" type="button" disabled>Trước</button>
+            <button className="btn-primary btn-sm" type="button">1</button>
+            <button className="btn-secondary btn-sm" type="button">2</button>
+            <button className="btn-secondary btn-sm" type="button">3</button>
+            <button className="btn-secondary btn-sm" type="button">Sau</button>
           </div>
         </div>
       </div>

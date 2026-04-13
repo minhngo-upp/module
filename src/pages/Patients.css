@@ -16,6 +16,10 @@
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
+  background: hsl(var(--surface));
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 
 .table-search {
@@ -53,7 +57,7 @@
 
 .data-table th,
 .data-table td {
-  padding: 1rem 1.5rem;
+  padding: 0.75rem 0.5rem;
   border-bottom: 1px solid hsl(var(--border));
 }
 
@@ -64,10 +68,17 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   background-color: hsl(var(--background));
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .data-table tbody tr:hover {
   background-color: hsla(var(--primary) / 0.05);
+}
+
+.data-table tbody tr:nth-child(even) {
+  background-color: hsla(var(--background) / 0.85);
 }
 
 .patient-link {
@@ -77,6 +88,8 @@
   font-weight: 500;
   width: fit-content;
   border-radius: var(--radius-sm);
+  padding: 0.25rem;
+  margin-left: -0.25rem;
 }
 
 .patient-link:hover {
@@ -102,6 +115,7 @@
   display: flex;
   justify-content: flex-end;
   gap: 0.25rem;
+  min-width: 180px;
 }
 
 .pagination {
@@ -119,8 +133,18 @@
 }
 
 .btn-sm {
-  padding: 0.25rem 0.75rem;
+  padding: 0.4rem 0.75rem;
   font-size: 0.875rem;
+}
+
+@media (min-width: 1280px) {
+  .table-card {
+    box-shadow: var(--shadow-md);
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+  }
 }
 
 @media (max-width: 1024px) {

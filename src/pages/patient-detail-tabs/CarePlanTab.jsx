@@ -1,5 +1,19 @@
 import React, { useMemo, useState } from 'react';
-import { Check, ChevronDown, ChevronUp, Copy, ImageOff, PlusCircle, Repeat, Save, Search, Trash2, X } from 'lucide-react';
+import {
+  Check,
+  ChevronDown,
+  ChevronUp,
+  Copy,
+  ImageOff,
+  MessageSquarePlus,
+  PlusCircle,
+  Repeat,
+  Save,
+  Search,
+  Target,
+  Trash2,
+  X,
+} from 'lucide-react';
 import { carePlanMockDB } from '../../mockData';
 
 const RANGE_OPTIONS = [
@@ -126,6 +140,115 @@ function recalculateDay(day) {
   };
 }
 
+function getCycleMetrics(days) {
+  const emptyDays = days.filter((day) => day.totals.filledMeals === 0).length;
+  const missingMealDays = days.filter((day) => day.totals.filledMeals > 0 && day.totals.filledMeals < 4).length;
+  const kcalReviewDays = days.filter((day) => {
+    const gap = Math.abs(day.totals.targetCalories - day.totals.calories);
+    return day.totals.filledMeals > 0 && gap > 180;
+  }).length;
+  const customizedDays = days.filter((day) => day.meals.some((meal) => meal.items.some((item) => item.isCustomized))).length;
+  const plannedDays = days.filter((day) => day.totals.filledMeals > 0).length;
+  const readyDays = days.filter((day) => day.status === 'ready').length;
+  const totalCalories = days.reduce((sum, day) => sum + day.totals.calories, 0);
+  const avgCalories = days.length > 0 ? Math.round(totalCalories / days.length) : 0;
+
+  let cycleStatus = 'Sẵn sàng áp dụng';
+  let conclusion = 'Đã sẵn sàng áp dụng cho chu kỳ hiện tại';
+  let tone = 'ready';
+
+  if (emptyDays > 0 || missingMealDays > 0) {
+    cycleStatus = 'Đang rà soát';
+    conclusion = 'Chưa sẵn sàng lưu toàn chu kỳ';
+    tone = 'warning';
+  } else if (kcalReviewDays > 0) {
+    cycleStatus = 'Đang rà soát';
+    conclusion = 'Có thể lưu nháp, nên rà soát kcal trước khi áp dụng';
+    tone = 'review';
+  }
+
+  return {
+    avgCalories,
+    conclusion,
+    customizedDays,
+    cycleStatus,
+    emptyDays,
+    kcalReviewDays,
+    missingMealDays,
+    plannedDays,
+    readyDays,
+    tone,
+    totalDays: days.length,
+  };
+}
+
+function getDayReadiness(day) {
+  const kcalGap = Math.max(0, day.totals.targetCalories - day.totals.calories);
+  const missingMeals = Math.max(0, 4 - day.totals.filledMeals);
+
+  if (day.totals.filledMeals === 0) {
+    return {
+      label: 'Draft',
+      reason: 'Chưa có thực đơn',
+      priority: 'Ưu tiên xử lý',
+      tone: 'draft',
+    };
+  }
+
+  if (missingMeals > 0) {
+    return {
+      label: 'Warning',
+      reason: `Thiếu ${missingMeals} bữa`,
+      priority: 'Ưu tiên xử lý',
+      tone: 'warning',
+    };
+  }
+
+  if (kcalGap > 180) {
+    return {
+      label: 'Review',
+      reason: `Thiếu khoảng ${kcalGap} kcal`,
+      priority: 'Cần rà soát kcal',
+      tone: 'review',
+    };
+  }
+
+  return {
+    label: 'Ready',
+    reason: 'Đủ bữa và gần mục tiêu',
+    priority: 'Có thể rà soát sau',
+    tone: 'ready',
+  };
+}
+
+function getMealSummary(meal) {
+  const calories = meal.items.reduce((sum, item) => sum + Number(item.calories || 0), 0);
+
+  if (meal.items.length === 0) {
+    return { calories, label: 'Chưa có', tone: 'warning', note: 'Cần thêm món' };
+  }
+
+  if (calories < 220) {
+    return { calories, label: 'Còn nhẹ', tone: 'review', note: 'Nên tăng năng lượng' };
+  }
+
+  if (calories >= 450) {
+    return { calories, label: 'Phù hợp', tone: 'ready', note: 'Đủ năng lượng cơ bản' };
+  }
+
+  return { calories, label: 'Tạm ổn', tone: 'neutral', note: 'Theo dõi dung nạp' };
+}
+
+function getDishInterventionNote(dish) {
+  const ingredientNames = dish.ingredients.map((ingredient) => ingredient.name.toLowerCase()).join(' ');
+  if (dish.calories >= 300) return 'Phù hợp mục tiêu tăng năng lượng';
+  if (ingredientNames.includes('sữa') || ingredientNames.includes('cá') || ingredientNames.includes('thịt') || ingredientNames.includes('gà')) {
+    return 'Hỗ trợ tăng đạm, ưu tiên dung nạp tốt';
+  }
+  if (dish.calories < 160) return 'Món nhẹ, nên đi kèm nguồn đạm hoặc bữa phụ';
+  return 'Đọc cùng tổng kcal của bữa để cân đối khẩu phần';
+}
+
 function buildDays(baseDays, startDate, durationDays) {
   const byDate = new Map(baseDays.map((day) => [day.date, hydrateDay(cloneData(day))]));
   const days = [];
@@ -146,7 +269,7 @@ function PlannerToolbar({ rangeDays, startDate, setRangeDays, setStartDate, metr
         <div className="section-heading">
           <span className="eyebrow">Kế hoạch thực đơn</span>
           <h2>Lập thực đơn từ 1 ngày đến 1 tháng cho bệnh nhân</h2>
-          <p>Chọn chu kỳ, chỉnh theo từng ngày, sau đó nhân bản hoặc lặp lại để tăng tốc độ thao tác.</p>
+          <p>Chọn chu kỳ, xử lý ngày còn thiếu trước, sau đó nhân bản hoặc lặp lại để tăng tốc độ thao tác.</p>
         </div>
 
         <div className="planner-toolbar-actions">
@@ -194,11 +317,11 @@ function PlannerToolbar({ rangeDays, startDate, setRangeDays, setStartDate, metr
         <div className="planner-metrics">
           <div className="planner-metric">
             <span>Ngày đã có thực đơn</span>
-            <strong>{metrics.readyDays}/{metrics.totalDays}</strong>
+            <strong>{metrics.plannedDays}/{metrics.totalDays}</strong>
           </div>
           <div className="planner-metric">
-            <span>Ngày còn trống</span>
-            <strong>{metrics.emptyDays}</strong>
+            <span>Cần xử lý trước</span>
+            <strong>{metrics.emptyDays + metrics.missingMealDays}</strong>
           </div>
           <div className="planner-metric">
             <span>Kcal trung bình</span>
@@ -210,33 +333,68 @@ function PlannerToolbar({ rangeDays, startDate, setRangeDays, setStartDate, metr
   );
 }
 
+function InterventionWorkflowStrip({ metrics, rangeDays }) {
+  const steps = [
+    { label: 'Chọn chu kỳ', value: `${rangeDays} ngày`, state: 'done' },
+    { label: 'Lên thực đơn', value: `${metrics.plannedDays}/${metrics.totalDays} ngày`, state: metrics.emptyDays === 0 ? 'done' : 'active' },
+    { label: 'Rà soát', value: `${metrics.missingMealDays + metrics.kcalReviewDays} điểm`, state: metrics.tone === 'ready' ? 'done' : 'active' },
+    { label: 'Theo dõi', value: 'Follow-up 48h', state: 'next' },
+  ];
+
+  return (
+    <article className={`card intervention-workflow-card readiness-${metrics.tone}`}>
+      <div className="intervention-workflow-header">
+        <div className="section-heading">
+          <span className="eyebrow">Tiến độ kế hoạch</span>
+          <h2>Trạng thái chu kỳ can thiệp</h2>
+          <p>Rà soát nhanh mức sẵn sàng trước khi lưu và tạo follow-up.</p>
+        </div>
+        <span className={`intervention-status-badge status-${metrics.tone}`}>{metrics.cycleStatus}</span>
+      </div>
+
+      <div className="intervention-workflow-steps" aria-label="Các bước của chu kỳ can thiệp">
+        {steps.map((step) => (
+          <div key={step.label} className={`workflow-step ${step.state}`}>
+            <span>{step.label}</span>
+            <strong>{step.value}</strong>
+          </div>
+        ))}
+      </div>
+    </article>
+  );
+}
+
 function DayRail({ days, selectedDate, onSelect }) {
   return (
     <article className="card planner-rail-card">
       <div className="section-heading">
-        <span className="eyebrow">Lịch thực đơn</span>
-        <h2>Danh sách ngày trong chu kỳ</h2>
+        <span className="eyebrow">Ngày cần xử lý trước</span>
+        <h2>Task list theo chu kỳ</h2>
       </div>
 
       <div className="planner-day-rail">
-        {days.map((day) => (
-          <button
-            key={day.date}
-            className={`planner-day-card ${selectedDate === day.date ? 'active' : ''}`}
-            type="button"
-            onClick={() => onSelect(day.date)}
-          >
-            <div className="planner-day-card-top">
-              <strong>{day.label}</strong>
-              <span className={`day-status-badge status-${day.status}`}>{day.status}</span>
-            </div>
-            <div className="planner-day-card-meta">
-              <span>{day.totals.calories} kcal</span>
-              <span>{day.totals.filledMeals}/4 bữa</span>
-            </div>
-            <p>{day.notes}</p>
-          </button>
-        ))}
+        {days.map((day) => {
+          const readiness = getDayReadiness(day);
+          return (
+            <button
+              key={day.date}
+              className={`planner-day-card ${selectedDate === day.date ? 'active' : ''} priority-${readiness.tone}`}
+              type="button"
+              onClick={() => onSelect(day.date)}
+            >
+              <div className="planner-day-card-top">
+                <strong>{day.label}</strong>
+                <span className={`day-status-badge status-${readiness.tone}`}>{readiness.label}</span>
+              </div>
+              <div className="planner-day-card-meta">
+                <span>{day.totals.calories} kcal</span>
+                <span>{day.totals.filledMeals}/4 bữa</span>
+              </div>
+              <p>{readiness.reason}</p>
+              <small>{readiness.priority}</small>
+            </button>
+          );
+        })}
       </div>
     </article>
   );
@@ -452,12 +610,20 @@ function AddDishModal({
 }
 
 function DishCard({ dish, onEdit, onMoveUp, onMoveDown, onRemove }) {
+  const ingredientSummary = dish.ingredients.map((ingredient) => ingredient.name).slice(0, 4).join(', ');
+  const interventionNote = getDishInterventionNote(dish);
+
   return (
     <article className="dish-card">
       <div className="dish-card-main">
         <div className="dish-card-copy">
           <div className="dish-card-topline">
-            <strong>{dish.dishName}</strong>
+            <div>
+              <strong>{dish.dishName}</strong>
+              <p className="dish-card-description">
+                {dish.calories} kcal · {dish.serving} · {dish.ingredients.length} nguyên liệu
+              </p>
+            </div>
             <span className={`dish-custom-badge ${dish.isCustomized ? 'customized' : ''}`}>
               {dish.isCustomized ? 'Đã chỉnh riêng' : 'Mặc định'}
             </span>
@@ -475,9 +641,6 @@ function DishCard({ dish, onEdit, onMoveUp, onMoveDown, onRemove }) {
             </div>
 
             <div className="dish-card-meta">
-              <p className="dish-card-description">
-                {dish.calories} kcal • {dish.serving} • {dish.ingredients.length} nguyên liệu
-              </p>
               <div className="dish-card-meta-grid">
                 <div className="dish-meta-chip">
                   <span>Khẩu phần</span>
@@ -492,6 +655,14 @@ function DishCard({ dish, onEdit, onMoveUp, onMoveDown, onRemove }) {
                   <strong>{dish.ingredients.length} thành phần</strong>
                 </div>
               </div>
+              <p className="dish-ingredient-strip">
+                <span>Thành phần chính</span>
+                {ingredientSummary || 'Chưa có dữ liệu nguyên liệu'}
+              </p>
+              <p className="meal-intervention-note">
+                <Target size={14} aria-hidden="true" />
+                {interventionNote}
+              </p>
             </div>
           </div>
         </div>
@@ -516,13 +687,16 @@ function DishCard({ dish, onEdit, onMoveUp, onMoveDown, onRemove }) {
 }
 
 function MealSlotCard({ meal, onStartAddDish, onOpenDishEditor, onMoveDish, onRemoveDish }) {
+  const summary = getMealSummary(meal);
+
   return (
-    <section className="meal-slot-card">
+    <section className={`meal-slot-card meal-${summary.tone}`}>
       <div className="meal-slot-header">
         <div>
           <h3>{meal.title}</h3>
-          <p>{meal.items.length > 0 ? `${meal.items.length} món đã chọn` : 'Chưa có món nào trong bữa này'}</p>
+          <p>{meal.items.length > 0 ? `${meal.items.length} món · ${summary.calories} kcal · ${summary.note}` : 'Chưa có món nào trong bữa này'}</p>
         </div>
+        <span className={`meal-status-badge status-${summary.tone}`}>{summary.label}</span>
         <button className="btn-secondary btn-small" type="button" onClick={() => onStartAddDish(meal.mealType)}>
           <PlusCircle size={16} className="button-icon-inline" aria-hidden="true" />
           Thêm món
@@ -558,6 +732,8 @@ function DayPlanEditor({
   onRemoveDish,
 }) {
   const summaryWarnings = [];
+  const kcalGap = Math.max(0, day.totals.targetCalories - day.totals.calories);
+  const missingMealLabels = day.meals.filter((meal) => meal.items.length === 0).map((meal) => meal.title.toLowerCase());
   const statusLabels = {
     draft: 'Chưa hoàn thiện',
     warning: 'Thiếu bữa',
@@ -574,7 +750,11 @@ function DayPlanEditor({
         <div className="section-heading">
           <span className="eyebrow">Chi tiết ngày</span>
           <h2>{day.label}</h2>
-          <p>{day.notes}</p>
+          <p>
+            {kcalGap > 0
+              ? `Hôm nay còn thiếu khoảng ${kcalGap} kcal so với mục tiêu.`
+              : 'Tổng năng lượng đang nằm trong vùng phù hợp.'}
+          </p>
         </div>
 
         <div className="planner-editor-kpis">
@@ -596,13 +776,32 @@ function DayPlanEditor({
         </div>
       </div>
 
-      <div className="planner-summary-strip">
+      <div className="selected-day-meal-summary" aria-label="Tóm tắt theo bữa của ngày đang chọn">
+        {day.meals.map((meal) => {
+          const summary = getMealSummary(meal);
+          return (
+            <div key={meal.mealType} className={`meal-summary-chip status-${summary.tone}`}>
+              <span>{meal.title}</span>
+              <strong>{summary.label}</strong>
+              <small>{summary.calories} kcal</small>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="planner-summary-strip intervention-day-guidance">
         <div className="planner-summary-pill">
+          <span>Mục tiêu ưu tiên</span>
           <strong>{patient.interventionPlan.goals[0]}</strong>
         </div>
         <div className="planner-summary-pill muted">
-          <span>Cảnh báo:</span>
-          <strong>{summaryWarnings.length > 0 ? summaryWarnings.join(' • ') : 'Không có'}</strong>
+          <span>Cảnh báo vận hành</span>
+          <strong>{summaryWarnings.length > 0 ? summaryWarnings.join(' • ') : 'Không có cảnh báo lớn'}</strong>
+          <small>
+            {missingMealLabels.length > 0
+              ? `Ưu tiên bổ sung ${missingMealLabels.join(', ')} bằng món mềm, dễ ăn, giàu đạm.`
+              : 'Tiếp tục rà soát khả năng dung nạp và phản hồi sau bữa.'}
+          </small>
         </div>
       </div>
 
@@ -622,50 +821,92 @@ function DayPlanEditor({
   );
 }
 
-function PlanSummaryPanel({ days, patient }) {
-  const metrics = useMemo(() => {
-    const emptyDays = days.filter((day) => day.totals.filledMeals === 0).length;
-    const warningDays = days.filter((day) => day.status === 'warning').length;
-    const reviewDays = days.filter((day) => day.status === 'review').length;
-    const customizedDays = days.filter((day) => day.meals.some((meal) => meal.items.some((item) => item.isCustomized))).length;
-    return { emptyDays, warningDays, reviewDays, customizedDays };
-  }, [days]);
+function PlanSummaryPanel({ patient, metrics, onSaveDraft, onSavePlan, onSaveAndFollowUp }) {
+  const checklist = [
+    {
+      label: 'Ngày còn trống',
+      value: metrics.emptyDays,
+      state: metrics.emptyDays === 0 ? 'pass' : 'warning',
+    },
+    {
+      label: 'Ngày thiếu bữa',
+      value: metrics.missingMealDays,
+      state: metrics.missingMealDays === 0 ? 'pass' : 'warning',
+    },
+    {
+      label: 'Ngày cần rà soát kcal',
+      value: metrics.kcalReviewDays,
+      state: metrics.kcalReviewDays === 0 ? 'pass' : 'review',
+    },
+    {
+      label: 'Ngày đã chỉnh riêng',
+      value: metrics.customizedDays,
+      state: metrics.customizedDays > 0 ? 'review' : 'pass',
+    },
+  ];
 
   return (
     <aside className="planner-summary-panel">
-      <article className="card planner-side-card">
+      <article className={`card planner-side-card cycle-readiness-card readiness-${metrics.tone}`}>
         <div className="section-heading">
-          <span className="eyebrow">Tóm tắt chu kỳ</span>
-          <h2>Rà soát nhanh trước khi lưu</h2>
+          <span className="eyebrow">Rà soát trước khi lưu</span>
+          <h2>Điều kiện sẵn sàng áp dụng</h2>
         </div>
 
-        <div className="planner-side-stats">
-          <div>
-            <span>Ngày còn trống</span>
-            <strong>{metrics.emptyDays}</strong>
-          </div>
-          <div>
-            <span>Ngày thiếu bữa</span>
-            <strong>{metrics.warningDays}</strong>
-          </div>
-          <div>
-            <span>Ngày cần rà soát kcal</span>
-            <strong>{metrics.reviewDays}</strong>
-          </div>
-          <div>
-            <span>Ngày đã chỉnh riêng</span>
-            <strong>{metrics.customizedDays}</strong>
-          </div>
+        <div className="readiness-checklist">
+          {checklist.map((item) => (
+            <div key={item.label} className={`readiness-check-item ${item.state}`}>
+              <span>{item.label}</span>
+              <strong>{item.value}</strong>
+            </div>
+          ))}
+        </div>
+
+        <div className="readiness-conclusion">
+          <span>Kết luận</span>
+          <strong>{metrics.conclusion}</strong>
+          <p>
+            {metrics.tone === 'ready'
+              ? 'Có thể lưu kế hoạch và chuyển sang theo dõi phản hồi trong 48 giờ.'
+              : 'Có thể lưu nháp để hoàn thiện tiếp, chưa nên áp dụng toàn bộ chu kỳ.'}
+          </p>
+        </div>
+
+        <div className="save-plan-action-bar" aria-label="Hành động lưu kế hoạch">
+          <button className="btn-secondary" type="button" onClick={onSaveDraft}>
+            Lưu nháp
+          </button>
+          <button className="btn-primary" type="button" onClick={onSavePlan} disabled={metrics.tone !== 'ready'}>
+            <Save size={16} className="button-icon-inline" aria-hidden="true" />
+            Lưu kế hoạch
+          </button>
+          <button className="btn-secondary" type="button" onClick={onSaveAndFollowUp}>
+            <MessageSquarePlus size={16} className="button-icon-inline" aria-hidden="true" />
+            Lưu và tạo follow-up
+          </button>
         </div>
       </article>
 
       <article className="card planner-side-card">
         <div className="section-heading">
-          <span className="eyebrow">Khuyến nghị</span>
+          <span className="eyebrow">Sau khi lưu kế hoạch</span>
+          <h2>Gợi ý follow-up sau can thiệp</h2>
+        </div>
+
+        <ul className="followup-recommendation-list">
+          <li>Theo dõi khả năng dung nạp bữa phụ chiều trong 48 giờ.</li>
+          <li>Nhắc nước uống theo mốc giờ, tránh dồn cuối ngày.</li>
+          <li>Kiểm tra mức mệt, tốc độ ăn và phản hồi của người nhà.</li>
+        </ul>
+      </article>
+
+      <article className="card planner-side-card">
+        <div className="section-heading">
+          <span className="eyebrow">Khuyến nghị gắn với kế hoạch</span>
           <h2>Nội dung cần nhắc bệnh nhân</h2>
         </div>
 
-        <ul className="detail-list">
+        <ul className="detail-list intervention-recommendation-list">
           {patient.interventionPlan.recommendations.map((item) => (
             <li key={item}>{item}</li>
           ))}
@@ -683,12 +924,14 @@ function PlanSummaryPanel({ days, patient }) {
             <div key={item.id} className="support-row">
               <strong>{item.name}</strong>
               <p>{item.usage}</p>
+              <small>Bù khoảng trống năng lượng hoặc vi chất, không thay thế bữa phụ.</small>
             </div>
           ))}
           {carePlanMockDB.exercises.slice(0, 2).map((item) => (
             <div key={item.id} className="support-row">
               <strong>{item.name}</strong>
               <p>{item.desc}</p>
+              <small>Theo dõi dung nạp và mức mệt sau ăn.</small>
             </div>
           ))}
         </div>
@@ -729,15 +972,7 @@ export default function CarePlanTab({ patient, showToast }) {
   }, [addDishState.mealType, addDishState.searchTerm]);
 
   const plannerMetrics = useMemo(() => {
-    const readyDays = days.filter((day) => day.totals.filledMeals > 0).length;
-    const emptyDays = days.filter((day) => day.totals.filledMeals === 0).length;
-    const totalCalories = days.reduce((sum, day) => sum + day.totals.calories, 0);
-    return {
-      readyDays,
-      emptyDays,
-      totalDays: days.length,
-      avgCalories: days.length > 0 ? Math.round(totalCalories / days.length) : 0,
-    };
+    return getCycleMetrics(days);
   }, [days]);
 
   const updateCurrentDay = (updater) => {
@@ -956,6 +1191,14 @@ export default function CarePlanTab({ patient, showToast }) {
     showToast(`Đã lưu kế hoạch ${rangeDays} ngày bắt đầu từ ${startDate}`);
   };
 
+  const saveDraft = () => {
+    showToast(`Đã lưu nháp kế hoạch ${rangeDays} ngày`);
+  };
+
+  const saveAndCreateFollowUp = () => {
+    showToast('Đã lưu kế hoạch và tạo follow-up sau 48 giờ');
+  };
+
   const resetPlannerWindow = (nextStartDate, nextRangeDays) => {
     const nextDays = buildDays(patient.mealPlanDays, nextStartDate, nextRangeDays);
     setDays(nextDays);
@@ -965,6 +1208,8 @@ export default function CarePlanTab({ patient, showToast }) {
   return (
     <div className="tab-pane care-plan-tab">
       <div className="planner-shell">
+        <InterventionWorkflowStrip metrics={plannerMetrics} rangeDays={rangeDays} />
+
         <PlannerToolbar
           rangeDays={rangeDays}
           startDate={startDate}
@@ -997,15 +1242,14 @@ export default function CarePlanTab({ patient, showToast }) {
             />
           ) : null}
 
-          <PlanSummaryPanel days={days} patient={patient} />
+          <PlanSummaryPanel
+            patient={patient}
+            metrics={plannerMetrics}
+            onSaveDraft={saveDraft}
+            onSavePlan={savePlan}
+            onSaveAndFollowUp={saveAndCreateFollowUp}
+          />
         </section>
-
-        <div className="planner-save-row">
-          <button className="btn-primary" type="button" onClick={savePlan}>
-            <Save size={16} className="button-icon-inline" aria-hidden="true" />
-            Lưu kế hoạch
-          </button>
-        </div>
 
         <DishEditModal
           dish={editingDish}

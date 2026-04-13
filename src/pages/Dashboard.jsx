@@ -100,7 +100,7 @@ const priorityPatients = [
     priority: 'Báo động đỏ',
     priorityTone: 'danger',
     adherence: '45%',
-    stage: 'Monitoring',
+    stage: 'Theo dõi',
     updatedAt: '2 giờ trước',
   },
   {
@@ -110,7 +110,7 @@ const priorityPatients = [
     priority: 'Báo động đỏ',
     priorityTone: 'danger',
     adherence: '55%',
-    stage: 'Intervention',
+    stage: 'Can thiệp',
     updatedAt: '1 giờ trước',
   },
   {
@@ -130,7 +130,7 @@ const priorityPatients = [
     priority: 'Cần theo dõi',
     priorityTone: 'warning',
     adherence: '72%',
-    stage: 'Diagnosis',
+    stage: 'Chẩn đoán',
     updatedAt: '3 giờ trước',
   },
 ];

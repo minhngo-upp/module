@@ -5,6 +5,9 @@ import { anthropometricRecordsMock } from '../../mockData';
 export default function AnthropometricsTab({ patient, showToast }) {
   const [metricType, setMetricType] = useState('weight');
   const { anthropometrics } = patient;
+  const latestRecord = anthropometricRecordsMock[anthropometricRecordsMock.length - 1];
+  const firstRecord = anthropometricRecordsMock[0];
+  const latestDelta = latestRecord.weight - anthropometricRecordsMock[anthropometricRecordsMock.length - 2].weight;
 
   return (
     <div className="tab-pane anthropometrics-tab">
@@ -26,6 +29,19 @@ export default function AnthropometricsTab({ patient, showToast }) {
           <strong>{anthropometrics.weightChange}</strong>
         </div>
       </section>
+
+      <article className="card anthropometric-trend-summary">
+        <div>
+          <span className="eyebrow">Xu hướng nhân trắc</span>
+          <h2>Giảm {Math.abs(latestRecord.weight - firstRecord.weight).toFixed(1)} kg từ mốc khám ban đầu</h2>
+          <p>BMI vẫn trong vùng chấp nhận được, nhưng xu hướng giảm liên tục cần can thiệp sớm để bảo vệ khối cơ và tránh giảm tiếp.</p>
+        </div>
+        <div className="trend-delta-badge">
+          <span>So với lần trước</span>
+          <strong>{latestDelta.toFixed(1)} kg</strong>
+          <small>Đánh giá gần nhất</small>
+        </div>
+      </article>
 
       <section className="chart-layout">
         <article className="card chart-panel">
@@ -113,6 +129,7 @@ export default function AnthropometricsTab({ patient, showToast }) {
                 <th>Ngày đo</th>
                 <th>Cân nặng</th>
                 <th>BMI</th>
+                <th>So với lần trước</th>
                 <th>Nguồn dữ liệu</th>
               </tr>
             </thead>
@@ -120,14 +137,19 @@ export default function AnthropometricsTab({ patient, showToast }) {
               {anthropometricRecordsMock
                 .slice()
                 .reverse()
-                .map((record) => (
+                .map((record) => {
+                  const previousRecord = anthropometricRecordsMock[anthropometricRecordsMock.findIndex((item) => item.id === record.id) - 1];
+                  const delta = previousRecord ? record.weight - previousRecord.weight : 0;
+                  return (
                   <tr key={record.id}>
                     <td className="font-medium">{record.date}</td>
                     <td>{record.weight} kg</td>
                     <td>{record.bmi}</td>
+                    <td className={delta < 0 ? 'text-danger font-bold' : ''}>{previousRecord ? `${delta.toFixed(1)} kg` : 'Mốc đầu'}</td>
                     <td>{record.source}</td>
                   </tr>
-                ))}
+                  );
+                })}
             </tbody>
           </table>
         </div>

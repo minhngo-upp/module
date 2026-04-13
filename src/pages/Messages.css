@@ -1,5 +1,6 @@
 .messages-page {
-  height: calc(100vh - var(--header-h) - 3rem);
+  height: calc(100dvh - var(--header-h) - 3rem);
+  min-height: 560px;
 }
 
 .messages-layout {
@@ -169,6 +170,9 @@
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 
 .chat-user-info {
@@ -218,6 +222,7 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  scroll-behavior: smooth;
 }
 
 .chat-date-divider {
@@ -279,6 +284,9 @@
   background-color: hsl(var(--surface));
   border-top: 1px solid hsl(var(--border));
   padding: 1rem 1.5rem;
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
 }
 
 .quick-replies {
@@ -349,6 +357,27 @@
   padding: 1.5rem;
 }
 
+@media (min-width: 1280px) {
+  .messages-layout {
+    display: grid;
+    grid-template-columns: 340px minmax(0, 1fr) 300px;
+  }
+
+  .conversations-sidebar {
+    width: 100%;
+  }
+
+  .chat-context-panel {
+    width: 100%;
+    overflow-y: auto;
+    max-height: calc(100dvh - var(--header-h) - 3rem);
+  }
+
+  .message-bubble {
+    max-width: 64%;
+  }
+}
+
 .context-header h4 {
   font-size: 1rem;
   margin-bottom: 1.5rem;
@@ -389,7 +418,10 @@
 }
 
 @media (max-width: 1024px) {
-  .messages-page { height: auto; }
+  .messages-page {
+    height: auto;
+    min-height: 0;
+  }
   .messages-layout { flex-direction: column; }
   .conversations-sidebar { width: 100%; max-height: 320px; }
   .hidden-md { display: none; }

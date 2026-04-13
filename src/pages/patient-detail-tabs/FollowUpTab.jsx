@@ -33,7 +33,7 @@ export default function FollowUpTab({ showToast }) {
              <textarea className="w-full mb-3" rows="2" placeholder="Ghi nhận phản hồi chi tiết từ bệnh nhân..."></textarea>
              <div className="flex gap-2">
                 <button className="btn-primary" onClick={() => showToast('Đã lưu Follow-up!')}>Lưu Follow-up</button>
-                <button className="btn-secondary" onClick={() => showToast('Đã đánh dấu cần bác sĩ xử lý lởi!')}>Cần Bác sĩ xử lý thêm</button>
+                <button className="btn-secondary" onClick={() => showToast('Đã đánh dấu cần bác sĩ xử lý thêm!')}>Cần bác sĩ xử lý thêm</button>
              </div>
           </div>
 

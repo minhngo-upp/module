@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Search, Filter, MoreVertical, Eye, CalendarClock, MessageSquare } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import CreatePatientDrawer from '../components/CreatePatientDrawer';
 import './Patients.css';
 
 const patients = [
@@ -78,24 +79,35 @@ function getStatusBadge(status) {
 
 export default function Patients() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [patientsList, setPatientsList] = useState(patients);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState(null);
 
   const filteredPatients = useMemo(() => {
     const normalizedSearch = searchTerm.trim().toLowerCase();
-    if (!normalizedSearch) return patients;
+    if (!normalizedSearch) return patientsList;
 
-    return patients.filter((patient) =>
+    return patientsList.filter((patient) =>
       [patient.id, patient.name, patient.phone, patient.doctor].some((value) => value.toLowerCase().includes(normalizedSearch)),
     );
   }, [searchTerm]);
+
+  const handleAddPatient = (newPatient) => {
+    setPatientsList([newPatient, ...patientsList]);
+    setToastMessage('Đã tạo bệnh nhân thành công!');
+    setTimeout(() => setToastMessage(null), 3000);
+  };
 
   return (
     <div className="patients-page">
       <div className="page-header flex-between">
         <div>
           <h1 className="page-title">Danh sách bệnh nhân</h1>
-          <p className="page-subtitle">Quản lý và theo dõi 124 bệnh nhân đang hoạt động trong hệ thống</p>
+          <p className="page-subtitle">Quản lý và theo dõi {patientsList.length} bệnh nhân đang hoạt động trong hệ thống</p>
         </div>
-        <button className="btn-primary" type="button">+ Thêm bệnh nhân</button>
+        <button className="btn-primary" type="button" onClick={() => setIsDrawerOpen(true)}>
+          + Thêm bệnh nhân
+        </button>
       </div>
 
       <div className="card table-card">
@@ -181,7 +193,7 @@ export default function Patients() {
         </div>
 
         <div className="pagination">
-          <span className="text-muted text-sm">Hiển thị 1 - {filteredPatients.length} trong tổng số 124 bệnh nhân</span>
+          <span className="text-muted text-sm">Hiển thị 1 - {filteredPatients.length} trong tổng số {patientsList.length} bệnh nhân</span>
           <div className="pagination-controls">
             <button className="btn-secondary btn-sm" type="button" disabled>Trước</button>
             <button className="btn-primary btn-sm" type="button">1</button>
@@ -191,6 +203,21 @@ export default function Patients() {
           </div>
         </div>
       </div>
+
+      <CreatePatientDrawer 
+        isOpen={isDrawerOpen} 
+        onClose={() => setIsDrawerOpen(false)} 
+        existingPatients={patientsList}
+        onSuccess={handleAddPatient}
+      />
+
+      {/* Lightweight Success Toast */}
+      {toastMessage && (
+        <div className="success-toast show" style={{ position: 'fixed', bottom: '2rem', left: '50%', transform: 'translateX(-50%)', backgroundColor: 'hsl(var(--surface))', padding: '1rem 1.5rem', borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-lg)', borderLeft: '4px solid hsl(var(--success))', zIndex: 3000, display: 'flex', alignItems: 'center', gap: '8px', color: 'hsl(var(--text-main))' }}>
+          <div style={{ color: 'hsl(var(--success))', display: 'flex' }}><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>
+          <span style={{ fontWeight: 500 }}>{toastMessage}</span>
+        </div>
+      )}
     </div>
   );
 }

@@ -8,8 +8,14 @@ export default function InterventionFollowUpTab({ patient, showToast }) {
       <article className="card composite-intro-card">
         <div className="section-heading">
           <span className="eyebrow">Can thiệp & theo dõi</span>
-          <h2>Thống nhất kế hoạch điều trị, follow-up và lịch sử phản hồi trong cùng một nơi</h2>
-          <p>Người dùng không cần đổi tab giữa lúc lên thực đơn, ghi dặn dò và đọc lại diễn tiến can thiệp.</p>
+          <h2>Workspace từ lập thực đơn đến follow-up sau can thiệp</h2>
+          <p>Đi theo một luồng: rà soát chu kỳ, xử lý ngày còn thiếu, lưu kế hoạch, rồi tạo follow-up theo phản hồi thực tế.</p>
+        </div>
+        <div className="intervention-flow-hints" aria-label="Luồng làm việc can thiệp">
+          <span>Lập kế hoạch</span>
+          <span>Rà soát sẵn sàng</span>
+          <span>Lưu kế hoạch</span>
+          <span>Theo dõi phản hồi</span>
         </div>
         <div className="section-anchor-nav" aria-label="Các phần trong tab can thiệp và theo dõi">
           <a href="#intervention-plan">Kế hoạch can thiệp</a>

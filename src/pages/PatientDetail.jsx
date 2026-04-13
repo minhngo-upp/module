@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   Activity,
   ArrowLeft,
@@ -9,6 +9,9 @@ import {
   FileText,
   MessageSquare,
   ScrollText,
+  AlertTriangle,
+  X,
+  Send,
 } from 'lucide-react';
 import './PatientDetail.css';
 
@@ -25,11 +28,44 @@ const TABS = [
   { id: 'intervention-followup', label: 'Can thiệp & theo dõi', icon: FileText },
 ];
 
+function PatientRiskBadge({ level }) {
+  return (
+    <span className="patient-risk-badge">
+      <AlertTriangle size={14} aria-hidden="true" />
+      {level}
+    </span>
+  );
+}
+
+function PatientClinicalSnapshot({ patient }) {
+  const snapshotItems = [
+    { label: 'Mức độ theo dõi', value: patient.nutritionAssessment.priority },
+    { label: 'Vấn đề chính', value: patient.nutritionAssessment.mainDiagnosis },
+    { label: 'Ưu tiên hôm nay', value: 'Tăng năng lượng khẩu phần và cải thiện nước uống' },
+    { label: 'Cập nhật gần nhất', value: 'Hôm nay, 08:30' },
+  ];
+
+  return (
+    <div className="clinical-snapshot-strip" aria-label="Tóm tắt lâm sàng nhanh">
+      {snapshotItems.map((item) => (
+        <div className="clinical-snapshot-item" key={item.label}>
+          <span>{item.label}</span>
+          <strong>{item.value}</strong>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function PatientDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('summary');
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatInput, setChatInput] = useState('');
   const [toastMsg, setToastMsg] = useState('');
   const toastTimeoutRef = useRef(null);
+  const detailContentRef = useRef(null);
 
   const patient = { ...patientDetailMock, patientCode: id ?? patientDetailMock.patientCode };
 
@@ -38,6 +74,22 @@ export default function PatientDetail() {
     window.clearTimeout(toastTimeoutRef.current);
     toastTimeoutRef.current = window.setTimeout(() => setToastMsg(''), 3000);
   };
+
+  useEffect(
+    () => () => {
+      window.clearTimeout(toastTimeoutRef.current);
+    },
+    [],
+  );
+
+  useEffect(() => {
+    if (!detailContentRef.current) return;
+
+    detailContentRef.current.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  }, [activeTab]);
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -64,19 +116,23 @@ export default function PatientDetail() {
       )}
 
       <div className="detail-header-actions">
-        <Link to="/patients" className="back-link">
+        <button className="back-link btn-link" type="button" onClick={() => navigate(-1)}>
           <ArrowLeft size={18} aria-hidden="true" />
-          <span>Quay lại danh sách bệnh nhân</span>
-        </Link>
+          <span>Quay lại</span>
+        </button>
 
         <div className="actions-right">
-          <Link className="btn-secondary" to={`/messages?patientId=${patient.patientCode}`}>
-            <MessageSquare size={16} className="button-icon-inline" aria-hidden="true" />
-            Nhắn tin
-          </Link>
           <button className="btn-primary" type="button" onClick={() => showToast('Đã mở form đặt lịch theo dõi')}>
             <CalendarPlus size={16} className="button-icon-inline" aria-hidden="true" />
             Tạo follow-up
+          </button>
+          <button className="btn-secondary" type="button" onClick={() => showToast('Đã tự động gửi tin nhắn nhắc nhở')}>
+            <AlertTriangle size={16} className="button-icon-inline" aria-hidden="true" />
+             Gửi nhắc nhở
+          </button>
+          <button className="btn-secondary" type="button" onClick={() => setIsChatOpen(true)}>
+            <MessageSquare size={16} className="button-icon-inline" aria-hidden="true" />
+            Nhắn tin
           </button>
         </div>
       </div>
@@ -88,7 +144,7 @@ export default function PatientDetail() {
 
             <div className="profile-details">
               <div className="hero-topline">
-                <span className="hero-status-badge">{patient.nutritionAssessment.priority}</span>
+                <PatientRiskBadge level={patient.nutritionAssessment.priority} />
                 <span className="hero-subtitle">Hồ sơ dinh dưỡng</span>
               </div>
               <h1 className="profile-name-large">{patient.fullName}</h1>
@@ -99,6 +155,9 @@ export default function PatientDetail() {
                   {patient.gender}, {patient.age} tuổi
                 </span>
                 <span className="tag">{patient.occupation}</span>
+                <span className="tag tag-danger inline-flex items-center gap-1">
+                  <AlertTriangle size={14} /> Cảnh báo: Không tuân thủ
+                </span>
               </div>
             </div>
           </div>
@@ -113,6 +172,8 @@ export default function PatientDetail() {
               <strong>{patient.assignedDoctor.name}</strong>
             </div>
           </div>
+
+          <PatientClinicalSnapshot patient={patient} />
         </div>
       </section>
 
@@ -142,9 +203,57 @@ export default function PatientDetail() {
         </nav>
       </div>
 
-      <div className="detail-content" id={`panel-${activeTab}`} role="tabpanel" aria-labelledby={`tab-${activeTab}`}>
+      <div
+        className="detail-content"
+        id={`panel-${activeTab}`}
+        role="tabpanel"
+        aria-labelledby={`tab-${activeTab}`}
+        ref={detailContentRef}
+      >
         {renderTabContent()}
       </div>
+
+      {isChatOpen && (
+        <div className="mini-chatbox">
+          <div className="mini-chatbox-header">
+            <div className="flex items-center gap-2">
+              <div className="chat-avatar">{patient.avatar}</div>
+              <strong>{patient.fullName}</strong>
+            </div>
+            <button className="btn-icon" onClick={() => setIsChatOpen(false)} aria-label="Đóng tin nhắn">
+              <X size={18} />
+            </button>
+          </div>
+          <div className="mini-chatbox-body">
+            <div className="chat-message received">
+              <p>Chào bác sĩ, hôm nay tôi lỡ ăn một cái bánh ngọt thì có sao không ạ?</p>
+              <span className="chat-time">10:42</span>
+            </div>
+          </div>
+          <div className="mini-chatbox-footer">
+            <input 
+              type="text" 
+              placeholder="Nhập tin nhắn..." 
+              value={chatInput} 
+              onChange={(e) => setChatInput(e.target.value)}
+              onKeyDown={(e) => { 
+                if (e.key === 'Enter' && chatInput) { 
+                  showToast('Đã gửi tin nhắn'); 
+                  setChatInput(''); 
+                } 
+              }}
+            />
+            <button 
+              className="btn-icon text-primary" 
+              onClick={() => { 
+                if (chatInput) { showToast('Đã gửi tin nhắn'); setChatInput(''); } 
+              }}
+            >
+              <Send size={18} />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -7,7 +7,6 @@ import PatientDetail from './pages/PatientDetail';
 import Appointments from './pages/Appointments';
 import Messages from './pages/Messages';
 import Settings from './pages/Settings';
-import './App.css';
 
 function App() {
   return (

@@ -1333,6 +1333,21 @@
   background: linear-gradient(180deg, #fffbeb 0%, hsl(var(--surface)) 70%);
 }
 
+.decision-plan-card .section-heading {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  text-align: left;
+  flex-wrap: wrap;
+}
+
+.decision-plan-card .section-heading > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
 .decision-checklist {
   display: grid;
   gap: 0.7rem;

@@ -17,6 +17,23 @@
   padding: 1.25rem;
 }
 
+@media (min-width: 1280px) {
+  .settings-grid {
+    gap: 1.5rem;
+  }
+
+  .nurse-list-panel {
+    position: sticky;
+    top: calc(var(--header-h) + 1.5rem);
+    max-height: calc(100dvh - var(--header-h) - 4rem);
+    overflow-y: auto;
+  }
+
+  .permission-columns {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
 .doctor-profile-panel,
 .access-panel,
 .nurse-list-panel {

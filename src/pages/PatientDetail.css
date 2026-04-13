@@ -475,12 +475,20 @@
 .info-main,
 .info-side,
 .daily-log-main,
-.daily-log-side,
 .care-plan-main,
 .care-plan-side,
 .history-main,
 .history-side,
 .lab-report-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.daily-log-side {
+  position: sticky;
+  top: calc(var(--header-h) + 1.5rem);
+  align-self: start;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -1131,8 +1139,7 @@
 }
 
 .decision-insight-card {
-  position: sticky;
-  top: calc(var(--header-h) + 4.5rem);
+  /* removed sticky to prevent child overlap, sticky is applied to wrapper */
 }
 
 .decision-insight-list {

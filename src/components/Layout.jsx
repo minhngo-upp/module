@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, Calendar, MessageSquare, Settings, Bell, Search, UserCircle } from 'lucide-react';
+import {
+  LayoutDashboard,
+  Users,
+  Calendar,
+  MessageSquare,
+  Settings,
+  Bell,
+  Search,
+  UserCircle,
+  Menu,
+  X
+} from 'lucide-react';
 import './Layout.css';
 
 export default function Layout() {
   const location = useLocation();
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
   const navItems = [
     { path: '/', label: 'Tổng quan', icon: LayoutDashboard },
@@ -16,13 +28,15 @@ export default function Layout() {
 
   return (
     <div className="app-container">
-      <aside className="sidebar">
+      <a className="skip-link" href="#main-content">Bỏ qua điều hướng, tới nội dung chính</a>
+
+      <aside className={`sidebar ${isMobileNavOpen ? 'open' : ''}`} aria-label="Thanh điều hướng bên trái">
         <div className="sidebar-header">
           <div className="logo-icon">M</div>
           <h2>The Meal Clinic</h2>
         </div>
 
-        <nav className="sidebar-nav" aria-label="Điều hướng chính">
+        <nav className="sidebar-nav" id="main-navigation" aria-label="Điều hướng chính">
           <ul>
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -36,6 +50,7 @@ export default function Layout() {
                     to={item.path}
                     className={`nav-link ${isActive ? 'active' : ''}`}
                     aria-current={isActive ? 'page' : undefined}
+                    onClick={() => setIsMobileNavOpen(false)}
                   >
                     <Icon size={20} aria-hidden="true" />
                     <span>{item.label}</span>
@@ -56,7 +71,7 @@ export default function Layout() {
               name="global-patient-search"
               autoComplete="off"
               aria-label="Tìm kiếm bệnh nhân theo tên, số điện thoại hoặc mã bệnh nhân"
-              placeholder="Tìm kiếm bệnh nhân (Tên, SĐT, Mã)..."
+              placeholder="Tìm bệnh nhân theo tên, SĐT, mã BN..."
             />
           </div>
 
@@ -78,10 +93,19 @@ export default function Layout() {
           </div>
         </header>
 
-        <main className="page-container">
+        <main className="page-container" id="main-content" tabIndex="-1">
           <Outlet />
         </main>
       </div>
+
+      {isMobileNavOpen && (
+        <button
+          type="button"
+          className="mobile-nav-backdrop"
+          aria-label="Đóng menu điều hướng"
+          onClick={() => setIsMobileNavOpen(false)}
+        />
+      )}
     </div>
   );
 }

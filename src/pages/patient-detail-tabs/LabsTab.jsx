@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { AlertTriangle, ChevronDown, CheckCircle2, ChevronRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { ChevronDown, ChevronRight, FileText } from 'lucide-react';
 import { labReportsMock } from '../../mockData';
 
 const labClinicalMeta = {
@@ -7,7 +7,7 @@ const labClinicalMeta = {
     severity: 'danger',
     label: 'Ưu tiên rà soát',
     delta: 'Giảm từ 6.5 g/dL lần trước',
-    interpretation: 'Cần rà soát lượng đạm thực tế và khả năng dung nạp.',
+    interpretation: 'Rà soát lượng đạm thực tế và khả năng dung nạp.',
   },
   'Glucose đói': {
     severity: 'warning',
@@ -25,137 +25,123 @@ const labClinicalMeta = {
     severity: 'danger',
     label: 'Ưu tiên rà soát',
     delta: 'Không đổi so với lần trước',
-    interpretation: 'Cân nhắc theo dõi khẩu phần giàu sắt/đạm.',
+    interpretation: 'Theo dõi khẩu phần giàu sắt/đạm và phối hợp bác sĩ nếu cần.',
   },
 };
 
 const reportInterpretations = {
   'Sinh hóa máu': 'Ưu tiên chú ý đạm và đường huyết vì ảnh hưởng trực tiếp đến phân bố bữa ăn.',
-  'Điện giải đồ': 'Canxi hơi thấp, các điện giải còn lại chưa có dấu rối loạn đáng kể.',
+  'Điện giải đồ': 'Canxi hơi thấp; các điện giải còn lại chưa có dấu rối loạn đáng kể.',
   'Công thức máu': 'Hemoglobin thấp nhẹ, cần theo dõi thêm nguy cơ thiếu máu và khẩu phần hỗ trợ.',
 };
 
 const reportReviewStatus = {
   'Sinh hóa máu': 'Chưa rà soát',
   'Điện giải đồ': 'Đã đối chiếu',
-  'Công thức máu': 'Đã ghi nhận',
+  'Công thức máu': 'Đã ghi nhận vào kế hoạch',
 };
 
-function LabPanelCard({ report, showToast }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const abnormalItems = report.items.filter((item) => item.abnormal);
-  const abnormalCount = abnormalItems.length;
-  const status = reportReviewStatus[report.reportType];
-  const severityTone = abnormalCount > 1 ? 'danger' : (abnormalCount === 1 ? 'warning' : 'success');
+function LabSeverityBadge({ meta, fallback }) {
+  return <span className={`lab-severity-pill tone-${meta?.severity ?? 'success'}`}>{meta?.label ?? fallback}</span>;
+}
 
-  const visibleItems = isExpanded ? report.items : abnormalItems;
+function LabResultRow({ item }) {
+  const meta = labClinicalMeta[item.name];
 
   return (
-    <article className="minimal-card lab-panel-clean mb-4 p-0 overflow-hidden">
-      <div 
-         className="lab-panel-header p-4 cursor-pointer flex items-center justify-between bg-white hover:bg-gray-50 transition-colors"
-         onClick={() => setIsExpanded(!isExpanded)}
-      >
-         <div className="flex items-center gap-4">
-             <button className="text-gray-400">
-               {isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
-             </button>
-             <div>
-                <h3 className="text-base font-bold m-0">{report.reportType}</h3>
-                <div className="text-sm text-gray-500 mt-1 flex gap-3">
-                   <span>{report.reportDate}</span>
-                   <span>•</span>
-                   <span className={`text-${status === 'Chưa rà soát' ? 'warning' : 'success'}`}>{status}</span>
-                   <span>•</span>
-                   <span>File: {report.attachmentUrl}</span>
-                </div>
-             </div>
-         </div>
-         <span className={`tag tag-${severityTone} font-bold`}>
-            {abnormalCount > 0 ? `${abnormalCount} bất thường` : 'Ổn định'}
-         </span>
+    <div className={`lab-result-clean-row ${item.abnormal ? 'abnormal' : 'stable'}`}>
+      <div className="lab-result-name">
+        <strong>{item.name}</strong>
+        {meta ? <span>{meta.delta}</span> : <span>Không có thay đổi đáng chú ý</span>}
       </div>
-      
-      {/* Interpretation Strip */}
-      {reportInterpretations[report.reportType] && (
-         <div className="bg-primary/10 text-primary-dark px-4 py-2 text-sm font-medium border-y border-primary/20">
-            {reportInterpretations[report.reportType]}
-         </div>
-      )}
+      <div className="lab-result-value">
+        <strong>{item.value} {item.unit}</strong>
+        <span>Tham chiếu: {item.refRange}</span>
+      </div>
+      <div className="lab-result-meaning">
+        <LabSeverityBadge meta={meta} fallback={item.note} />
+        <p>{meta?.interpretation ?? 'Trong giới hạn, chưa cần ưu tiên can thiệp.'}</p>
+      </div>
+    </div>
+  );
+}
 
-      {visibleItems.length > 0 && (
-        <div className="lab-panel-body p-4 pt-2">
-           <table className="w-full text-sm text-left">
-              <thead>
-                 <tr className="text-gray-500 border-b border-gray-100">
-                    <th className="py-2 font-medium w-1/4">Chỉ số</th>
-                    <th className="py-2 font-medium">Kết quả</th>
-                    <th className="py-2 font-medium">Tham chiếu</th>
-                    <th className="py-2 font-medium w-2/5">Ý nghĩa lâm sàng</th>
-                 </tr>
-              </thead>
-              <tbody>
-                 {visibleItems.map(item => {
-                    const meta = labClinicalMeta[item.name];
-                    const isAbnormal = item.abnormal;
-                    return (
-                      <tr key={item.name} className="border-b border-gray-50 last:border-0 align-top">
-                         <td className="py-3">
-                           <strong className={isAbnormal ? 'text-gray-900' : 'text-gray-600 font-medium'}>{item.name}</strong>
-                         </td>
-                         <td className="py-3">
-                           <span className={isAbnormal ? 'text-danger font-bold' : ''}>{item.value} {item.unit}</span>
-                         </td>
-                         <td className="py-3 text-gray-500">{item.refRange}</td>
-                         <td className="py-3">
-                            {isAbnormal && meta ? (
-                               <div className="flex flex-col gap-1">
-                                 <span className={`tag tag-${meta.severity} w-fit`}>{meta.label}</span>
-                                 <span className="text-gray-500 text-xs">{meta.delta}</span>
-                                 <span className="text-gray-800">{meta.interpretation}</span>
-                               </div>
-                            ) : (
-                               <span className="text-gray-400 font-medium">Bình thường</span>
-                            )}
-                         </td>
-                      </tr>
-                    )
-                 })}
-              </tbody>
-           </table>
-           
-           {!isExpanded && abnormalCount > 0 && (
-             <button className="text-primary text-sm font-medium mt-3" onClick={() => setIsExpanded(true)}>
-                + Xem tất cả chỉ số trong phiếu
-             </button>
-           )}
+function LabPanelCard({ report, defaultOpen }) {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+  const [showAll, setShowAll] = useState(false);
+  const abnormalItems = report.items.filter((item) => item.abnormal);
+  const visibleItems = showAll ? report.items : abnormalItems;
+  const abnormalCount = abnormalItems.length;
+  const reviewStatus = reportReviewStatus[report.reportType];
+
+  return (
+    <article className={`lab-panel-minimal ${isOpen ? 'open' : ''}`}>
+      <button className="lab-panel-minimal-header" type="button" onClick={() => setIsOpen((current) => !current)}>
+        <span className="lab-panel-toggle" aria-hidden="true">
+          {isOpen ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
+        </span>
+        <span className="lab-panel-title-group">
+          <strong>{report.reportType}</strong>
+          <small>{report.reportDate} · {report.attachmentUrl}</small>
+        </span>
+        <span className={`lab-review-status ${reviewStatus === 'Chưa rà soát' ? 'pending' : 'done'}`}>{reviewStatus}</span>
+        <span className={`lab-count-pill ${abnormalCount > 0 ? 'has-alert' : 'stable'}`}>
+          {abnormalCount > 0 ? `${abnormalCount} cần chú ý` : 'Ổn định'}
+        </span>
+      </button>
+
+      {isOpen ? (
+        <div className="lab-panel-minimal-body">
+          <div className="lab-interpretation-strip">
+            <FileText size={16} aria-hidden="true" />
+            <span>{reportInterpretations[report.reportType]}</span>
+          </div>
+
+          <div className="lab-result-clean-list">
+            {visibleItems.length > 0 ? (
+              visibleItems.map((item) => <LabResultRow key={item.name} item={item} />)
+            ) : (
+              <div className="lab-empty-stable">Không có chỉ số bất thường trong phiếu này.</div>
+            )}
+          </div>
+
+          {abnormalCount > 0 ? (
+            <button className="lab-expand-minimal-btn" type="button" onClick={() => setShowAll((current) => !current)}>
+              {showAll ? 'Thu gọn về chỉ số cần chú ý' : 'Xem tất cả chỉ số'}
+            </button>
+          ) : null}
         </div>
-      )}
+      ) : null}
     </article>
   );
 }
 
-export default function LabsTab({ showToast }) {
+export default function LabsTab() {
   const totalReports = labReportsMock.length;
-  const abnormalTotal = labReportsMock.flatMap(r => r.items.filter(i => i.abnormal)).length;
+  const abnormalTotal = labReportsMock.flatMap((report) => report.items.filter((item) => item.abnormal)).length;
+  const reviewedReports = labReportsMock.filter((report) => reportReviewStatus[report.reportType] !== 'Chưa rà soát').length;
 
   return (
-    <div className="module-container">
-      <div className="flex items-center gap-6 mb-6 pb-4 border-b border-gray-100">
-         <div className="flex flex-col">
-            <span className="text-gray-500 text-sm font-medium uppercase tracking-wider">Tổng số phiếu</span>
-            <strong className="text-xl">{totalReports}</strong>
-         </div>
-         <div className="flex flex-col">
-            <span className="text-gray-500 text-sm font-medium uppercase tracking-wider">Chỉ số bất thường</span>
-            <strong className="text-xl text-danger">{abnormalTotal}</strong>
-         </div>
+    <div className="labs-minimal-module">
+      <div className="lab-summary-minimal-row" aria-label="Tóm tắt xét nghiệm">
+        <div>
+          <span>Tổng số phiếu</span>
+          <strong>{totalReports}</strong>
+        </div>
+        <div className="alert">
+          <span>Chỉ số cần chú ý</span>
+          <strong>{abnormalTotal}</strong>
+        </div>
+        <div>
+          <span>Đã rà soát</span>
+          <strong>{reviewedReports}/{totalReports}</strong>
+        </div>
       </div>
 
-      <div className="lab-panels-wrapper">
-         {labReportsMock.map(report => (
-            <LabPanelCard key={report.id} report={report} showToast={showToast} />
-         ))}
+      <div className="lab-panels-minimal-list">
+        {labReportsMock.map((report) => (
+          <LabPanelCard key={report.id} report={report} defaultOpen={report.items.some((item) => item.abnormal)} />
+        ))}
       </div>
     </div>
   );

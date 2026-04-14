@@ -1,63 +1,53 @@
 import React from 'react';
-import { AlertTriangle, ArrowRight, ClipboardCheck, FlaskConical, Ruler, TrendingDown } from 'lucide-react';
-import BasicInfoTab from './BasicInfoTab';
+import { AlertTriangle, TrendingDown, ClipboardCheck } from 'lucide-react';
 import AnthropometricsTab from './AnthropometricsTab';
 import LabsTab from './LabsTab';
+import BasicInfoTab from './BasicInfoTab';
 
 function AssessmentQuickImpressionCard({ showToast }) {
   const findings = [
-    'Cân nặng giảm dần trong 6 tuần gần đây, cần tránh giảm thêm trong giai đoạn hiện tại.',
-    'Protein toàn phần hơi thấp, gợi ý cần củng cố lượng đạm thực tế.',
-    'Glucose đói tăng nhẹ, tiếp tục theo dõi phân bố bữa ăn và năng lượng.',
-    'Hemoglobin thấp nhẹ, cần rà soát nguy cơ thiếu máu và khẩu phần hỗ trợ.',
+    'Xu hướng giảm cân tiếp diễn',
+    'Protein máu hơi thấp',
+    'Glucose đói tăng nhẹ',
+    'Hemoglobin thấp nhẹ',
   ];
-  const nextSteps = ['Rà soát lượng đạm thực tế', 'Theo dõi lại đường huyết', 'Gắn bất thường xét nghiệm vào kế hoạch can thiệp'];
+  const nextSteps = [
+    'Rà soát lượng đạm thực tế',
+    'Chỉnh lại phân bố tinh bột giữa bữa',
+    'Tích hợp bất thường xét nghiệm vào kế hoạch',
+  ];
 
   return (
-    <article className="card assessment-impression-card">
-      <div className="assessment-impression-header">
-        <div>
-          <span className="eyebrow">Kết luận nhanh</span>
-          <h2>Đánh giá ưu tiên hôm nay</h2>
-          <p>Diễn giải nhanh dữ liệu nhân trắc và xét nghiệm liên quan trực tiếp đến can thiệp dinh dưỡng.</p>
-        </div>
-        <span className="assessment-priority-badge">
-          <AlertTriangle size={15} aria-hidden="true" />
-          4 chỉ số cần chú ý
-        </span>
+    <article className="minimal-card impression-top-card">
+      <div className="impression-top-header">
+         <div className="impression-title-block flex items-center justify-between">
+           <h2 className="minimal-card-title m-0">Đánh giá ưu tiên hôm nay</h2>
+           <span className="alert-severity tag tag-danger inline-flex items-center gap-1 font-bold">
+             <AlertTriangle size={14} /> 4 chỉ số cần chú ý
+           </span>
+         </div>
       </div>
-
-      <div className="assessment-impression-grid">
-        <section>
-          <h3>Điều đáng chú ý</h3>
-          <ul>
-            {findings.map((item) => (
-              <li key={item}>
-                <TrendingDown size={15} aria-hidden="true" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-        <section>
-          <h3>Việc cần làm tiếp</h3>
-          <ul>
-            {nextSteps.map((item) => (
-              <li key={item}>
-                <ClipboardCheck size={15} aria-hidden="true" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-          <div className="assessment-impression-actions">
-            <button className="btn-primary btn-small" type="button" onClick={() => showToast('Đã gắn ghi chú vào kế hoạch can thiệp')}>
-              Gắn vào kế hoạch
-            </button>
-            <button className="btn-secondary btn-small" type="button" onClick={() => showToast('Đã tạo nhắc follow-up xét nghiệm')}>
-              Tạo follow-up xét nghiệm
-            </button>
-          </div>
-        </section>
+      
+      <div className="impression-split-grid mt-4">
+         <section className="impression-section">
+            <h3 className="impression-subtitle">Điều đáng chú ý</h3>
+            <ul className="impression-bullets text-warning-strong">
+               {findings.map((item, idx) => (
+                 <li key={idx}><TrendingDown size={15} /> <span>{item}</span></li>
+               ))}
+            </ul>
+         </section>
+         <section className="impression-section">
+            <h3 className="impression-subtitle">Việc cần làm tiếp</h3>
+            <ul className="impression-bullets text-primary">
+               {nextSteps.map((item, idx) => (
+                 <li key={idx}><ClipboardCheck size={15} /> <span>{item}</span></li>
+               ))}
+            </ul>
+            <div className="impression-actions mt-3">
+               <button className="btn-primary btn-small w-full justify-center" onClick={() => showToast('Cập nhật kế hoạch')}>Đưa vào kế hoạch</button>
+            </div>
+         </section>
       </div>
     </article>
   );
@@ -65,33 +55,27 @@ function AssessmentQuickImpressionCard({ showToast }) {
 
 export default function AssessmentTab({ patient, showToast }) {
   return (
-    <div className="tab-pane stacked-tab assessment-review-tab">
-      <AssessmentQuickImpressionCard showToast={showToast} />
-
-      <article className="card composite-intro-card assessment-nav-card">
-        <div className="section-heading">
-          <span className="eyebrow">Clinical review</span>
-          <h2>Đọc nhanh từ bối cảnh, nhân trắc đến xét nghiệm</h2>
-          <p>Ưu tiên xu hướng, bất thường có ý nghĩa dinh dưỡng và hành động tiếp theo thay vì chỉ liệt kê số liệu.</p>
+    <div className="tab-pane assessment-review-tab pb-8">
+      <div className="clinical-dashboard-layout !grid-cols-1">
+        <div className="clinical-dashboard-main single-column-override">
+          <AssessmentQuickImpressionCard showToast={showToast} />
+          
+          <div className="module-divider mt-6 mb-2">
+             <h2 className="module-divider-title text-xl font-bold">A. Nhân trắc</h2>
+          </div>
+          <AnthropometricsTab patient={patient} showToast={showToast} />
+          
+          <div className="module-divider mt-8 mb-2">
+             <h2 className="module-divider-title text-xl font-bold">B. Xét nghiệm</h2>
+          </div>
+          <LabsTab showToast={showToast} />
+          
+          <div className="module-divider mt-8 mb-2">
+             <h2 className="module-divider-title text-xl font-bold">C. Thông tin nền</h2>
+          </div>
+          <BasicInfoTab patient={patient} />
         </div>
-        <div className="section-anchor-nav" aria-label="Các phần trong tab đánh giá">
-          <a href="#assessment-anthropometrics"><Ruler size={14} aria-hidden="true" /> Nhân trắc <ArrowRight size={13} aria-hidden="true" /></a>
-          <a href="#assessment-labs"><FlaskConical size={14} aria-hidden="true" /> Xét nghiệm <ArrowRight size={13} aria-hidden="true" /></a>
-          <a href="#assessment-basic">Thông tin nền <ArrowRight size={13} aria-hidden="true" /></a>
-        </div>
-      </article>
-
-      <section id="assessment-anthropometrics" className="composite-section">
-        <AnthropometricsTab patient={patient} showToast={showToast} />
-      </section>
-
-      <section id="assessment-labs" className="composite-section">
-        <LabsTab showToast={showToast} />
-      </section>
-
-      <section id="assessment-basic" className="composite-section">
-        <BasicInfoTab patient={patient} />
-      </section>
+      </div>
     </div>
   );
 }

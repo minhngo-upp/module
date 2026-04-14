@@ -1,81 +1,111 @@
 import React from 'react';
-import { AlertTriangle, TrendingDown, ClipboardCheck } from 'lucide-react';
+import { AlertTriangle, ArrowRight, ClipboardCheck } from 'lucide-react';
 import AnthropometricsTab from './AnthropometricsTab';
 import LabsTab from './LabsTab';
 import BasicInfoTab from './BasicInfoTab';
 
-function AssessmentQuickImpressionCard({ showToast }) {
+function QuickClinicalImpression({ showToast }) {
   const findings = [
-    'Xu hướng giảm cân tiếp diễn',
-    'Protein máu hơi thấp',
-    'Glucose đói tăng nhẹ',
-    'Hemoglobin thấp nhẹ',
+    'Cân nặng tiếp tục giảm so với mốc khám ban đầu.',
+    'Protein toàn phần hơi thấp, cần đối chiếu lượng đạm thực tế.',
+    'Glucose đói tăng nhẹ, nên rà soát phân bố tinh bột giữa các bữa.',
+    'Hemoglobin thấp nhẹ, cần theo dõi nguy cơ thiếu máu.',
   ];
-  const nextSteps = [
-    'Rà soát lượng đạm thực tế',
-    'Chỉnh lại phân bố tinh bột giữa bữa',
-    'Tích hợp bất thường xét nghiệm vào kế hoạch',
+
+  const nextActions = [
+    'Rà soát lượng đạm và khả năng dung nạp.',
+    'Gắn bất thường xét nghiệm vào kế hoạch can thiệp.',
+    'Ưu tiên follow-up sau khi điều chỉnh khẩu phần.',
   ];
 
   return (
-    <article className="minimal-card impression-top-card">
-      <div className="impression-top-header">
-         <div className="impression-title-block flex items-center justify-between">
-           <h2 className="minimal-card-title m-0">Đánh giá ưu tiên hôm nay</h2>
-           <span className="alert-severity tag tag-danger inline-flex items-center gap-1 font-bold">
-             <AlertTriangle size={14} /> 4 chỉ số cần chú ý
-           </span>
-         </div>
-      </div>
-      
-      <div className="impression-split-grid mt-4">
-         <section className="impression-section">
-            <h3 className="impression-subtitle">Điều đáng chú ý</h3>
-            <ul className="impression-bullets text-warning-strong">
-               {findings.map((item, idx) => (
-                 <li key={idx}><TrendingDown size={15} /> <span>{item}</span></li>
-               ))}
+    <article className="assessment-impression-compact">
+      <div className="assessment-impression-copy">
+        <div className="assessment-impression-title-row">
+          <div>
+            <span className="eyebrow">Kết luận nhanh</span>
+            <h2>Đánh giá ưu tiên hôm nay</h2>
+          </div>
+          <span className="assessment-alert-pill">
+            <AlertTriangle size={15} aria-hidden="true" />
+            4 chỉ số cần chú ý
+          </span>
+        </div>
+
+        <div className="assessment-impression-grid-minimal">
+          <section>
+            <h3>Điều đáng chú ý</h3>
+            <ul>
+              {findings.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
             </ul>
-         </section>
-         <section className="impression-section">
-            <h3 className="impression-subtitle">Việc cần làm tiếp</h3>
-            <ul className="impression-bullets text-primary">
-               {nextSteps.map((item, idx) => (
-                 <li key={idx}><ClipboardCheck size={15} /> <span>{item}</span></li>
-               ))}
+          </section>
+
+          <section className="assessment-next-action-box">
+            <h3>Việc cần làm tiếp</h3>
+            <ul>
+              {nextActions.map((item) => (
+                <li key={item}>
+                  <ClipboardCheck size={15} aria-hidden="true" />
+                  <span>{item}</span>
+                </li>
+              ))}
             </ul>
-            <div className="impression-actions mt-3">
-               <button className="btn-primary btn-small w-full justify-center" onClick={() => showToast('Cập nhật kế hoạch')}>Đưa vào kế hoạch</button>
-            </div>
-         </section>
+            <button className="btn-primary btn-small" type="button" onClick={() => showToast('Đã chuyển nhận định vào kế hoạch can thiệp')}>
+              Đưa vào kế hoạch
+              <ArrowRight size={15} aria-hidden="true" />
+            </button>
+          </section>
+        </div>
       </div>
     </article>
   );
 }
 
-export default function AssessmentTab({ patient, showToast }) {
+function AssessmentModule({ eyebrow, title, description, children }) {
   return (
-    <div className="tab-pane assessment-review-tab pb-8">
-      <div className="clinical-dashboard-layout !grid-cols-1">
-        <div className="clinical-dashboard-main single-column-override">
-          <AssessmentQuickImpressionCard showToast={showToast} />
-          
-          <div className="module-divider mt-6 mb-2">
-             <h2 className="module-divider-title text-xl font-bold">A. Nhân trắc</h2>
-          </div>
-          <AnthropometricsTab patient={patient} showToast={showToast} />
-          
-          <div className="module-divider mt-8 mb-2">
-             <h2 className="module-divider-title text-xl font-bold">B. Xét nghiệm</h2>
-          </div>
-          <LabsTab showToast={showToast} />
-          
-          <div className="module-divider mt-8 mb-2">
-             <h2 className="module-divider-title text-xl font-bold">C. Thông tin nền</h2>
-          </div>
-          <BasicInfoTab patient={patient} />
+    <section className="assessment-module-clean">
+      <div className="assessment-module-heading">
+        <span className="eyebrow">{eyebrow}</span>
+        <div>
+          <h2>{title}</h2>
+          <p>{description}</p>
         </div>
       </div>
+      {children}
+    </section>
+  );
+}
+
+export default function AssessmentTab({ patient, showToast }) {
+  return (
+    <div className="tab-pane assessment-review-tab assessment-minimal-workspace">
+      <QuickClinicalImpression showToast={showToast} />
+
+      <AssessmentModule
+        eyebrow="A. Nhân trắc"
+        title="Xu hướng cơ thể"
+        description="Đọc nhanh cân nặng, BMI và biến động gần đây trước khi đi vào chi tiết."
+      >
+        <AnthropometricsTab patient={patient} />
+      </AssessmentModule>
+
+      <AssessmentModule
+        eyebrow="B. Xét nghiệm"
+        title="Chỉ số cần ưu tiên rà soát"
+        description="Hiển thị bất thường quan trọng trước, bảng đầy đủ chỉ mở khi cần đối chiếu."
+      >
+        <LabsTab showToast={showToast} />
+      </AssessmentModule>
+
+      <AssessmentModule
+        eyebrow="C. Thông tin nền"
+        title="Bối cảnh hỗ trợ diễn giải"
+        description="Thông tin tần suất thấp hơn được đặt cuối trang để không cạnh tranh với nhân trắc và xét nghiệm."
+      >
+        <BasicInfoTab patient={patient} />
+      </AssessmentModule>
     </div>
   );
 }

@@ -4297,3 +4297,545 @@
   letter-spacing: 0.05em;
   font-size: 0.75rem;
 }
+
+/* =========================================================
+   Minimal clinical assessment workspace
+   ========================================================= */
+
+.assessment-minimal-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.assessment-impression-compact,
+.assessment-module-clean {
+  border: 1px solid hsl(var(--border));
+  border-radius: 24px;
+  background: hsl(var(--surface));
+  box-shadow: 0 18px 38px -34px hsla(var(--foreground) / 0.32);
+}
+
+.assessment-impression-compact {
+  padding: 1.25rem;
+  background:
+    radial-gradient(circle at top right, hsla(var(--primary) / 0.08), transparent 32%),
+    linear-gradient(180deg, hsl(var(--surface)) 0%, hsl(var(--background)) 100%);
+}
+
+.assessment-impression-title-row,
+.assessment-module-heading,
+.assessment-panel-toolbar,
+.lab-panel-minimal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.assessment-impression-title-row h2,
+.assessment-module-heading h2,
+.assessment-panel-toolbar h3,
+.anthropometric-insight-panel h3 {
+  margin: 0;
+  color: hsl(var(--text-main));
+  letter-spacing: -0.02em;
+}
+
+.assessment-impression-title-row h2 {
+  font-size: clamp(1.25rem, 1.8vw, 1.55rem);
+}
+
+.assessment-alert-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+  width: fit-content;
+  padding: 0.42rem 0.7rem;
+  border: 1px solid hsla(var(--danger) / 0.14);
+  border-radius: var(--radius-full);
+  background: hsla(var(--danger) / 0.075);
+  color: hsl(var(--danger));
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.assessment-impression-grid-minimal {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
+  gap: 1.15rem;
+  margin-top: 1.15rem;
+}
+
+.assessment-impression-grid-minimal section {
+  min-width: 0;
+}
+
+.assessment-impression-grid-minimal h3 {
+  margin: 0 0 0.75rem;
+  color: hsl(var(--text-muted));
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.assessment-impression-grid-minimal ul {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.assessment-impression-grid-minimal li {
+  color: hsl(var(--text-main));
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.assessment-impression-grid-minimal > section:first-child li {
+  position: relative;
+  padding-left: 1rem;
+}
+
+.assessment-impression-grid-minimal > section:first-child li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.56rem;
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-full);
+  background: hsl(var(--danger));
+}
+
+.assessment-next-action-box {
+  padding: 1rem;
+  border: 1px solid hsla(var(--primary) / 0.14);
+  border-radius: 18px;
+  background: hsla(var(--primary) / 0.045);
+}
+
+.assessment-next-action-box li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-weight: 650;
+}
+
+.assessment-next-action-box svg {
+  flex-shrink: 0;
+  margin-top: 0.18rem;
+  color: hsl(var(--primary-dark));
+}
+
+.assessment-next-action-box .btn-primary {
+  margin-top: 0.95rem;
+  width: 100%;
+  justify-content: center;
+}
+
+.assessment-module-clean {
+  padding: 1.25rem;
+}
+
+.assessment-module-heading {
+  margin-bottom: 1.1rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid hsla(var(--border) / 0.85);
+}
+
+.assessment-module-heading > .eyebrow {
+  min-width: 8rem;
+  padding-top: 0.25rem;
+}
+
+.assessment-module-heading p,
+.assessment-panel-toolbar p,
+.anthropometric-insight-panel p,
+.background-info-heading p {
+  margin: 0.25rem 0 0;
+  color: hsl(var(--text-muted));
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.anthropometric-unified-module,
+.labs-minimal-module {
+  display: grid;
+  gap: 1rem;
+}
+
+.assessment-metric-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.assessment-metric-tile {
+  padding: 0.95rem 1rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 16px;
+  background: linear-gradient(180deg, hsl(var(--surface)) 0%, hsl(var(--background)) 100%);
+}
+
+.assessment-metric-tile.tone-warning {
+  border-color: hsla(var(--warning) / 0.24);
+  background: linear-gradient(180deg, hsla(var(--warning) / 0.07) 0%, hsl(var(--surface)) 100%);
+}
+
+.assessment-metric-tile span {
+  display: block;
+  color: hsl(var(--text-muted));
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.assessment-metric-tile strong {
+  display: block;
+  margin-top: 0.28rem;
+  color: hsl(var(--text-main));
+  font-size: 1.08rem;
+  letter-spacing: -0.02em;
+}
+
+.anthropometric-review-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.45fr);
+  gap: 1rem;
+}
+
+.anthropometric-chart-panel,
+.anthropometric-insight-panel {
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 18px;
+  background: hsl(var(--background));
+}
+
+.assessment-panel-toolbar {
+  margin-bottom: 0.85rem;
+}
+
+.assessment-select-label {
+  display: grid;
+  gap: 0.35rem;
+  color: hsl(var(--text-muted));
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.assessment-select-label select {
+  min-width: 150px;
+}
+
+.anthropometric-chart-frame {
+  height: 300px;
+}
+
+.anthropometric-insight-panel {
+  border-color: hsla(var(--primary) / 0.16);
+  background:
+    radial-gradient(circle at top right, hsla(var(--primary) / 0.08), transparent 34%),
+    hsl(var(--surface));
+}
+
+.anthropometric-insight-panel h3 {
+  margin-top: 0.25rem;
+  font-size: 1.05rem;
+}
+
+.anthropometric-reference-list {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.anthropometric-reference-list div {
+  padding: 0.72rem 0.8rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 14px;
+  background: hsl(var(--background));
+}
+
+.anthropometric-reference-list span {
+  display: block;
+  color: hsl(var(--text-muted));
+  font-size: 0.76rem;
+  font-weight: 750;
+}
+
+.anthropometric-reference-list strong {
+  display: block;
+  margin-top: 0.18rem;
+  font-size: 0.92rem;
+}
+
+.lab-summary-minimal-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.lab-summary-minimal-row div {
+  padding: 0.9rem 1rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 16px;
+  background: hsl(var(--background));
+}
+
+.lab-summary-minimal-row .alert {
+  border-color: hsla(var(--danger) / 0.16);
+  background: hsla(var(--danger) / 0.04);
+}
+
+.lab-summary-minimal-row span {
+  display: block;
+  color: hsl(var(--text-muted));
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.lab-summary-minimal-row strong {
+  display: block;
+  margin-top: 0.2rem;
+  color: hsl(var(--text-main));
+  font-size: 1.15rem;
+}
+
+.lab-panels-minimal-list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.lab-panel-minimal {
+  border: 1px solid hsl(var(--border));
+  border-radius: 18px;
+  background: hsl(var(--surface));
+  overflow: hidden;
+}
+
+.lab-panel-minimal.open {
+  border-color: hsla(var(--primary) / 0.18);
+}
+
+.lab-panel-minimal-header {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.lab-panel-toggle {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid hsl(var(--border));
+  border-radius: 10px;
+  color: hsl(var(--text-muted));
+  flex-shrink: 0;
+}
+
+.lab-panel-title-group {
+  display: grid;
+  gap: 0.18rem;
+  margin-right: auto;
+}
+
+.lab-panel-title-group strong {
+  color: hsl(var(--text-main));
+  font-size: 0.98rem;
+}
+
+.lab-panel-title-group small {
+  color: hsl(var(--text-muted));
+  font-size: 0.8rem;
+}
+
+.lab-review-status,
+.lab-count-pill,
+.lab-severity-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  border-radius: var(--radius-full);
+  padding: 0.32rem 0.62rem;
+  font-size: 0.76rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.lab-review-status.pending,
+.lab-count-pill.has-alert,
+.lab-severity-pill.tone-danger {
+  background: hsla(var(--danger) / 0.075);
+  color: hsl(var(--danger));
+}
+
+.lab-review-status.done,
+.lab-count-pill.stable,
+.lab-severity-pill.tone-success {
+  background: hsla(var(--success) / 0.12);
+  color: hsl(var(--success));
+}
+
+.lab-severity-pill.tone-warning {
+  background: hsla(var(--warning) / 0.16);
+  color: hsl(38 92% 40%);
+}
+
+.lab-panel-minimal-body {
+  padding: 0 1rem 1rem;
+}
+
+.lab-interpretation-strip {
+  display: flex;
+  gap: 0.55rem;
+  align-items: flex-start;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid hsla(var(--primary) / 0.14);
+  border-radius: 14px;
+  background: hsla(var(--primary) / 0.05);
+  color: hsl(var(--primary-dark));
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.lab-result-clean-list {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.75rem;
+}
+
+.lab-result-clean-row {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.85fr) minmax(150px, 0.55fr) minmax(0, 1.25fr);
+  gap: 0.85rem;
+  padding: 0.85rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 14px;
+  background: hsl(var(--background));
+}
+
+.lab-result-clean-row.abnormal {
+  border-color: hsla(var(--danger) / 0.12);
+  background: hsla(var(--danger) / 0.025);
+}
+
+.lab-result-name,
+.lab-result-value,
+.lab-result-meaning {
+  display: grid;
+  align-content: start;
+  gap: 0.25rem;
+}
+
+.lab-result-name strong,
+.lab-result-value strong {
+  color: hsl(var(--text-main));
+}
+
+.lab-result-name span,
+.lab-result-value span,
+.lab-result-meaning p {
+  margin: 0;
+  color: hsl(var(--text-muted));
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.lab-result-meaning p {
+  color: hsl(var(--text-main));
+}
+
+.lab-expand-minimal-btn {
+  margin-top: 0.75rem;
+  border: 0;
+  background: transparent;
+  color: hsl(var(--primary-dark));
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.lab-empty-stable {
+  padding: 0.85rem;
+  color: hsl(var(--text-muted));
+  font-weight: 700;
+}
+
+.assessment-background-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.background-info-card {
+  padding: 1rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 18px;
+  background: hsl(var(--background));
+}
+
+.background-info-heading {
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid hsla(var(--border) / 0.85);
+  margin-bottom: 0.75rem;
+}
+
+.background-info-heading h3 {
+  margin: 0;
+  color: hsl(var(--text-main));
+  font-size: 1rem;
+}
+
+.background-info-card dl {
+  display: grid;
+  gap: 0.7rem;
+  margin: 0;
+}
+
+.background-info-card dt {
+  color: hsl(var(--text-muted));
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.background-info-card dd {
+  margin: 0.18rem 0 0;
+  color: hsl(var(--text-main));
+  font-size: 0.9rem;
+  font-weight: 650;
+  line-height: 1.4;
+}
+
+@media (max-width: 1180px) {
+  .assessment-impression-grid-minimal,
+  .anthropometric-review-grid,
+  .assessment-background-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 860px) {
+  .assessment-impression-title-row,
+  .assessment-module-heading,
+  .assessment-panel-toolbar,
+  .lab-panel-minimal-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .assessment-metric-strip,
+  .lab-summary-minimal-row,
+  .lab-result-clean-row {
+    grid-template-columns: 1fr;
+  }
+}

@@ -28,34 +28,7 @@ const TABS = [
   { id: 'intervention-followup', label: 'Can thiệp & theo dõi', icon: FileText },
 ];
 
-function PatientRiskBadge({ level }) {
-  return (
-    <span className="patient-risk-badge">
-      <AlertTriangle size={14} aria-hidden="true" />
-      {level}
-    </span>
-  );
-}
-
-function PatientClinicalSnapshot({ patient }) {
-  const snapshotItems = [
-    { label: 'Mức độ theo dõi', value: patient.nutritionAssessment.priority },
-    { label: 'Vấn đề chính', value: patient.nutritionAssessment.mainDiagnosis },
-    { label: 'Ưu tiên hôm nay', value: 'Tăng năng lượng khẩu phần và cải thiện nước uống' },
-    { label: 'Cập nhật gần nhất', value: 'Hôm nay, 08:30' },
-  ];
-
-  return (
-    <div className="clinical-snapshot-strip" aria-label="Tóm tắt lâm sàng nhanh">
-      {snapshotItems.map((item) => (
-        <div className="clinical-snapshot-item" key={item.label}>
-          <span>{item.label}</span>
-          <strong>{item.value}</strong>
-        </div>
-      ))}
-    </div>
-  );
-}
+// Clinical snapshot block moved directly into header layout
 
 export default function PatientDetail() {
   const { id } = useParams();
@@ -122,58 +95,49 @@ export default function PatientDetail() {
         </button>
 
         <div className="actions-right">
-          <button className="btn-primary" type="button" onClick={() => showToast('Đã mở form đặt lịch theo dõi')}>
-            <CalendarPlus size={16} className="button-icon-inline" aria-hidden="true" />
-            Tạo follow-up
-          </button>
-          <button className="btn-secondary" type="button" onClick={() => showToast('Đã tự động gửi tin nhắn nhắc nhở')}>
-            <AlertTriangle size={16} className="button-icon-inline" aria-hidden="true" />
-             Gửi nhắc nhở
-          </button>
           <button className="btn-secondary" type="button" onClick={() => setIsChatOpen(true)}>
             <MessageSquare size={16} className="button-icon-inline" aria-hidden="true" />
             Nhắn tin
           </button>
+          <button className="btn-primary" type="button" onClick={() => showToast('Đã mở form đặt lịch theo dõi')}>
+            <CalendarPlus size={16} className="button-icon-inline" aria-hidden="true" />
+            Tạo follow-up
+          </button>
         </div>
       </div>
 
-      <section className="patient-hero">
-        <div className="card patient-hero-card">
-          <div className="profile-info-main">
-            <div className="profile-avatar-lg bg-blue-light text-primary">{patient.avatar}</div>
-
-            <div className="profile-details">
-              <div className="hero-topline">
-                <PatientRiskBadge level={patient.nutritionAssessment.priority} />
-                <span className="hero-subtitle">Hồ sơ dinh dưỡng</span>
-              </div>
-              <h1 className="profile-name-large">{patient.fullName}</h1>
-              <p className="hero-diagnosis">{patient.nutritionAssessment.mainDiagnosis}</p>
-              <div className="profile-tags profile-tags-wrap">
-                <span className="tag">Mã BN: {patient.patientCode}</span>
-                <span className="tag">
-                  {patient.gender}, {patient.age} tuổi
-                </span>
-                <span className="tag">{patient.occupation}</span>
-                <span className="tag tag-danger inline-flex items-center gap-1">
-                  <AlertTriangle size={14} /> Cảnh báo: Không tuân thủ
-                </span>
-              </div>
+      <section className="patient-minimal-header-wrapper">
+        <div className="patient-minimal-header">
+          <div className="patient-minimal-avatar">{patient.avatar}</div>
+          <div className="patient-minimal-info">
+            <div className="patient-minimal-name-row">
+              <h1 className="patient-name-display">{patient.fullName}</h1>
+              <span className="patient-meta-display">Mã BN: {patient.patientCode} • {patient.age} tuổi, {patient.gender} • {patient.occupation} • BS: {patient.assignedDoctor.name}</span>
             </div>
+            <p className="patient-goal-display">Mục tiêu hiện tại: {patient.nutritionAssessment.currentGoal}</p>
           </div>
+        </div>
 
-          <div className="hero-side">
-            <div className="hero-side-item">
-              <span>Mục tiêu hiện tại</span>
-              <strong>{patient.nutritionAssessment.currentGoal}</strong>
-            </div>
-            <div className="hero-side-item">
-              <span>Người phụ trách</span>
-              <strong>{patient.assignedDoctor.name}</strong>
-            </div>
+        <div className="clinical-snapshot-bar">
+          <div className="snapshot-item">
+            <span className="snapshot-label">Mức độ theo dõi</span>
+            <strong className="snapshot-value text-danger">{patient.nutritionAssessment.priority}</strong>
           </div>
-
-          <PatientClinicalSnapshot patient={patient} />
+          <div className="snapshot-separator"></div>
+          <div className="snapshot-item">
+            <span className="snapshot-label">Vấn đề chính</span>
+            <strong className="snapshot-value truncate">{patient.nutritionAssessment.mainDiagnosis}</strong>
+          </div>
+          <div className="snapshot-separator"></div>
+          <div className="snapshot-item">
+            <span className="snapshot-label">Ưu tiên hôm nay</span>
+            <strong className="snapshot-value truncate">Tăng năng lượng khẩu phần và nước uống</strong>
+          </div>
+          <div className="snapshot-separator"></div>
+          <div className="snapshot-item">
+            <span className="snapshot-label">Cập nhật gần nhất</span>
+            <strong className="snapshot-value">Hôm nay, 08:30</strong>
+          </div>
         </div>
       </section>
 

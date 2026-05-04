@@ -7,7 +7,7 @@ import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/module">
       <ConfigProvider theme={{ token: { colorPrimary: '#22a06b', borderRadius: 8 } }}>
         <App />
       </ConfigProvider>

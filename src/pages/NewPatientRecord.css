@@ -1,0 +1,740 @@
+.new-patient-page {
+  padding: 1.5rem;
+  padding-bottom: 6.5rem;
+}
+
+.new-patient-header {
+  display: grid;
+  justify-items: start;
+  gap: 0.9rem;
+  margin-bottom: 1.25rem;
+}
+
+.new-patient-header h1 {
+  margin: 0.28rem 0;
+  color: hsl(var(--text-main));
+  font-size: clamp(1.55rem, 2vw, 2rem);
+}
+
+.new-patient-header > div {
+  max-width: 760px;
+}
+
+.new-patient-header h1 span {
+  color: hsl(var(--text-muted));
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.new-patient-header p,
+.onboarding-form-heading p,
+.onboarding-subsection-heading p,
+.onboarding-subsection summary small {
+  color: hsl(var(--text-muted));
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  white-space: nowrap;
+}
+
+.new-patient-layout {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.patient-onboarding-sidebar {
+  display: grid;
+  gap: 1rem;
+  position: sticky;
+  top: 1rem;
+}
+
+.draft-progress-card,
+.onboarding-form-card,
+.onboarding-subsection {
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius-lg);
+  background: hsl(var(--surface));
+  box-shadow: var(--shadow-sm);
+}
+
+.onboarding-form-card:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.draft-progress-card {
+  padding: 1.1rem;
+}
+
+.progress-card-topline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.draft-progress-card > span,
+.progress-card-topline span,
+.eyebrow {
+  color: hsl(var(--primary-dark));
+  font-size: 0.74rem;
+  font-weight: 850;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.progress-card-topline strong {
+  color: hsl(var(--text-main));
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.draft-progress-card p {
+  margin: 0.65rem 0 0;
+  color: hsl(var(--text-muted));
+  font-size: 0.86rem;
+}
+
+.micro-progress {
+  width: 100%;
+  height: 8px;
+  margin-top: 0.75rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: hsl(var(--background));
+}
+
+.micro-progress-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  transition: width 0.25s ease;
+}
+
+.progress-success {
+  background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--success)));
+}
+
+.missing-required-card {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.85rem;
+  padding: 0.75rem;
+  border-radius: 16px;
+  background: hsl(var(--background));
+}
+
+.missing-required-card span {
+  color: hsl(var(--text-muted));
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.missing-required-card ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.missing-required-card li,
+.missing-required-card strong {
+  width: fit-content;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  background: hsl(var(--surface));
+  color: hsl(var(--text-main));
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.patient-stepper {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.patient-stepper button {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 0.12rem 0.7rem;
+  width: 100%;
+  padding: 0.78rem;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  background: transparent;
+  color: hsl(var(--text-muted));
+  text-align: left;
+}
+
+.patient-stepper button:hover,
+.patient-stepper button:focus-visible {
+  border-color: hsl(var(--border));
+  background: hsl(var(--surface));
+}
+
+.patient-stepper button > span {
+  grid-row: span 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid hsl(var(--border));
+  border-radius: 999px;
+  background: hsl(var(--surface));
+  color: hsl(var(--text-muted));
+  font-weight: 850;
+}
+
+.patient-stepper button strong {
+  color: inherit;
+  font-size: 0.92rem;
+}
+
+.patient-stepper button small {
+  color: hsl(var(--text-muted));
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+
+.patient-stepper button.active {
+  border-color: hsla(var(--primary) / 0.18);
+  background: hsla(var(--primary) / 0.08);
+  color: hsl(var(--primary-dark));
+}
+
+.patient-stepper button.active > span {
+  border-color: hsl(var(--primary));
+  background: hsl(var(--primary));
+  color: #fff;
+}
+
+.onboarding-form-card {
+  padding: 1.35rem;
+}
+
+.onboarding-form-heading {
+  max-width: 760px;
+  margin-bottom: 1.25rem;
+}
+
+.onboarding-form-heading h2 {
+  margin: 0.35rem 0;
+  color: hsl(var(--text-main));
+}
+
+.onboarding-step-content {
+  display: grid;
+  gap: 1rem;
+}
+
+.onboarding-subsection {
+  padding: 1rem;
+  border-radius: 20px;
+  box-shadow: none;
+}
+
+.onboarding-subsection-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.95rem;
+}
+
+.onboarding-subsection-heading h3,
+.onboarding-subsection summary span {
+  margin: 0;
+  color: hsl(var(--text-main));
+  font-size: 1rem;
+}
+
+.onboarding-subsection-heading p {
+  margin: 0.25rem 0 0;
+  font-size: 0.86rem;
+}
+
+.onboarding-subsection.collapsible {
+  padding: 0;
+  overflow: hidden;
+}
+
+.onboarding-subsection summary {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.95rem 1rem;
+  cursor: pointer;
+}
+
+.onboarding-subsection summary::marker {
+  color: hsl(var(--primary-dark));
+}
+
+.onboarding-subsection-body {
+  padding: 0 1rem 1rem;
+}
+
+.onboarding-field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem 1rem;
+}
+
+.onboarding-field {
+  display: grid;
+  gap: 0.42rem;
+}
+
+.onboarding-field.wide {
+  grid-column: span 2;
+}
+
+.onboarding-field span {
+  color: hsl(var(--text-main));
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.onboarding-field em {
+  margin-left: 0.18rem;
+  color: hsl(var(--danger));
+  font-style: normal;
+}
+
+.onboarding-field input,
+.onboarding-field select,
+.onboarding-field textarea {
+  width: 100%;
+  border: 1px solid hsl(var(--border));
+  border-radius: 14px;
+  background: hsl(var(--surface));
+  color: hsl(var(--text-main));
+}
+
+.onboarding-field textarea {
+  min-height: 88px;
+  resize: vertical;
+}
+
+.onboarding-field small {
+  color: hsl(var(--danger));
+  font-size: 0.76rem;
+}
+
+.meal-log-editor {
+  display: grid;
+  gap: 1rem;
+}
+
+.meal-log-editor-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.meal-log-editor-summary > div {
+  padding: 0.8rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 14px;
+  background: hsl(var(--background));
+}
+
+.meal-log-editor-summary span,
+.meal-log-dish-card span,
+.meal-dish-editor-hero p,
+.meal-empty-note,
+.meal-empty-preview p,
+.meal-library-card small,
+.meal-ingredient-row p,
+.meal-modal-header p {
+  color: hsl(var(--text-muted));
+  font-size: 0.82rem;
+}
+
+.meal-log-editor-summary strong {
+  display: block;
+  margin-top: 0.25rem;
+  color: hsl(var(--text-main));
+  font-size: 1.15rem;
+}
+
+.meal-log-slots {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.meal-log-slot {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+  padding: 0.85rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 16px;
+  background: hsl(var(--surface));
+}
+
+.meal-log-slot-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.meal-log-slot-header h3,
+.meal-dish-editor-hero h3,
+.meal-modal-header h2 {
+  margin: 0;
+  color: hsl(var(--text-main));
+}
+
+.meal-log-slot-header p,
+.meal-log-dish-card p,
+.meal-dish-editor-hero p,
+.meal-ingredient-row p,
+.meal-modal-header p {
+  margin: 0.2rem 0 0;
+}
+
+.meal-log-dish-list {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.meal-log-dish-card,
+.meal-library-card,
+.meal-ingredient-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 14px;
+  background: hsl(var(--background));
+}
+
+.meal-log-dish-card > img,
+.meal-library-card > img,
+.meal-dish-image-fallback {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.meal-dish-image-fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: hsl(var(--surface));
+  color: hsl(var(--text-muted));
+}
+
+.meal-log-dish-card strong,
+.meal-library-card strong,
+.meal-ingredient-row strong {
+  display: block;
+  color: hsl(var(--text-main));
+  font-size: 0.9rem;
+}
+
+.meal-log-dish-card span {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 0.35rem;
+  padding: 0.18rem 0.45rem;
+  border-radius: 999px;
+  background: hsla(var(--primary) / 0.09);
+  color: hsl(var(--primary-dark));
+  font-weight: 750;
+}
+
+.meal-log-dish-actions {
+  display: inline-flex;
+  gap: 0.25rem;
+}
+
+.meal-log-empty-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 68px;
+  border: 1px dashed hsl(var(--border));
+  border-radius: 14px;
+  background: hsl(var(--background));
+  color: hsl(var(--text-muted));
+  font-weight: 750;
+}
+
+.meal-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: rgba(15, 23, 42, 0.38);
+}
+
+.meal-modal {
+  width: min(620px, 100%);
+  max-height: min(760px, calc(100vh - 2.5rem));
+  overflow: auto;
+  border: 1px solid hsl(var(--border));
+  border-radius: 20px;
+  background: hsl(var(--surface));
+  box-shadow: var(--shadow-lg);
+}
+
+.meal-modal.wide {
+  width: min(1040px, 100%);
+}
+
+.meal-modal-header,
+.meal-modal-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.meal-modal-header {
+  align-items: flex-start;
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.meal-modal-footer {
+  align-items: center;
+  border-top: 1px solid hsl(var(--border));
+}
+
+.meal-add-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.meal-library-panel,
+.meal-draft-panel {
+  min-width: 0;
+}
+
+.meal-search-field {
+  margin-bottom: 0.75rem;
+}
+
+.meal-search-input {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 14px;
+  padding: 0 0.65rem;
+  background: hsl(var(--surface));
+}
+
+.meal-search-input input {
+  border: 0;
+  padding-inline: 0;
+  background: transparent;
+}
+
+.meal-search-input input:focus {
+  outline: 0;
+}
+
+.meal-library-list,
+.meal-ingredient-list {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.meal-library-list {
+  max-height: 470px;
+  overflow: auto;
+  padding-right: 0.25rem;
+}
+
+.meal-library-card {
+  width: 100%;
+  text-align: left;
+}
+
+.meal-library-card:hover,
+.meal-library-card:focus-visible,
+.meal-library-card.active {
+  border-color: hsl(var(--primary));
+  background: hsla(var(--primary) / 0.07);
+}
+
+.meal-dish-editor {
+  display: grid;
+  gap: 0.9rem;
+  padding: 1rem;
+}
+
+.meal-draft-panel .meal-dish-editor {
+  padding: 0;
+}
+
+.meal-dish-editor-hero {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.meal-dish-editor-hero img,
+.meal-dish-editor-hero .meal-dish-image-fallback {
+  width: 78px;
+  height: 78px;
+  border-radius: 16px;
+  object-fit: cover;
+}
+
+.meal-serving-field {
+  margin-top: 0.15rem;
+}
+
+.meal-ingredient-row {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.meal-ingredient-row label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.meal-ingredient-row input {
+  width: 86px;
+  border: 1px solid hsl(var(--border));
+  border-radius: 12px;
+  background: hsl(var(--surface));
+}
+
+.meal-empty-preview {
+  display: grid;
+  place-items: center;
+  min-height: 320px;
+  padding: 1rem;
+  border: 1px dashed hsl(var(--border));
+  border-radius: 16px;
+  background: hsl(var(--background));
+  color: hsl(var(--text-muted));
+  text-align: center;
+}
+
+.meal-empty-preview strong {
+  color: hsl(var(--text-main));
+}
+
+.sticky-form-footer {
+  position: fixed;
+  left: var(--sidebar-width, 255px);
+  right: 0;
+  bottom: 0;
+  z-index: 80;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1.5rem;
+  border-top: 1px solid hsl(var(--border));
+  background: hsl(var(--surface));
+}
+
+.sticky-form-footer button,
+.sticky-footer-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.sticky-footer-actions {
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.onboarding-toast {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 5.5rem;
+  z-index: 2000;
+}
+
+@media (max-width: 1180px) {
+  .new-patient-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .patient-onboarding-sidebar {
+    position: static;
+  }
+
+  .patient-stepper {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .new-patient-page {
+    padding: 1rem;
+    padding-bottom: 9rem;
+  }
+
+  .new-patient-header {
+    flex-direction: column;
+  }
+
+  .patient-stepper,
+  .onboarding-field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .onboarding-field.wide {
+    grid-column: span 1;
+  }
+
+  .meal-log-editor-summary,
+  .meal-log-slots,
+  .meal-add-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .meal-log-slot-header,
+  .meal-modal-header,
+  .meal-modal-footer {
+    flex-direction: column;
+  }
+
+  .meal-log-dish-card,
+  .meal-library-card {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .meal-log-dish-actions,
+  .meal-library-card > svg {
+    grid-column: 2;
+  }
+
+  .sticky-form-footer {
+    left: 0;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sticky-footer-actions {
+    justify-content: space-between;
+  }
+}

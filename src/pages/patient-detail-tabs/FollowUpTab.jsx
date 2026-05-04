@@ -6,13 +6,13 @@ export default function FollowUpTab({ showToast }) {
     <div className="follow-up-tab">
       <div className="card">
         <div className="p-4" style={{borderBottom: '1px solid hsl(var(--border))'}}>
-          <h2 className="text-xl font-bold">Quản lý Theo dõi (Follow-up)</h2>
+          <h2 className="text-xl font-bold">Quản lý theo dõi</h2>
           <p className="text-muted text-sm mt-1">Ghi nhận các liên hệ với bệnh nhân trong vòng 24-72h sau khám.</p>
         </div>
         
         <div className="p-4">
           <div className="bg-slate-50 p-4 rounded-md mb-6" style={{border: '1px solid #e2e8f0'}}>
-             <h3 className="font-bold text-main mb-2">Tạo Follow-up mới</h3>
+             <h3 className="font-bold text-main mb-2">Tạo lượt theo dõi mới</h3>
              <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
                    <label className="block text-sm font-medium mb-1">Phương thức liên lạc</label>
@@ -32,12 +32,12 @@ export default function FollowUpTab({ showToast }) {
              </div>
              <textarea className="w-full mb-3" rows="2" placeholder="Ghi nhận phản hồi chi tiết từ bệnh nhân..."></textarea>
              <div className="flex gap-2">
-                <button className="btn-primary" onClick={() => showToast('Đã lưu Follow-up!')}>Lưu Follow-up</button>
+                <button className="btn-primary" onClick={() => showToast('Đã lưu lượt theo dõi!')}>Lưu lượt theo dõi</button>
                 <button className="btn-secondary" onClick={() => showToast('Đã đánh dấu cần bác sĩ xử lý thêm!')}>Cần bác sĩ xử lý thêm</button>
              </div>
           </div>
 
-          <h3 className="font-bold text-lg mb-4">Lịch sử Follow-up</h3>
+          <h3 className="font-bold text-lg mb-4">Lịch sử theo dõi</h3>
           <div className="space-y-4">
              <div className="p-4 border rounded-md" style={{borderLeft: '4px solid #16a34a'}}>
                 <div className="flex justify-between mb-2">

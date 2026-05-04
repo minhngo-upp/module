@@ -1,21 +1,29 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Activity,
   ArrowLeft,
   CalendarPlus,
   CheckCircle2,
   ClipboardList,
+  Edit3,
   FileText,
   MessageSquare,
   ScrollText,
-  AlertTriangle,
+  Trash2,
   X,
-  Send,
 } from 'lucide-react';
 import './PatientDetail.css';
 
+import { findBasePatient } from '../data/patients';
 import { patientDetailMock } from '../mockData';
+import {
+  buildPatientDetailFromDraft,
+  deletePatientDraft,
+  ensurePatientDraftFromDetail,
+  getDeletedPatientIds,
+  getPatientDraft,
+} from '../utils/patientDrafts';
 import OverviewTab from './patient-detail-tabs/OverviewTab';
 import AssessmentTab from './patient-detail-tabs/AssessmentTab';
 import DailyLogTab from './patient-detail-tabs/DailyLogTab';
@@ -24,23 +32,67 @@ import InterventionFollowUpTab from './patient-detail-tabs/InterventionFollowUpT
 const TABS = [
   { id: 'summary', label: 'Tóm tắt', icon: ScrollText },
   { id: 'assessment', label: 'Đánh giá', icon: Activity },
-  { id: 'daily-log', label: 'Nhật ký khẩu phần', icon: ClipboardList },
+  { id: 'daily-log', label: 'Nhật ký', icon: ClipboardList },
   { id: 'intervention-followup', label: 'Can thiệp & theo dõi', icon: FileText },
 ];
+
+function getValidTab(tabId) {
+  return TABS.some((tab) => tab.id === tabId) ? tabId : 'summary';
+}
 
 // Clinical snapshot block moved directly into header layout
 
 export default function PatientDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('summary');
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [chatInput, setChatInput] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState(() => getValidTab(searchParams.get('tab')));
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [toastMsg, setToastMsg] = useState('');
   const toastTimeoutRef = useRef(null);
   const detailContentRef = useRef(null);
 
-  const patient = { ...patientDetailMock, patientCode: id ?? patientDetailMock.patientCode };
+  const draftPatient = getPatientDraft(id);
+  const basePatient = findBasePatient(id);
+  const fallbackPatient = basePatient
+    ? {
+        ...patientDetailMock,
+        patientCode: basePatient.id,
+        fullName: basePatient.name,
+        gender: basePatient.gender,
+        age: basePatient.age,
+        phone: basePatient.phone,
+        occupation: basePatient.occupation,
+        avatar: basePatient.name.charAt(0).toUpperCase(),
+        assignedDoctor: {
+          ...patientDetailMock.assignedDoctor,
+          name: basePatient.doctor,
+        },
+      }
+    : { ...patientDetailMock, patientCode: id ?? patientDetailMock.patientCode };
+  const patient = buildPatientDetailFromDraft(
+    draftPatient,
+    fallbackPatient,
+  );
+
+  const handleSelectTab = (tabId) => {
+    const nextTab = getValidTab(tabId);
+    setActiveTab(nextTab);
+    const nextParams = new URLSearchParams(searchParams);
+    if (nextTab === 'summary') nextParams.delete('tab');
+    else nextParams.set('tab', nextTab);
+    setSearchParams(nextParams, { replace: true });
+  };
+
+  const handleEditPatient = () => {
+    const draft = ensurePatientDraftFromDetail(patient);
+    navigate(`/patients/new/${draft.patientCode}`);
+  };
+
+  const handleDeletePatient = () => {
+    deletePatientDraft(patient.patientCode);
+    navigate('/patients');
+  };
 
   const showToast = (message) => {
     setToastMsg(message);
@@ -56,6 +108,14 @@ export default function PatientDetail() {
   );
 
   useEffect(() => {
+    if (id && getDeletedPatientIds().includes(id)) navigate('/patients');
+  }, [id, navigate]);
+
+  useEffect(() => {
+    setActiveTab(getValidTab(searchParams.get('tab')));
+  }, [searchParams]);
+
+  useEffect(() => {
     if (!detailContentRef.current) return;
 
     detailContentRef.current.scrollIntoView({
@@ -67,11 +127,11 @@ export default function PatientDetail() {
   const renderTabContent = () => {
     switch (activeTab) {
       case 'summary':
-        return <OverviewTab patient={patient} onNavigate={setActiveTab} showToast={showToast} />;
+        return <OverviewTab patient={patient} onNavigate={handleSelectTab} showToast={showToast} />;
       case 'assessment':
         return <AssessmentTab patient={patient} showToast={showToast} />;
       case 'daily-log':
-        return <DailyLogTab patient={patient} onNavigate={setActiveTab} />;
+        return <DailyLogTab patient={patient} onNavigate={handleSelectTab} />;
       case 'intervention-followup':
         return <InterventionFollowUpTab patient={patient} showToast={showToast} />;
       default:
@@ -95,13 +155,21 @@ export default function PatientDetail() {
         </button>
 
         <div className="actions-right">
-          <button className="btn-secondary" type="button" onClick={() => setIsChatOpen(true)}>
+          <button className="btn-secondary" type="button" onClick={handleEditPatient}>
+            <Edit3 size={16} className="button-icon-inline" aria-hidden="true" />
+            Chỉnh sửa
+          </button>
+          <Link className="btn-secondary" to={`/messages?patientId=${patient.patientCode}`}>
             <MessageSquare size={16} className="button-icon-inline" aria-hidden="true" />
             Nhắn tin
-          </button>
-          <button className="btn-primary" type="button" onClick={() => showToast('Đã mở form đặt lịch theo dõi')}>
+          </Link>
+          <Link className="btn-primary" to={`/appointments?create=1&patientId=${patient.patientCode}`}>
             <CalendarPlus size={16} className="button-icon-inline" aria-hidden="true" />
-            Tạo follow-up
+            Tạo theo dõi
+          </Link>
+          <button className="btn-secondary danger-action" type="button" onClick={() => setIsDeleteOpen(true)}>
+            <Trash2 size={16} className="button-icon-inline" aria-hidden="true" />
+            Xoá
           </button>
         </div>
       </div>
@@ -126,12 +194,12 @@ export default function PatientDetail() {
           <div className="snapshot-separator"></div>
           <div className="snapshot-item">
             <span className="snapshot-label">Vấn đề chính</span>
-            <strong className="snapshot-value truncate">{patient.nutritionAssessment.mainDiagnosis}</strong>
+            <strong className="snapshot-value">{patient.nutritionAssessment.mainDiagnosis}</strong>
           </div>
           <div className="snapshot-separator"></div>
           <div className="snapshot-item">
             <span className="snapshot-label">Ưu tiên hôm nay</span>
-            <strong className="snapshot-value truncate">Tăng năng lượng khẩu phần và nước uống</strong>
+            <strong className="snapshot-value">Tăng năng lượng khẩu phần và nước uống</strong>
           </div>
           <div className="snapshot-separator"></div>
           <div className="snapshot-item">
@@ -157,7 +225,7 @@ export default function PatientDetail() {
                 aria-selected={selected}
                 aria-controls={`panel-${tab.id}`}
                 tabIndex={selected ? 0 : -1}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => handleSelectTab(tab.id)}
               >
                 <Icon size={18} aria-hidden="true" />
                 {tab.label}
@@ -177,47 +245,39 @@ export default function PatientDetail() {
         {renderTabContent()}
       </div>
 
-      {isChatOpen && (
-        <div className="mini-chatbox">
-          <div className="mini-chatbox-header">
-            <div className="flex items-center gap-2">
-              <div className="chat-avatar">{patient.avatar}</div>
-              <strong>{patient.fullName}</strong>
+      {isDeleteOpen ? (
+        <div className="patient-confirm-backdrop" role="presentation" onClick={() => setIsDeleteOpen(false)}>
+          <section
+            className="patient-confirm-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-detail-patient-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="confirm-dialog-header">
+              <div>
+                <span className="eyebrow">Xoá hồ sơ</span>
+                <h2 id="delete-detail-patient-title">Xoá {patient.fullName}?</h2>
+              </div>
+              <button className="btn-icon" type="button" aria-label="Đóng xác nhận xoá" onClick={() => setIsDeleteOpen(false)}>
+                <X size={18} aria-hidden="true" />
+              </button>
             </div>
-            <button className="btn-icon" onClick={() => setIsChatOpen(false)} aria-label="Đóng tin nhắn">
-              <X size={18} />
-            </button>
-          </div>
-          <div className="mini-chatbox-body">
-            <div className="chat-message received">
-              <p>Chào bác sĩ, hôm nay tôi lỡ ăn một cái bánh ngọt thì có sao không ạ?</p>
-              <span className="chat-time">10:42</span>
+            <p>Hồ sơ sẽ được ẩn khỏi danh sách bệnh nhân. Nếu đây là hồ sơ nhập tay, dữ liệu nháp trên trình duyệt này cũng sẽ bị xoá.</p>
+            <div className="confirm-patient-summary">
+              <strong>{patient.patientCode}</strong>
+              <span>{patient.age} tuổi · {patient.gender} · {patient.assignedDoctor.name}</span>
             </div>
-          </div>
-          <div className="mini-chatbox-footer">
-            <input 
-              type="text" 
-              placeholder="Nhập tin nhắn..." 
-              value={chatInput} 
-              onChange={(e) => setChatInput(e.target.value)}
-              onKeyDown={(e) => { 
-                if (e.key === 'Enter' && chatInput) { 
-                  showToast('Đã gửi tin nhắn'); 
-                  setChatInput(''); 
-                } 
-              }}
-            />
-            <button 
-              className="btn-icon text-primary" 
-              onClick={() => { 
-                if (chatInput) { showToast('Đã gửi tin nhắn'); setChatInput(''); } 
-              }}
-            >
-              <Send size={18} />
-            </button>
-          </div>
+            <div className="confirm-dialog-actions">
+              <button className="btn-secondary" type="button" onClick={() => setIsDeleteOpen(false)}>Huỷ</button>
+              <button className="btn-danger" type="button" onClick={handleDeletePatient}>
+                <Trash2 size={16} className="button-icon-inline" aria-hidden="true" />
+                Xoá hồ sơ
+              </button>
+            </div>
+          </section>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

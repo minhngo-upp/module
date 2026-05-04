@@ -7,7 +7,7 @@ function getFollowUpStatusClass(status) {
 
 function getTimelineEventType(record, index) {
   if (index === 0) return 'Điều chỉnh kế hoạch';
-  if (record.visitType?.toLowerCase().includes('follow')) return 'Follow-up';
+  if (record.visitType?.toLowerCase().includes('theo dõi')) return 'Theo dõi';
   return 'Mốc đánh giá';
 }
 
@@ -20,7 +20,7 @@ export default function HistoryTab({ showToast }) {
             <div className="section-heading">
               <span className="eyebrow">Theo dõi & lịch sử</span>
               <h2>Nhận định chuyên môn và bước theo dõi tiếp theo</h2>
-              <p>Ghi nhận quyết định sau khi chỉnh kế hoạch, sau đó tạo follow-up để đóng vòng can thiệp.</p>
+              <p>Ghi nhận quyết định sau khi chỉnh kế hoạch, sau đó tạo lượt theo dõi để đóng vòng can thiệp.</p>
             </div>
 
             <div className="decision-note-prompts" aria-label="Gợi ý nội dung cần ghi nhận">
@@ -51,8 +51,8 @@ export default function HistoryTab({ showToast }) {
               <button className="btn-secondary" type="button" onClick={() => showToast('Đã lưu ghi chú chuyên môn')}>
                 Lưu ghi chú
               </button>
-              <button className="btn-primary" type="button" onClick={() => showToast('Đã tạo follow-up mới')}>
-                Tạo follow-up
+              <button className="btn-primary" type="button" onClick={() => showToast('Đã tạo lượt theo dõi mới')}>
+                Tạo lượt theo dõi
               </button>
             </div>
           </article>
@@ -92,7 +92,7 @@ export default function HistoryTab({ showToast }) {
         <aside className="history-side">
           <article className="card history-panel">
             <div className="section-heading">
-              <span className="eyebrow">Follow-up</span>
+              <span className="eyebrow">Theo dõi</span>
               <h2>Các lần nhắc và phản hồi gần nhất</h2>
             </div>
 

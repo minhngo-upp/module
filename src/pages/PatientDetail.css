@@ -1,4 +1,4 @@
-.relative {
+﻿.relative {
   position: relative;
 }
 
@@ -64,6 +64,14 @@
   width: 100%;
 }
 
+.detail-header-actions {
+  position: sticky;
+  top: 0;
+  z-index: 28;
+  padding: 0.55rem 0;
+  background: hsl(var(--background));
+}
+
 .back-link {
   display: inline-flex;
   align-items: center;
@@ -78,6 +86,89 @@
 
 .actions-right {
   gap: 0.6rem;
+}
+
+.danger-action {
+  color: hsl(var(--danger));
+}
+
+.danger-action:hover,
+.danger-action:focus-visible {
+  background: hsla(var(--danger) / 0.08);
+  border-color: hsla(var(--danger) / 0.2);
+}
+
+.btn-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0.65rem 1rem;
+  border: 1px solid hsla(var(--danger) / 0.22);
+  border-radius: var(--radius-md);
+  background: hsl(var(--danger));
+  color: white;
+  font-weight: 700;
+}
+
+.btn-danger:hover,
+.btn-danger:focus-visible {
+  background: hsl(348 83% 42%);
+}
+
+.patient-confirm-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 3200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: hsla(210 24% 16% / 0.28);
+  backdrop-filter: blur(6px);
+}
+
+.patient-confirm-dialog {
+  width: min(460px, 100%);
+  padding: 1.1rem;
+  border: 1px solid hsla(var(--danger) / 0.18);
+  border-radius: 22px;
+  background: hsl(var(--surface));
+  box-shadow: var(--shadow-lg);
+}
+
+.confirm-dialog-header,
+.confirm-dialog-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.confirm-dialog-header h2 {
+  margin: 0.25rem 0 0;
+  font-size: 1.25rem;
+}
+
+.patient-confirm-dialog p {
+  margin: 0.9rem 0;
+  color: hsl(var(--text-muted));
+  line-height: 1.55;
+}
+
+.confirm-patient-summary {
+  display: grid;
+  gap: 0.2rem;
+  margin-bottom: 1rem;
+  padding: 0.8rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 14px;
+  background: hsl(var(--background));
+}
+
+.confirm-patient-summary span {
+  color: hsl(var(--text-muted));
+  font-size: 0.88rem;
 }
 
 .patient-hero-card {
@@ -261,8 +352,7 @@
   padding: 0.3rem;
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius-md);
-  background: hsla(var(--surface) / 0.95);
-  backdrop-filter: blur(12px);
+  background: hsl(var(--surface));
 }
 
 .tab-btn {
@@ -2543,7 +2633,7 @@
 .planner-modal-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 80;
+  z-index: 1200;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2560,6 +2650,42 @@
   border-radius: var(--radius-lg);
   background: hsl(var(--surface));
   box-shadow: var(--shadow-lg);
+}
+
+.mini-chatbox {
+  position: fixed;
+  right: 2rem;
+  bottom: 2rem;
+  width: 320px;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: hsl(var(--surface));
+  border: 1px solid hsl(var(--border));
+  box-shadow: var(--shadow-lg);
+}
+
+.mini-chatbox-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: hsl(var(--background));
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.chat-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: hsl(var(--primary-light));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.8rem;
 }
 
 .planner-modal-wide {
@@ -3209,6 +3335,17 @@
   gap: 1rem;
 }
 
+.patient-minimal-header-wrapper {
+  padding: 1.5rem 1.75rem;
+  border-radius: var(--radius-lg);
+  background: hsl(var(--surface));
+  border: 1px solid hsl(var(--border));
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+
 .lab-report-panel {
   padding: 1.1rem 1.1rem 0.95rem;
   border: 1px solid hsl(var(--border));
@@ -3799,25 +3936,25 @@
    ========================================================= */
 
 .patient-minimal-header-wrapper {
-  background: white;
+  background: hsl(var(--surface));
   border-radius: var(--radius-lg);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-  padding: 1.5rem 1.5rem 0 1.5rem;
-  margin-bottom: 1.5rem;
-  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  padding: 1rem 1.1rem 0;
+  margin-bottom: 1rem;
+  border: 1px solid hsl(var(--border));
 }
 
 .patient-minimal-header {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
-  margin-bottom: 1.5rem;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .patient-minimal-avatar {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
   background-color: hsl(var(--primary) / 0.1);
   color: hsl(var(--primary));
   font-size: 1.75rem;
@@ -3842,11 +3979,11 @@
 }
 
 .patient-name-display {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: hsl(var(--heading));
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: hsl(var(--text-main));
   margin: 0;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
 
 .patient-meta-display {
@@ -3864,45 +4001,215 @@
 
 /* Clinical Snapshot Bar */
 .clinical-snapshot-bar {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 1rem 0;
-  border-top: 1px solid var(--border-light);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 0.55rem;
+  padding: 0.85rem 0 1rem;
+  border-top: 1px solid hsl(var(--border));
 }
 
 .snapshot-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  flex: 1;
+  display: grid;
+  grid-template-columns: 138px minmax(0, 1fr);
+  gap: 0.65rem;
+  align-items: start;
+  min-width: 0;
+  min-height: 54px;
+  padding: 0.62rem 0.75rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius-sm);
+  background: hsl(var(--background));
 }
 
 .snapshot-label {
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   color: hsl(var(--text-muted));
-  font-weight: 600;
+  font-weight: 800;
+  line-height: 1.35;
 }
 
 .snapshot-value {
-  font-size: 0.95rem;
-  color: hsl(var(--heading));
-  font-weight: 600;
-}
-
-.snapshot-value.truncate {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 250px;
+  min-width: 0;
+  color: hsl(var(--text-main));
+  font-size: 0.9rem;
+  color: hsl(var(--text-main));
+  font-weight: 750;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.45;
 }
 
 .snapshot-separator {
-  width: 1px;
-  height: 24px;
-  background-color: var(--border-light);
+  display: none;
+}
+
+@media (max-width: 1180px) {
+  .clinical-snapshot-bar {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .snapshot-item {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+}
+
+/* Patient clinical header refinements */
+.patient-minimal-header-wrapper {
+  padding: 1.1rem;
+  border-color: hsla(var(--primary) / 0.14);
+  background:
+    linear-gradient(180deg, hsl(var(--surface)) 0%, hsl(var(--background)) 100%);
+  box-shadow: 0 18px 42px -38px hsla(var(--foreground) / 0.32);
+}
+
+.patient-minimal-header {
+  align-items: stretch;
+  gap: 0.95rem;
+  margin-bottom: 0.9rem;
+}
+
+.patient-minimal-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: hsl(var(--primary-light));
+  color: hsl(var(--primary-dark));
+  box-shadow: inset 0 0 0 1px hsla(var(--primary) / 0.08);
+}
+
+.patient-minimal-info {
+  flex: 1;
+  min-width: 0;
+  gap: 0.65rem;
+}
+
+.patient-minimal-name-row {
+  gap: 0.6rem 0.75rem;
+}
+
+.patient-name-display {
+  font-size: clamp(1.28rem, 1.6vw, 1.55rem);
+  line-height: 1.18;
+}
+
+.patient-meta-display {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  max-width: 100%;
+  color: hsl(var(--text-muted));
+  line-height: 1.5;
+}
+
+.patient-goal-display {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  padding: 0.7rem 0.82rem;
+  border: 1px solid hsla(var(--primary) / 0.18);
+  border-radius: var(--radius-md);
+  background: hsla(var(--primary) / 0.055);
+  color: hsl(var(--text-main));
+  line-height: 1.5;
+}
+
+.patient-goal-display::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  margin-top: 0.48rem;
+  border-radius: var(--radius-full);
+  background: hsl(var(--primary));
+  box-shadow: 0 0 0 5px hsla(var(--primary) / 0.11);
+  flex-shrink: 0;
+}
+
+.clinical-snapshot-bar {
+  grid-template-columns: minmax(172px, 0.86fr) minmax(320px, 1.62fr) minmax(260px, 1.25fr) minmax(178px, 0.9fr);
+  gap: 0.7rem;
+  padding: 0.9rem 0 0;
+}
+
+.snapshot-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.32rem;
+  min-height: 84px;
+  padding: 0.82rem 0.88rem 0.86rem;
+  border-radius: 14px;
+  background: hsl(var(--surface));
+  border-color: hsla(var(--border) / 0.9);
+  box-shadow: 0 10px 26px -28px hsla(var(--foreground) / 0.38);
+}
+
+.snapshot-item::before {
+  content: '';
+  width: 28px;
+  height: 3px;
+  border-radius: var(--radius-full);
+  background: hsla(var(--primary) / 0.34);
+}
+
+.snapshot-item:first-child {
+  border-color: hsla(var(--danger) / 0.18);
+  background: linear-gradient(180deg, hsla(var(--danger) / 0.045) 0%, hsl(var(--surface)) 72%);
+}
+
+.snapshot-item:first-child::before {
+  background: hsl(var(--danger));
+}
+
+.snapshot-label {
+  color: hsl(var(--text-muted));
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+}
+
+.snapshot-value {
+  font-size: 0.9rem;
+  line-height: 1.42;
+}
+
+.snapshot-item:first-child .snapshot-value {
+  color: hsl(var(--danger));
+  font-weight: 850;
+}
+
+@media (max-width: 1280px) {
+  .clinical-snapshot-bar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .patient-minimal-header-wrapper {
+    padding: 0.9rem;
+  }
+
+  .patient-minimal-header {
+    flex-direction: column;
+  }
+
+  .patient-minimal-avatar {
+    width: 56px;
+    height: 56px;
+  }
+
+  .clinical-snapshot-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .snapshot-item {
+    min-height: auto;
+  }
 }
 
 /* --------------------------------------
@@ -3932,7 +4239,7 @@
 .minimal-card {
   background: white;
   border-radius: var(--radius-lg);
-  border: 1px solid var(--border-light);
+  border: 1px solid hsl(var(--border));
   padding: 1.5rem;
   box-shadow: 0 2px 10px rgba(0,0,0,0.02);
 }
@@ -3940,7 +4247,7 @@
 .minimal-card-title {
   font-size: 1.1rem;
   font-weight: 700;
-  color: hsl(var(--heading));
+  color: hsl(var(--text-main));
   margin: 0 0 1rem 0;
 }
 
@@ -3963,7 +4270,7 @@
   align-items: flex-start;
   gap: 1rem;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--border-light);
+  border-bottom: 1px solid hsl(var(--border));
 }
 
 .summary-row:last-child {
@@ -3981,7 +4288,7 @@
 .summary-row-value {
   flex: 1;
   font-size: 0.95rem;
-  color: hsl(var(--heading));
+  color: hsl(var(--text-main));
   font-weight: 600;
   line-height: 1.4;
 }
@@ -4002,7 +4309,7 @@
 .compact-metric-card {
   background: white;
   border-radius: var(--radius-md);
-  border: 1px solid var(--border-light);
+  border: 1px solid hsl(var(--border));
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -4035,7 +4342,7 @@
 .metric-actual {
   font-size: 1.25rem;
   font-weight: 700;
-  color: hsl(var(--heading));
+  color: hsl(var(--text-main));
 }
 
 .metric-target {
@@ -4046,7 +4353,7 @@
 .metric-progress-track {
   width: 100%;
   height: 4px;
-  background-color: var(--border-light);
+  background-color: hsl(var(--border));
   border-radius: 2px;
   margin-top: 0.25rem;
   overflow: hidden;
@@ -4071,7 +4378,7 @@
   background-color: hsl(var(--surface));
   padding: 1rem;
   border-radius: var(--radius-md);
-  border: 1px solid var(--border-light);
+  border: 1px solid hsl(var(--border));
   align-items: flex-start;
 }
 
@@ -4093,7 +4400,7 @@
 
 .alert-title-row strong {
   font-size: 0.95rem;
-  color: hsl(var(--heading));
+  color: hsl(var(--text-main));
 }
 
 .alert-detail {
@@ -4117,7 +4424,7 @@
   display: flex;
   gap: 0.5rem;
   font-size: 0.95rem;
-  color: hsl(var(--heading));
+  color: hsl(var(--text-main));
   font-weight: 500;
   line-height: 1.4;
   align-items: flex-start;
@@ -4154,7 +4461,7 @@
   left: 3px;
   bottom: 0;
   width: 2px;
-  background-color: var(--border-light);
+  background-color: hsl(var(--border));
   border-radius: 1px;
 }
 
@@ -4201,7 +4508,7 @@
 }
 
 .impression-top-header {
-  border-bottom: 1px solid var(--border-light);
+  border-bottom: 1px solid hsl(var(--border));
   padding-bottom: 1rem;
 }
 
@@ -4221,7 +4528,7 @@
 .impression-subtitle {
   font-size: 0.95rem;
   font-weight: 700;
-  color: hsl(var(--heading));
+  color: hsl(var(--text-main));
   margin: 0 0 1rem 0;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -4252,12 +4559,12 @@
 
 /* Module Divider */
 .module-divider {
-  border-bottom: 2px solid var(--border-light);
+  border-bottom: 2px solid hsl(var(--border));
   padding-bottom: 0.5rem;
 }
 
 .module-divider-title {
-  color: hsl(var(--heading));
+  color: hsl(var(--text-main));
   margin: 0;
   letter-spacing: -0.01em;
 }
@@ -4284,7 +4591,7 @@
 /* Lab Panel Base */
 .lab-panel-clean {
   border-radius: var(--radius-lg);
-  border: 1px solid var(--border-light);
+  border: 1px solid hsl(var(--border));
   box-shadow: 0 2px 8px rgba(0,0,0,0.02);
 }
 
@@ -4442,14 +4749,26 @@
 }
 
 .assessment-module-heading {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
   margin-bottom: 1.1rem;
   padding-bottom: 0.9rem;
   border-bottom: 1px solid hsla(var(--border) / 0.85);
+  justify-content: flex-start;
 }
 
 .assessment-module-heading > .eyebrow {
-  min-width: 8rem;
-  padding-top: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-width: 0;
+  padding-top: 0;
+  flex-shrink: 0;
+}
+
+.assessment-module-heading > div {
+  max-width: 720px;
 }
 
 .assessment-module-heading p,
@@ -4839,3 +5158,901 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* =========================================================
+   Minimal daily nutrition review workspace
+   ========================================================= */
+
+.daily-log-minimal {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.daily-log-minimal-toolbar,
+.daily-nutrition-hero,
+.nutrition-metric-strip,
+.macro-distribution-mini,
+.seven-day-trend-section,
+.meals-to-review-section,
+.daily-support-context-section {
+  border: 1px solid hsl(var(--border));
+  border-radius: 22px;
+  background: hsl(var(--surface));
+}
+
+.daily-log-minimal-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.15rem;
+}
+
+.daily-log-minimal-toolbar h2,
+.daily-nutrition-hero h2,
+.daily-hero-action h3,
+.seven-day-trend-section h2,
+.meals-to-review-section h2,
+.support-context-primary h2 {
+  margin: 0;
+  color: hsl(var(--text-main));
+  letter-spacing: -0.02em;
+}
+
+.daily-nutrition-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(340px, 0.8fr);
+  gap: 1.1rem;
+  padding: 1.25rem;
+  background:
+    radial-gradient(circle at top right, hsla(var(--primary) / 0.08), transparent 34%),
+    linear-gradient(180deg, hsl(var(--surface)) 0%, hsl(var(--background)) 100%);
+  box-shadow: 0 18px 38px -34px hsla(var(--foreground) / 0.32);
+}
+
+.daily-hero-left p {
+  max-width: 760px;
+  margin: 0.35rem 0 0;
+  color: hsl(var(--text-main));
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.daily-hero-left ul,
+.daily-hero-action ul {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0.95rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.daily-hero-left li {
+  position: relative;
+  padding-left: 1rem;
+  color: hsl(var(--text-main));
+  font-size: 0.94rem;
+}
+
+.daily-hero-left li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.52rem;
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-full);
+  background: hsl(var(--warning));
+}
+
+.daily-hero-action {
+  padding: 1rem;
+  border: 1px solid hsla(var(--primary) / 0.14);
+  border-radius: 18px;
+  background: hsla(var(--primary) / 0.045);
+}
+
+.daily-hero-action li {
+  color: hsl(var(--text-main));
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.daily-hero-actions {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.daily-hero-actions .btn-primary,
+.daily-hero-actions .btn-secondary {
+  width: 100%;
+  justify-content: center;
+}
+
+.daily-hero-action > p {
+  margin: 0.85rem 0 0;
+  color: hsl(var(--text-muted));
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.nutrition-metric-strip {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.75rem;
+  padding: 0.95rem;
+}
+
+.metric-card-compact {
+  min-width: 0;
+  padding: 0.85rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 16px;
+  background: hsl(var(--background));
+}
+
+.metric-card-topline {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.45rem;
+}
+
+.metric-card-topline > span,
+.metric-card-compact p,
+.metric-card-compact small {
+  color: hsl(var(--text-muted));
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.metric-card-compact strong {
+  display: block;
+  color: hsl(var(--text-main));
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+}
+
+.metric-card-compact .micro-progress {
+  margin: 0.55rem 0 0.42rem;
+}
+
+.metric-card-compact p,
+.metric-card-compact small {
+  display: block;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.macro-distribution-mini {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.35fr) minmax(0, 0.65fr);
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem 1.1rem;
+}
+
+.macro-distribution-mini strong {
+  display: block;
+  margin-top: 0.18rem;
+  color: hsl(var(--text-main));
+  font-size: 1rem;
+}
+
+.macro-distribution-mini p {
+  margin: 0.3rem 0 0;
+  color: hsl(var(--text-muted));
+  font-size: 0.88rem;
+}
+
+.seven-day-trend-section,
+.meals-to-review-section,
+.daily-support-context-section {
+  padding: 1.15rem;
+}
+
+.nutrition-chart-shell.compact {
+  height: 220px;
+  margin-top: 0.9rem;
+}
+
+.meal-filter-toggle {
+  display: inline-flex;
+  gap: 0.35rem;
+  padding: 0.25rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius-full);
+  background: hsl(var(--background));
+}
+
+.meal-filter-toggle button {
+  border: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: hsl(var(--text-muted));
+  padding: 0.48rem 0.75rem;
+  font-size: 0.84rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.meal-filter-toggle button.active {
+  background: hsl(var(--primary-light));
+  color: hsl(var(--primary-dark));
+}
+
+.meal-review-compact-list {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1rem;
+}
+
+.meal-review-compact {
+  display: grid;
+  grid-template-columns: 128px minmax(0, 1fr);
+  gap: 0.9rem;
+  padding: 0.85rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 18px;
+  background: hsl(var(--background));
+}
+
+.meal-review-compact.tone-warning {
+  border-color: hsla(var(--warning) / 0.24);
+  background: linear-gradient(180deg, hsla(var(--warning) / 0.06) 0%, hsl(var(--background)) 100%);
+}
+
+.meal-review-compact img {
+  width: 128px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid hsl(var(--border));
+}
+
+.meal-review-compact-body {
+  display: grid;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.meal-review-compact-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  align-items: flex-start;
+}
+
+.meal-review-compact-header span,
+.meal-review-compact small {
+  color: hsl(var(--text-muted));
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.meal-review-compact h3 {
+  margin: 0.18rem 0 0;
+  color: hsl(var(--text-main));
+  font-size: 1rem;
+}
+
+.meal-review-compact p {
+  margin: 0;
+  color: hsl(var(--text-main));
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.meal-compact-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.meal-compact-metrics span {
+  padding: 0.32rem 0.55rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius-full);
+  background: hsl(var(--surface));
+  color: hsl(var(--text-main));
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
+.support-context-primary {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.support-context-row {
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+  padding: 0.78rem 0.85rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 14px;
+  background: hsl(var(--background));
+}
+
+.support-context-row svg {
+  flex-shrink: 0;
+  color: hsl(var(--primary-dark));
+  margin-top: 0.12rem;
+}
+
+.support-context-row p {
+  margin: 0;
+  color: hsl(var(--text-main));
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.secondary-day-context {
+  margin-top: 0.9rem;
+  border-top: 1px solid hsl(var(--border));
+  padding-top: 0.85rem;
+}
+
+.secondary-day-context summary {
+  cursor: pointer;
+  color: hsl(var(--primary-dark));
+  font-weight: 800;
+}
+
+.secondary-day-context-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin-top: 0.85rem;
+}
+
+.secondary-day-context-grid article {
+  padding: 0.85rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 14px;
+  background: hsl(var(--background));
+}
+
+.secondary-day-context-grid h3 {
+  margin: 0 0 0.55rem;
+  color: hsl(var(--text-main));
+  font-size: 0.95rem;
+}
+
+.secondary-day-context-grid p {
+  margin: 0.35rem 0 0;
+  color: hsl(var(--text-muted));
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 1180px) {
+  .daily-nutrition-hero,
+  .macro-distribution-mini,
+  .secondary-day-context-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nutrition-metric-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .daily-log-minimal-toolbar,
+  .meal-review-compact-header,
+  .section-heading.with-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .nutrition-metric-strip,
+  .meal-review-compact {
+    grid-template-columns: 1fr;
+  }
+
+  .meal-review-compact img {
+    width: 100%;
+    height: 160px;
+  }
+}
+
+/* =========================================================
+   Minimal intervention planning workspace
+   ========================================================= */
+
+.care-plan-tab .planner-shell {
+  gap: 1.1rem;
+}
+
+.intervention-minimal-workspace {
+  grid-template-columns: minmax(0, 2fr) minmax(340px, 0.8fr);
+  gap: 1rem;
+}
+
+.planning-main-column {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.intervention-workflow-card {
+  padding: 0.85rem;
+}
+
+.intervention-workflow-steps {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.workflow-step {
+  padding: 0.7rem 0.75rem;
+  border-radius: 14px;
+}
+
+.workflow-step::before {
+  width: 22px;
+  height: 3px;
+  margin-bottom: 0.48rem;
+}
+
+.cycle-control-bar {
+  padding: 1rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 20px;
+  background: hsl(var(--surface));
+  box-shadow: 0 14px 30px -30px hsla(var(--foreground) / 0.28);
+}
+
+.cycle-control-primary,
+.cycle-utility-row,
+.cycle-control-fields {
+  display: flex;
+  gap: 0.9rem;
+}
+
+.cycle-control-primary,
+.cycle-utility-row {
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.cycle-control-fields {
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.cycle-utility-row {
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid hsla(var(--border) / 0.85);
+}
+
+.cycle-control-microcopy {
+  display: grid;
+  gap: 0.15rem;
+  color: hsl(var(--text-main));
+}
+
+.cycle-control-microcopy span {
+  color: hsl(var(--text-muted));
+  font-size: 0.82rem;
+}
+
+.cycle-control-bar .planner-toolbar-actions {
+  justify-content: flex-end;
+}
+
+.cycle-control-bar .danger-ghost {
+  border-color: transparent;
+  background: transparent;
+}
+
+.day-queue-panel {
+  padding: 0.95rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 20px;
+  background: hsl(var(--surface));
+}
+
+.day-queue-header {
+  margin-bottom: 0.75rem;
+}
+
+.day-queue-header h2 {
+  margin: 0.15rem 0 0;
+  font-size: 1.05rem;
+}
+
+.day-queue-panel .planner-day-rail {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(172px, 1fr));
+  gap: 0.55rem;
+  max-height: none;
+  overflow: visible;
+}
+
+.day-queue-panel .planner-day-card {
+  min-height: 0;
+  padding: 0.68rem 0.72rem;
+  border-radius: 14px;
+}
+
+.day-queue-panel .planner-day-card p {
+  margin-top: 0.32rem;
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.day-queue-panel .planner-day-card-meta {
+  font-size: 0.76rem;
+}
+
+.planner-editor-card {
+  padding: 1rem;
+}
+
+.planner-editor-header {
+  gap: 1rem;
+}
+
+.planner-editor-kpis {
+  grid-template-columns: repeat(3, minmax(96px, 1fr));
+  margin-left: 0;
+}
+
+.planner-editor-kpi {
+  min-height: 68px;
+  padding: 0.62rem 0.7rem;
+}
+
+.selected-day-meal-summary {
+  gap: 0.55rem;
+  margin: 0.75rem 0;
+}
+
+.selected-day-meal-summary,
+.selected-day-inline-add-actions,
+.missing-meal-quick-add,
+.meal-slot-list-legacy {
+  display: none;
+}
+
+.meal-slot-list-default {
+  margin-top: 0.9rem;
+  margin-bottom: 0.85rem;
+}
+
+.meal-summary-chip {
+  padding: 0.58rem 0.65rem;
+}
+
+.selected-day-action-line {
+  display: grid;
+  gap: 0.2rem;
+  margin-bottom: 0.8rem;
+  padding: 0.72rem 0.85rem;
+  border-left: 3px solid hsla(var(--warning) / 0.35);
+  border-radius: 14px;
+  background: hsla(var(--warning) / 0.055);
+}
+
+.selected-day-action-line strong {
+  color: hsl(var(--text-main));
+  font-size: 0.92rem;
+}
+
+.selected-day-action-line span {
+  color: hsl(var(--text-muted));
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
+.selected-day-inline-add-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.55rem;
+}
+
+.selected-day-inline-add-actions .btn-primary {
+  min-height: 34px;
+  padding: 0.38rem 0.68rem;
+  font-size: 0.82rem;
+}
+
+.missing-meal-quick-add {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+  padding: 0.78rem 0.85rem;
+  border: 1px solid hsla(var(--primary) / 0.18);
+  border-radius: 15px;
+  background: linear-gradient(180deg, hsla(var(--primary) / 0.055), hsl(var(--surface)));
+}
+
+.missing-meal-quick-add > div:first-child {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.missing-meal-quick-add strong {
+  color: hsl(var(--text-main));
+  font-size: 0.92rem;
+}
+
+.missing-meal-quick-add span {
+  color: hsl(var(--text-muted));
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.missing-meal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.meal-slot-list {
+  gap: 0.75rem;
+}
+
+.meal-slot-card {
+  padding: 0.85rem;
+  border-radius: 16px;
+  box-shadow: none;
+}
+
+.meal-slot-header {
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+  padding-bottom: 0.6rem;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.meal-slot-title-block {
+  display: grid;
+  gap: 0.18rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.meal-slot-header h3 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.meal-slot-header p {
+  font-size: 0.8rem;
+  margin: 0;
+  color: hsl(var(--text-muted));
+  line-height: 1.35;
+}
+
+.meal-section-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.meal-section-actions .btn-primary,
+.meal-section-actions .btn-secondary {
+  min-height: 36px;
+  padding-block: 0.42rem;
+  white-space: nowrap;
+}
+
+.meal-item-compact {
+  padding: 0.72rem;
+  border-radius: 15px;
+  background: hsl(var(--surface));
+}
+
+.meal-item-compact .dish-card-main {
+  display: grid;
+  grid-template-columns: 78px minmax(0, 1fr) 112px;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.meal-item-compact .dish-card-media {
+  width: 78px;
+}
+
+.meal-item-compact .dish-card-image,
+.meal-item-compact .dish-card-image-fallback {
+  border-radius: 12px;
+  aspect-ratio: 1 / 1;
+}
+
+.meal-item-compact .dish-card-copy {
+  gap: 0.45rem;
+}
+
+.meal-item-compact .dish-card-topline {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.65rem;
+  align-items: start;
+}
+
+.meal-item-compact .dish-card-description {
+  margin-top: 0.08rem;
+  font-size: 0.8rem;
+}
+
+.dish-compact-meta-line {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  color: hsl(var(--text-muted));
+  font-size: 0.78rem;
+}
+
+.dish-main-ingredients {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meal-item-compact .meal-intervention-note {
+  max-width: 100%;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.74rem;
+  color: hsl(var(--primary-dark));
+  background: hsla(var(--primary) / 0.07);
+  border-color: hsla(var(--primary) / 0.16);
+}
+
+.meal-item-compact .dish-card-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 32px);
+  justify-content: end;
+  align-items: center;
+  min-width: 112px;
+  gap: 0.35rem;
+}
+
+.meal-item-compact .dish-card-actions .btn-secondary {
+  grid-column: 1 / -1;
+  min-height: 34px;
+  padding: 0.36rem 0.62rem;
+  font-size: 0.82rem;
+}
+
+.meal-item-compact .dish-card-actions .btn-icon {
+  width: 32px;
+  height: 32px;
+  min-height: 32px;
+}
+
+.meal-item-compact .dish-card-actions .danger-ghost {
+  color: hsl(var(--text-muted));
+  opacity: 0.75;
+}
+
+.meal-item-compact .dish-card-actions .danger-ghost:hover {
+  opacity: 1;
+  color: hsl(var(--danger));
+}
+
+.meal-item-compact .dish-custom-badge {
+  padding: 0.18rem 0.46rem;
+  font-size: 0.72rem;
+  background: hsl(var(--background));
+}
+
+.planner-summary-panel {
+  position: sticky;
+  top: calc(var(--header-h) + 5rem);
+}
+
+.planner-summary-panel .planner-side-card {
+  padding: 1rem;
+  border-radius: 20px;
+}
+
+.readiness-checklist {
+  gap: 0.55rem;
+}
+
+.readiness-check-item {
+  padding: 0.65rem 0.72rem;
+}
+
+.readiness-conclusion {
+  padding: 0.75rem 0.8rem;
+}
+
+.followup-recommendation-list li,
+.intervention-recommendation-list li {
+  padding: 0.62rem 0.7rem;
+  font-size: 0.84rem;
+}
+
+.followup-create-btn {
+  width: 100%;
+  justify-content: center;
+  margin-top: 0.85rem;
+}
+
+.recommendation-accordion {
+  display: block;
+  padding: 0;
+  border: 1px solid hsl(var(--border));
+  border-radius: 20px;
+  background: hsl(var(--surface));
+}
+
+.recommendation-accordion summary {
+  cursor: pointer;
+  padding: 0.9rem 1rem;
+  color: hsl(var(--primary-dark));
+  font-weight: 850;
+}
+
+.recommendation-accordion-body {
+  display: grid;
+  gap: 1rem;
+  padding: 0 1rem 1rem;
+}
+
+.recommendation-accordion-body h3 {
+  margin: 0 0 0.55rem;
+  color: hsl(var(--text-main));
+  font-size: 0.95rem;
+}
+
+.recommendation-accordion .support-list {
+  gap: 0.55rem;
+}
+
+.recommendation-accordion .support-row {
+  padding: 0.65rem 0.72rem;
+}
+
+@media (max-width: 1280px) {
+  .intervention-minimal-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .planner-summary-panel {
+    position: static;
+  }
+}
+
+@media (max-width: 920px) {
+  .cycle-control-primary,
+  .cycle-utility-row,
+  .meal-item-compact .dish-card-main {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cycle-control-fields,
+  .cycle-control-bar .planner-toolbar-actions {
+    justify-content: flex-start;
+  }
+
+  .meal-item-compact .dish-card-media {
+    width: 100%;
+  }
+
+  .meal-item-compact .dish-card-actions {
+    width: 100%;
+  }
+}
+

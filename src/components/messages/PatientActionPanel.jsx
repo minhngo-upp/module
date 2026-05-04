@@ -32,14 +32,14 @@ export default function PatientActionPanel({ patient }) {
         {/* C: Dữ liệu mới nhất (Rich Data) */}
         <div className="context-section">
           <h5><Activity size={14} className="inline-icon text-success" /> Dữ liệu mới nhất</h5>
-          <button className="context-data-btn">
+          <Link className="context-data-btn" to={`/patients/${patient.id}?tab=assessment`}>
             <FileText size={18} className="text-muted" />
             <div className="flex-1 text-left overflow-hidden">
                <span className="block text-sm font-semibold truncate text-main">{patient.latestReport || 'Chưa có tài liệu'}</span>
                <span className="block text-xs text-muted truncate mt-1">Cập nhật lúc 09:15 hôm nay</span>
             </div>
             <ChevronRight size={14} className="text-muted" />
-          </button>
+          </Link>
         </div>
 
         {/* Quick Actions Grid (Refined for Workflow) */}
@@ -52,20 +52,20 @@ export default function PatientActionPanel({ patient }) {
               <span>Hồ sơ gốc</span>
             </Link>
             
-            <button className="quick-action-btn">
+            <Link to={`/patients/${patient.id}?tab=intervention-followup`} className="quick-action-btn">
               <CalendarClock size={16} />
-              <span>Follow-up</span>
-            </button>
+              <span>Theo dõi</span>
+            </Link>
             
-            <button className="quick-action-btn">
+            <Link to={`/patients/${patient.id}?tab=daily-log`} className="quick-action-btn">
               <Utensils size={16} />
               <span>Nhật ký bữa ăn</span>
-            </button>
+            </Link>
             
-            <button className="quick-action-btn">
+            <Link to={`/appointments?create=1&patientId=${patient.id}`} className="quick-action-btn">
               <Stethoscope size={16} />
               <span>Lịch khám</span>
-            </button>
+            </Link>
           </div>
         </div>
 

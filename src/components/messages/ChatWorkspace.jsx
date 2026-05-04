@@ -25,15 +25,21 @@ function analyzeChatContext(messages) {
   return { hasEscalation, recommendedReplies: [...new Set(recommendedReplies)].slice(0, 4) };
 }
 
-export default function ChatWorkspace({ contact }) {
+export default function ChatWorkspace({ contact, onSchedule, onSendMessage }) {
   const [messageText, setMessageText] = useState('');
   const [internalNoteMode, setInternalNoteMode] = useState(false);
+  const [isPinned, setIsPinned] = useState(false);
   const messageInputId = useId();
   const chatBottomRef = useRef(null);
 
   useEffect(() => {
     chatBottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [contact?.messages]);
+
+  const { hasEscalation, recommendedReplies } = useMemo(
+    () => (contact ? analyzeChatContext(contact.messages) : { hasEscalation: false, recommendedReplies: genericReplies }),
+    [contact],
+  );
 
   if (!contact) {
     return (
@@ -43,17 +49,15 @@ export default function ChatWorkspace({ contact }) {
     );
   }
 
-  const { hasEscalation, recommendedReplies } = useMemo(() => analyzeChatContext(contact.messages), [contact]);
-
   const handleSend = () => {
     if (!messageText.trim()) return;
-    alert(`${internalNoteMode ? '[INTERNAL NOTE]' : '[GỬI BỆNH NHÂN]'} ${messageText}`);
+    onSendMessage?.({ text: messageText, isInternal: internalNoteMode, createFollowUp: false });
     setMessageText('');
   };
 
   const handleSendAndFollowUp = () => {
     if (!messageText.trim()) return;
-    alert(`Đã gửi "${messageText}" và TẠO MỚI FOLLOW-UP!`);
+    onSendMessage?.({ text: messageText, isInternal: false, createFollowUp: true });
     setMessageText('');
   };
 
@@ -85,10 +89,15 @@ export default function ChatWorkspace({ contact }) {
         </div>
 
         <div className="chat-header-actions">
-          <button className="btn-icon" aria-label="Ghi ghim">
+          <button
+            className={`btn-icon ${isPinned ? 'active' : ''}`}
+            type="button"
+            aria-label={isPinned ? 'Bỏ ghim hội thoại' : 'Ghim hội thoại'}
+            onClick={() => setIsPinned((current) => !current)}
+          >
             <Pin size={20} />
           </button>
-          <button className="btn-icon" aria-label="Khác">
+          <button className="btn-icon" type="button" aria-label="Bật ghi chú nội bộ" onClick={() => setInternalNoteMode(true)}>
             <MoreVertical size={20} />
           </button>
         </div>
@@ -170,7 +179,7 @@ export default function ChatWorkspace({ contact }) {
              <p className="text-sm mt-1 mb-2">Bệnh nhân nhắc đến các từ khóa rủi ro lâm sàng. Không nên chỉ điều chỉnh khẩu phần đơn thuần.</p>
              <div className="escalation-actions flex gap-2">
                <button className="btn-secondary btn-sm" onClick={() => setMessageText('Bạn hãy mô tả rõ triệu chứng này từ bao giờ nhé.')}>Hỏi thêm</button>
-               <button className="btn-secondary btn-sm">Đặt lịch khám</button>
+               <button className="btn-secondary btn-sm" type="button" onClick={() => onSchedule?.(contact.id)}>Đặt lịch khám</button>
                <button className="btn-secondary btn-sm btn-outline-warning text-warning" onClick={() => setInternalNoteMode(true)}>+ Ghi chú nội bộ</button>
              </div>
           </div>
@@ -212,8 +221,8 @@ export default function ChatWorkspace({ contact }) {
               <Send size={18} />
             </button>
             {!internalNoteMode && (
-              <button className="btn-primary btn-send-action" disabled={!messageText.trim()} onClick={handleSendAndFollowUp} title="Gửi và Tạo Follow-up">
-                Gửi & Follow-up
+              <button className="btn-primary btn-send-action" disabled={!messageText.trim()} onClick={handleSendAndFollowUp} title="Gửi và tạo theo dõi">
+                Gửi và tạo theo dõi
               </button>
             )}
           </div>

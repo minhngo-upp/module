@@ -92,12 +92,24 @@ function createDraftDishFromLibrary(libraryDish) {
 }
 
 function hydrateDay(day) {
+  const mealsByType = new Map((day.meals ?? []).map((meal) => [meal.mealType, meal]));
+
   return {
     ...day,
-    meals: (day.meals ?? []).map((meal) => ({
-      ...meal,
+    meals: MEAL_TYPES.map((mealType) => {
+      const meal = mealsByType.get(mealType.key) ?? {
+        mealType: mealType.key,
+        title: mealType.label,
+        items: [],
+      };
+
+      return {
+        ...meal,
+        mealType: meal.mealType ?? mealType.key,
+        title: meal.title ?? mealType.label,
       items: (meal.items ?? []).map((dish) => hydrateDish(dish)),
-    })),
+      };
+    }),
   };
 }
 
@@ -264,14 +276,42 @@ function buildDays(baseDays, startDate, durationDays) {
 
 function PlannerToolbar({ rangeDays, startDate, setRangeDays, setStartDate, metrics, onDuplicateDay, onApplyRange, onRepeatWeekly, onClearDay }) {
   return (
-    <article className="card planner-toolbar-card">
-      <div className="planner-toolbar-top">
+    <article className="planner-toolbar-card cycle-control-bar">
+      <div className="cycle-control-primary">
         <div className="section-heading">
-          <span className="eyebrow">Kế hoạch thực đơn</span>
-          <h2>Lập thực đơn từ 1 ngày đến 1 tháng cho bệnh nhân</h2>
-          <p>Chọn chu kỳ, xử lý ngày còn thiếu trước, sau đó nhân bản hoặc lặp lại để tăng tốc độ thao tác.</p>
+          <span className="eyebrow">Thiết lập chu kỳ</span>
+          <h2>Kế hoạch thực đơn</h2>
         </div>
 
+        <div className="cycle-control-fields">
+          <div className="planner-control-group">
+            <span>Chu kỳ</span>
+            <div className="range-chip-group" role="tablist" aria-label="Chọn phạm vi lập thực đơn">
+              {RANGE_OPTIONS.map((option) => (
+                <button
+                  key={option.value}
+                  className={`range-chip ${rangeDays === option.value ? 'active' : ''}`}
+                  type="button"
+                  onClick={() => setRangeDays(option.value)}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <label className="planner-control-group planner-date-control">
+            <span>Ngày bắt đầu</span>
+            <input type="date" value={startDate} onChange={(event) => setStartDate(event.target.value)} />
+          </label>
+        </div>
+      </div>
+
+      <div className="cycle-utility-row">
+        <div className="cycle-control-microcopy">
+          <strong>{metrics.emptyDays + metrics.missingMealDays} ngày cần xử lý trước</strong>
+          <span>Ưu tiên hoàn thiện bữa còn thiếu trước khi lưu áp dụng.</span>
+        </div>
         <div className="planner-toolbar-actions">
           <button className="btn-secondary" type="button" onClick={onDuplicateDay}>
             <Copy size={16} className="button-icon-inline" aria-hidden="true" />
@@ -291,67 +331,20 @@ function PlannerToolbar({ rangeDays, startDate, setRangeDays, setStartDate, metr
           </button>
         </div>
       </div>
-
-      <div className="planner-toolbar-bottom">
-        <div className="planner-control-group">
-          <span>Chu kỳ</span>
-          <div className="range-chip-group" role="tablist" aria-label="Chọn phạm vi lập thực đơn">
-            {RANGE_OPTIONS.map((option) => (
-              <button
-                key={option.value}
-                className={`range-chip ${rangeDays === option.value ? 'active' : ''}`}
-                type="button"
-                onClick={() => setRangeDays(option.value)}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <label className="planner-control-group planner-date-control">
-          <span>Ngày bắt đầu</span>
-          <input type="date" value={startDate} onChange={(event) => setStartDate(event.target.value)} />
-        </label>
-
-        <div className="planner-metrics">
-          <div className="planner-metric">
-            <span>Ngày đã có thực đơn</span>
-            <strong>{metrics.plannedDays}/{metrics.totalDays}</strong>
-          </div>
-          <div className="planner-metric">
-            <span>Cần xử lý trước</span>
-            <strong>{metrics.emptyDays + metrics.missingMealDays}</strong>
-          </div>
-          <div className="planner-metric">
-            <span>Kcal trung bình</span>
-            <strong>{metrics.avgCalories} kcal</strong>
-          </div>
-        </div>
-      </div>
     </article>
   );
 }
 
 function InterventionWorkflowStrip({ metrics, rangeDays }) {
   const steps = [
-    { label: 'Chọn chu kỳ', value: `${rangeDays} ngày`, state: 'done' },
-    { label: 'Lên thực đơn', value: `${metrics.plannedDays}/${metrics.totalDays} ngày`, state: metrics.emptyDays === 0 ? 'done' : 'active' },
-    { label: 'Rà soát', value: `${metrics.missingMealDays + metrics.kcalReviewDays} điểm`, state: metrics.tone === 'ready' ? 'done' : 'active' },
-    { label: 'Theo dõi', value: 'Follow-up 48h', state: 'next' },
+    { label: 'Chu kỳ', value: `${rangeDays} ngày`, state: 'done' },
+    { label: 'Đã lên thực đơn', value: `${metrics.plannedDays}/${metrics.totalDays}`, state: metrics.emptyDays === 0 ? 'done' : 'active' },
+    { label: 'Cần xử lý trước', value: metrics.emptyDays + metrics.missingMealDays, state: metrics.tone === 'ready' ? 'done' : 'active' },
+    { label: 'Trạng thái', value: metrics.cycleStatus, state: metrics.tone === 'ready' ? 'done' : 'active' },
   ];
 
   return (
-    <article className={`card intervention-workflow-card readiness-${metrics.tone}`}>
-      <div className="intervention-workflow-header">
-        <div className="section-heading">
-          <span className="eyebrow">Tiến độ kế hoạch</span>
-          <h2>Trạng thái chu kỳ can thiệp</h2>
-          <p>Rà soát nhanh mức sẵn sàng trước khi lưu và tạo follow-up.</p>
-        </div>
-        <span className={`intervention-status-badge status-${metrics.tone}`}>{metrics.cycleStatus}</span>
-      </div>
-
+    <article className={`intervention-workflow-card readiness-${metrics.tone}`}>
       <div className="intervention-workflow-steps" aria-label="Các bước của chu kỳ can thiệp">
         {steps.map((step) => (
           <div key={step.label} className={`workflow-step ${step.state}`}>
@@ -366,10 +359,12 @@ function InterventionWorkflowStrip({ metrics, rangeDays }) {
 
 function DayRail({ days, selectedDate, onSelect }) {
   return (
-    <article className="card planner-rail-card">
-      <div className="section-heading">
-        <span className="eyebrow">Ngày cần xử lý trước</span>
-        <h2>Task list theo chu kỳ</h2>
+    <article className="planner-rail-card day-queue-panel">
+      <div className="day-queue-header">
+        <div>
+          <span className="eyebrow">Day queue</span>
+          <h2>Ngày cần xử lý trước</h2>
+        </div>
       </div>
 
       <div className="planner-day-rail">
@@ -391,7 +386,6 @@ function DayRail({ days, selectedDate, onSelect }) {
                 <span>{day.totals.filledMeals}/4 bữa</span>
               </div>
               <p>{readiness.reason}</p>
-              <small>{readiness.priority}</small>
             </button>
           );
         })}
@@ -610,72 +604,51 @@ function AddDishModal({
 }
 
 function DishCard({ dish, onEdit, onMoveUp, onMoveDown, onRemove }) {
-  const ingredientSummary = dish.ingredients.map((ingredient) => ingredient.name).slice(0, 4).join(', ');
+  const ingredientSummary = dish.ingredients.map((ingredient) => ingredient.name).slice(0, 3).join(', ');
   const interventionNote = getDishInterventionNote(dish);
 
   return (
-    <article className="dish-card">
+    <article className="dish-card meal-item-compact">
       <div className="dish-card-main">
+        <div className="dish-card-media">
+          {dish.image ? (
+            <img className="dish-card-image" src={dish.image} alt={dish.dishName} />
+          ) : (
+            <div className="dish-card-image-fallback" aria-hidden="true">
+              <ImageOff size={18} />
+            </div>
+          )}
+        </div>
+
         <div className="dish-card-copy">
           <div className="dish-card-topline">
             <div>
               <strong>{dish.dishName}</strong>
-              <p className="dish-card-description">
-                {dish.calories} kcal · {dish.serving} · {dish.ingredients.length} nguyên liệu
-              </p>
+              <p className="dish-card-description">{dish.calories} kcal · {dish.serving} · {dish.ingredients.length} nguyên liệu</p>
             </div>
             <span className={`dish-custom-badge ${dish.isCustomized ? 'customized' : ''}`}>
               {dish.isCustomized ? 'Đã chỉnh riêng' : 'Mặc định'}
             </span>
           </div>
 
-          <div className="dish-card-details">
-            <div className="dish-card-media">
-              {dish.image ? (
-                <img className="dish-card-image" src={dish.image} alt={dish.dishName} />
-              ) : (
-                <div className="dish-card-image-fallback" aria-hidden="true">
-                  <ImageOff size={20} />
-                </div>
-              )}
-            </div>
-
-            <div className="dish-card-meta">
-              <div className="dish-card-meta-grid">
-                <div className="dish-meta-chip">
-                  <span>Khẩu phần</span>
-                  <strong>{dish.serving}</strong>
-                </div>
-                <div className="dish-meta-chip">
-                  <span>Năng lượng</span>
-                  <strong>{dish.calories} kcal</strong>
-                </div>
-                <div className="dish-meta-chip">
-                  <span>Nguyên liệu</span>
-                  <strong>{dish.ingredients.length} thành phần</strong>
-                </div>
-              </div>
-              <p className="dish-ingredient-strip">
-                <span>Thành phần chính</span>
-                {ingredientSummary || 'Chưa có dữ liệu nguyên liệu'}
-              </p>
-              <p className="meal-intervention-note">
-                <Target size={14} aria-hidden="true" />
-                {interventionNote}
-              </p>
-            </div>
+          <div className="dish-compact-meta-line">
+            <span className="dish-main-ingredients">{ingredientSummary || 'Chưa có nguyên liệu'}</span>
+            <span className="meal-intervention-note">
+              <Target size={13} aria-hidden="true" />
+              {interventionNote}
+            </span>
           </div>
         </div>
 
         <div className="dish-card-actions">
+          <button className="btn-secondary btn-small" type="button" onClick={onEdit}>
+            Sửa món
+          </button>
           <button className="btn-icon" type="button" aria-label={`Di chuyển ${dish.dishName} lên`} onClick={onMoveUp}>
             <ChevronUp size={16} aria-hidden="true" />
           </button>
           <button className="btn-icon" type="button" aria-label={`Di chuyển ${dish.dishName} xuống`} onClick={onMoveDown}>
             <ChevronDown size={16} aria-hidden="true" />
-          </button>
-          <button className="btn-secondary btn-small" type="button" onClick={onEdit}>
-            Sửa món
           </button>
           <button className="btn-icon danger-ghost" type="button" aria-label={`Xóa ${dish.dishName}`} onClick={onRemove}>
             <Trash2 size={16} aria-hidden="true" />
@@ -688,22 +661,28 @@ function DishCard({ dish, onEdit, onMoveUp, onMoveDown, onRemove }) {
 
 function MealSlotCard({ meal, onStartAddDish, onOpenDishEditor, onMoveDish, onRemoveDish }) {
   const summary = getMealSummary(meal);
+  const [isOpen, setIsOpen] = useState(summary.tone !== 'ready');
 
   return (
     <section className={`meal-slot-card meal-${summary.tone}`}>
       <div className="meal-slot-header">
-        <div>
+        <div className="meal-slot-title-block">
           <h3>{meal.title}</h3>
           <p>{meal.items.length > 0 ? `${meal.items.length} món · ${summary.calories} kcal · ${summary.note}` : 'Chưa có món nào trong bữa này'}</p>
         </div>
-        <span className={`meal-status-badge status-${summary.tone}`}>{summary.label}</span>
-        <button className="btn-secondary btn-small" type="button" onClick={() => onStartAddDish(meal.mealType)}>
-          <PlusCircle size={16} className="button-icon-inline" aria-hidden="true" />
-          Thêm món
-        </button>
+        <div className="meal-section-actions">
+          <span className={`meal-status-badge status-${summary.tone}`}>{summary.label}</span>
+          <button className="btn-secondary btn-small" type="button" onClick={() => setIsOpen((current) => !current)}>
+            {isOpen ? 'Thu gọn' : 'Mở rộng'}
+          </button>
+          <button className="btn-primary btn-small" type="button" onClick={() => onStartAddDish(meal.mealType)}>
+            <PlusCircle size={16} className="button-icon-inline" aria-hidden="true" />
+            Thêm món
+          </button>
+        </div>
       </div>
 
-      {meal.items.length > 0 ? (
+      {isOpen && meal.items.length > 0 ? (
         <div className="dish-list">
           {meal.items.map((dish, dishIndex) => (
             <DishCard
@@ -716,9 +695,11 @@ function MealSlotCard({ meal, onStartAddDish, onOpenDishEditor, onMoveDish, onRe
             />
           ))}
         </div>
-      ) : (
+      ) : null}
+
+      {isOpen && meal.items.length === 0 ? (
         <p className="empty-copy">Thêm món từ thư viện để hoàn thiện bữa này.</p>
-      )}
+      ) : null}
     </section>
   );
 }
@@ -748,7 +729,7 @@ function DayPlanEditor({
     <article className="card planner-editor-card">
       <div className="planner-editor-header">
         <div className="section-heading">
-          <span className="eyebrow">Chi tiết ngày</span>
+          <span className="eyebrow">Selected day review</span>
           <h2>{day.label}</h2>
           <p>
             {kcalGap > 0
@@ -789,23 +770,60 @@ function DayPlanEditor({
         })}
       </div>
 
-      <div className="planner-summary-strip intervention-day-guidance">
-        <div className="planner-summary-pill">
-          <span>Mục tiêu ưu tiên</span>
-          <strong>{patient.interventionPlan.goals[0]}</strong>
-        </div>
-        <div className="planner-summary-pill muted">
-          <span>Cảnh báo vận hành</span>
-          <strong>{summaryWarnings.length > 0 ? summaryWarnings.join(' • ') : 'Không có cảnh báo lớn'}</strong>
-          <small>
-            {missingMealLabels.length > 0
-              ? `Ưu tiên bổ sung ${missingMealLabels.join(', ')} bằng món mềm, dễ ăn, giàu đạm.`
-              : 'Tiếp tục rà soát khả năng dung nạp và phản hồi sau bữa.'}
-          </small>
-        </div>
+      <div className="meal-slot-list meal-slot-list-default" aria-label="Bốn bữa trong ngày đang chọn">
+        {day.meals.map((meal) => (
+          <MealSlotCard
+            key={meal.mealType}
+            meal={meal}
+            onStartAddDish={onStartAddDish}
+            onOpenDishEditor={onOpenDishEditor}
+            onMoveDish={onMoveDish}
+            onRemoveDish={onRemoveDish}
+          />
+        ))}
       </div>
 
-      <div className="meal-slot-list">
+      <div className="selected-day-action-line">
+        <strong>{summaryWarnings.length > 0 ? summaryWarnings.join(' • ') : 'Không có cảnh báo lớn'}</strong>
+        <span>
+          {missingMealLabels.length > 0
+            ? `Ưu tiên bổ sung ${missingMealLabels.join(', ')} bằng món mềm, dễ ăn, giàu đạm.`
+            : patient.interventionPlan.goals[0]}
+        </span>
+        {missingMealLabels.length > 0 ? (
+          <div className="selected-day-inline-add-actions" aria-label="Thêm món cho bữa còn thiếu">
+            {day.meals
+              .filter((meal) => meal.items.length === 0)
+              .map((meal) => (
+                <button key={meal.mealType} className="btn-primary btn-small" type="button" onClick={() => onStartAddDish(meal.mealType)}>
+                  <PlusCircle size={15} className="button-icon-inline" aria-hidden="true" />
+                  Thêm {meal.title.toLowerCase()}
+                </button>
+              ))}
+          </div>
+        ) : null}
+      </div>
+
+      {missingMealLabels.length > 0 ? (
+        <div className="missing-meal-quick-add" aria-label="Thêm món nhanh cho các bữa còn thiếu">
+          <div>
+            <strong>Thêm món nhanh</strong>
+            <span>Chọn bữa còn thiếu để mở thư viện món và chỉnh nguyên liệu trước khi thêm.</span>
+          </div>
+          <div className="missing-meal-actions">
+            {day.meals
+              .filter((meal) => meal.items.length === 0)
+              .map((meal) => (
+                <button key={meal.mealType} className="btn-primary btn-small" type="button" onClick={() => onStartAddDish(meal.mealType)}>
+                  <PlusCircle size={15} className="button-icon-inline" aria-hidden="true" />
+                  {meal.title}
+                </button>
+              ))}
+          </div>
+        </div>
+      ) : null}
+
+      <div className="meal-slot-list meal-slot-list-legacy">
         {day.meals.map((meal) => (
           <MealSlotCard
             key={meal.mealType}
@@ -882,7 +900,7 @@ function PlanSummaryPanel({ patient, metrics, onSaveDraft, onSavePlan, onSaveAnd
           </button>
           <button className="btn-secondary" type="button" onClick={onSaveAndFollowUp}>
             <MessageSquarePlus size={16} className="button-icon-inline" aria-hidden="true" />
-            Lưu và tạo follow-up
+            Lưu và tạo theo dõi
           </button>
         </div>
       </article>
@@ -890,7 +908,7 @@ function PlanSummaryPanel({ patient, metrics, onSaveDraft, onSavePlan, onSaveAnd
       <article className="card planner-side-card">
         <div className="section-heading">
           <span className="eyebrow">Sau khi lưu kế hoạch</span>
-          <h2>Gợi ý follow-up sau can thiệp</h2>
+          <h2>Gợi ý theo dõi sau can thiệp</h2>
         </div>
 
         <ul className="followup-recommendation-list">
@@ -898,44 +916,43 @@ function PlanSummaryPanel({ patient, metrics, onSaveDraft, onSavePlan, onSaveAnd
           <li>Nhắc nước uống theo mốc giờ, tránh dồn cuối ngày.</li>
           <li>Kiểm tra mức mệt, tốc độ ăn và phản hồi của người nhà.</li>
         </ul>
+        <button className="btn-secondary btn-small followup-create-btn" type="button" onClick={onSaveAndFollowUp}>
+          <MessageSquarePlus size={15} className="button-icon-inline" aria-hidden="true" />
+          Tạo theo dõi
+        </button>
       </article>
 
-      <article className="card planner-side-card">
-        <div className="section-heading">
-          <span className="eyebrow">Khuyến nghị gắn với kế hoạch</span>
-          <h2>Nội dung cần nhắc bệnh nhân</h2>
-        </div>
+      <details className="planner-side-card recommendation-accordion">
+        <summary>Khuyến nghị & hỗ trợ</summary>
+        <div className="recommendation-accordion-body">
+          <section>
+            <h3>Khuyến nghị gắn với kế hoạch</h3>
+            <ul className="intervention-recommendation-list">
+              {patient.interventionPlan.recommendations.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </section>
 
-        <ul className="detail-list intervention-recommendation-list">
-          {patient.interventionPlan.recommendations.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </article>
-
-      <article className="card planner-side-card">
-        <div className="section-heading">
-          <span className="eyebrow">Hỗ trợ dinh dưỡng</span>
-          <h2>Bổ sung và vận động đi kèm kế hoạch</h2>
-        </div>
-
-        <div className="support-list">
-          {carePlanMockDB.medicines.slice(0, 2).map((item) => (
-            <div key={item.id} className="support-row">
-              <strong>{item.name}</strong>
-              <p>{item.usage}</p>
-              <small>Bù khoảng trống năng lượng hoặc vi chất, không thay thế bữa phụ.</small>
+          <section>
+            <h3>Hỗ trợ dinh dưỡng</h3>
+            <div className="support-list">
+              {carePlanMockDB.medicines.slice(0, 1).map((item) => (
+                <div key={item.id} className="support-row">
+                  <strong>{item.name}</strong>
+                  <p>{item.usage}</p>
+                </div>
+              ))}
+              {carePlanMockDB.exercises.slice(0, 1).map((item) => (
+                <div key={item.id} className="support-row">
+                  <strong>{item.name}</strong>
+                  <p>{item.desc}</p>
+                </div>
+              ))}
             </div>
-          ))}
-          {carePlanMockDB.exercises.slice(0, 2).map((item) => (
-            <div key={item.id} className="support-row">
-              <strong>{item.name}</strong>
-              <p>{item.desc}</p>
-              <small>Theo dõi dung nạp và mức mệt sau ăn.</small>
-            </div>
-          ))}
+          </section>
         </div>
-      </article>
+      </details>
     </aside>
   );
 }
@@ -1196,7 +1213,7 @@ export default function CarePlanTab({ patient, showToast }) {
   };
 
   const saveAndCreateFollowUp = () => {
-    showToast('Đã lưu kế hoạch và tạo follow-up sau 48 giờ');
+    showToast('Đã lưu kế hoạch và tạo lượt theo dõi sau 48 giờ');
   };
 
   const resetPlannerWindow = (nextStartDate, nextRangeDays) => {
@@ -1210,37 +1227,39 @@ export default function CarePlanTab({ patient, showToast }) {
       <div className="planner-shell">
         <InterventionWorkflowStrip metrics={plannerMetrics} rangeDays={rangeDays} />
 
-        <PlannerToolbar
-          rangeDays={rangeDays}
-          startDate={startDate}
-          setRangeDays={(nextRangeDays) => {
-            setRangeDays(nextRangeDays);
-            resetPlannerWindow(startDate, nextRangeDays);
-          }}
-          setStartDate={(nextStartDate) => {
-            setStartDate(nextStartDate);
-            resetPlannerWindow(nextStartDate, rangeDays);
-          }}
-          metrics={plannerMetrics}
-          onDuplicateDay={duplicateCurrentDay}
-          onApplyRange={applyCurrentDayToRange}
-          onRepeatWeekly={repeatWeekly}
-          onClearDay={clearCurrentDay}
-        />
-
-        <section className="planner-workspace">
-          <DayRail days={days} selectedDate={selectedDate} onSelect={setSelectedDate} />
-
-          {selectedDay ? (
-            <DayPlanEditor
-              day={selectedDay}
-              patient={patient}
-              onStartAddDish={openAddDishModal}
-              onOpenDishEditor={(mealType, dishIndex) => setEditingDishRef({ date: selectedDay.date, mealType, dishIndex })}
-              onMoveDish={moveDish}
-              onRemoveDish={removeDish}
+        <section className="planner-workspace intervention-minimal-workspace">
+          <div className="planning-main-column">
+            <PlannerToolbar
+              rangeDays={rangeDays}
+              startDate={startDate}
+              setRangeDays={(nextRangeDays) => {
+                setRangeDays(nextRangeDays);
+                resetPlannerWindow(startDate, nextRangeDays);
+              }}
+              setStartDate={(nextStartDate) => {
+                setStartDate(nextStartDate);
+                resetPlannerWindow(nextStartDate, rangeDays);
+              }}
+              metrics={plannerMetrics}
+              onDuplicateDay={duplicateCurrentDay}
+              onApplyRange={applyCurrentDayToRange}
+              onRepeatWeekly={repeatWeekly}
+              onClearDay={clearCurrentDay}
             />
-          ) : null}
+
+            <DayRail days={days} selectedDate={selectedDate} onSelect={setSelectedDate} />
+
+            {selectedDay ? (
+              <DayPlanEditor
+                day={selectedDay}
+                patient={patient}
+                onStartAddDish={openAddDishModal}
+                onOpenDishEditor={(mealType, dishIndex) => setEditingDishRef({ date: selectedDay.date, mealType, dishIndex })}
+                onMoveDish={moveDish}
+                onRemoveDish={removeDish}
+              />
+            ) : null}
+          </div>
 
           <PlanSummaryPanel
             patient={patient}

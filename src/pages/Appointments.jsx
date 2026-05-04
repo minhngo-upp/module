@@ -7,27 +7,24 @@ import {
   ChevronRight,
   Clock,
   Filter,
+  MessageSquare,
   Plus,
   Search,
   Settings,
   X,
   XCircle,
 } from 'lucide-react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { basePatients } from '../data/patients';
 import './Appointments.css';
 
-const patients = [
-  { id: 'BN001', name: 'Trần Văn Nam', phone: '0901 223 445', status: 'Đang theo dõi' },
-  { id: 'BN002', name: 'Lê Hoàng Anh', phone: '0912 556 778', status: 'Khám mới' },
-  { id: 'BN003', name: 'Nguyễn Văn Bình', phone: '0934 778 889', status: 'Tái khám' },
-  { id: 'BN004', name: 'Lê Thị Thu', phone: '0988 456 123', status: 'Đang theo dõi' },
-  { id: 'BN005', name: 'Phạm Văn Đông', phone: '0977 612 345', status: 'Tái khám' },
-];
+const patients = basePatients.map(({ id, name, phone, status }) => ({ id, name, phone, status }));
 
-const providers = ['Dr. Nguyễn Văn A', 'BS. Trần Minh Châu', 'CNDD. Lê Thu Hà'];
-const visitGoals = ['Theo dõi mỡ máu', 'Tư vấn dinh dưỡng thể thao', 'Theo dõi đường huyết', 'Đái tháo đường thai kỳ', 'Cập nhật thực đơn', 'Follow-up giảm cân', 'Khác'];
-const appointmentTypes = ['Khám mới', 'Tái khám', 'Follow-up'];
-const visitMethods = ['Tại phòng khám', 'Online', 'Gọi điện / tư vấn nhanh'];
-const filters = ['Tất cả', 'Khám mới', 'Tái khám', 'Follow-up', 'Chờ xác nhận', 'Đã xác nhận'];
+const providers = ['BS. Nguyễn Văn A', 'BS. Trần Minh Châu', 'CNDD. Lê Thu Hà'];
+const visitGoals = ['Theo dõi mỡ máu', 'Tư vấn dinh dưỡng thể thao', 'Theo dõi đường huyết', 'Đái tháo đường thai kỳ', 'Cập nhật thực đơn', 'Theo dõi giảm cân', 'Khác'];
+const appointmentTypes = ['Khám mới', 'Tái khám', 'Theo dõi'];
+const visitMethods = ['Tại phòng khám', 'Trực tuyến', 'Gọi điện / tư vấn nhanh'];
+const filters = ['Tất cả', 'Khám mới', 'Tái khám', 'Theo dõi', 'Chờ xác nhận', 'Đã xác nhận'];
 
 const scheduleDays = [
   { key: 'mon', label: 'Thứ 2', date: '02/12', isoDate: '2024-12-02' },
@@ -52,12 +49,12 @@ const timeSlots = [
 ];
 
 const initialAppointments = [
-  { id: 'apt-1', patient: 'Phạm Văn Đông', patientId: 'BN005', type: 'Tái khám', status: 'Đã xác nhận', statusTone: 'success', dayKey: 'mon', date: '2024-12-02', startTime: '08:00', endTime: '08:30', note: 'Giảm cân, theo dõi mỡ máu', provider: 'Dr. Nguyễn Văn A' },
-  { id: 'apt-2', patient: 'Lê Thị Thu', patientId: 'BN004', type: 'Khám mới', status: 'Chờ check-in', statusTone: 'info', dayKey: 'tue', date: '2024-12-03', startTime: '09:00', endTime: '09:30', note: 'Đái tháo đường thai kỳ', provider: 'BS. Trần Minh Châu', upcoming: true },
-  { id: 'apt-3', patient: 'Nguyễn Văn Bình', patientId: 'BN003', type: 'Tái khám', status: 'Đã hoàn thành', statusTone: 'success', dayKey: 'tue', date: '2024-12-03', startTime: '10:00', endTime: '10:30', note: 'Theo dõi đường huyết', provider: 'Dr. Nguyễn Văn A' },
-  { id: 'apt-4', patient: 'Mai Thu Trang', patientId: 'BN008', type: 'Follow-up', status: 'Đã xác nhận', statusTone: 'success', dayKey: 'thu', date: '2024-12-05', startTime: '15:00', endTime: '15:30', note: 'Cập nhật thực đơn', provider: 'CNDD. Lê Thu Hà' },
-  { id: 'apt-p1', patient: 'Trần Văn Nam', patientId: 'BN001', type: 'Tái khám', status: 'Chờ xác nhận', statusTone: 'warning', dayKey: 'fri', date: '2024-12-06', startTime: '14:00', endTime: '14:30', note: 'Theo dõi mỡ máu', provider: 'Dr. Nguyễn Văn A', priority: 'Hôm nay' },
-  { id: 'apt-p2', patient: 'Lê Hoàng Anh', patientId: 'BN002', type: 'Khám mới', status: 'Chờ xác nhận', statusTone: 'warning', dayKey: 'sat', date: '2024-12-07', startTime: '09:00', endTime: '09:45', note: 'Dinh dưỡng thể thao', provider: 'BS. Trần Minh Châu', priority: 'Ngày mai' },
+  { id: 'apt-1', patient: 'Phạm Văn Đông', patientId: 'BN005', type: 'Tái khám', status: 'Đã xác nhận', statusTone: 'success', dayKey: 'mon', date: '2024-12-02', startTime: '08:00', endTime: '08:30', note: 'Giảm cân, theo dõi mỡ máu', provider: 'BS. Nguyễn Văn A' },
+  { id: 'apt-2', patient: 'Lê Thị Thu', patientId: 'BN006', type: 'Khám mới', status: 'Chờ check-in', statusTone: 'info', dayKey: 'tue', date: '2024-12-03', startTime: '09:00', endTime: '09:30', note: 'Đái tháo đường thai kỳ', provider: 'BS. Trần Minh Châu', upcoming: true },
+  { id: 'apt-3', patient: 'Nguyễn Văn Bình', patientId: 'BN007', type: 'Tái khám', status: 'Đã hoàn thành', statusTone: 'success', dayKey: 'tue', date: '2024-12-03', startTime: '10:00', endTime: '10:30', note: 'Theo dõi đường huyết', provider: 'BS. Nguyễn Văn A' },
+  { id: 'apt-4', patient: 'Mai Thu Trang', patientId: 'BN008', type: 'Theo dõi', status: 'Đã xác nhận', statusTone: 'success', dayKey: 'thu', date: '2024-12-05', startTime: '15:00', endTime: '15:30', note: 'Cập nhật thực đơn', provider: 'CNDD. Lê Thu Hà' },
+  { id: 'apt-p1', patient: 'Trần Văn Nam', patientId: 'BN002', type: 'Tái khám', status: 'Chờ xác nhận', statusTone: 'warning', dayKey: 'fri', date: '2024-12-06', startTime: '14:00', endTime: '14:30', note: 'Theo dõi mỡ máu', provider: 'BS. Nguyễn Văn A', priority: 'Hôm nay' },
+  { id: 'apt-p2', patient: 'Lê Hoàng Anh', patientId: 'BN004', type: 'Khám mới', status: 'Chờ xác nhận', statusTone: 'warning', dayKey: 'sat', date: '2024-12-07', startTime: '09:00', endTime: '09:45', note: 'Dinh dưỡng thể thao', provider: 'BS. Trần Minh Châu', priority: 'Ngày mai' },
 ];
 
 const initialFormState = {
@@ -65,9 +62,9 @@ const initialFormState = {
   patientSearch: '',
   type: 'Tái khám',
   date: '2024-12-03',
-  startTime: '09:30',
-  endTime: '10:00',
-  provider: 'Dr. Nguyễn Văn A',
+  startTime: '11:00',
+  endTime: '11:30',
+  provider: 'BS. Nguyễn Văn A',
   method: 'Tại phòng khám',
   goal: 'Theo dõi mỡ máu',
   status: 'Chờ xác nhận',
@@ -82,6 +79,11 @@ function getStatusTone(status) {
   if (status === 'Chờ check-in') return 'info';
   if (status === 'Đã hủy' || status === 'Trễ hẹn') return 'danger';
   return 'neutral';
+}
+
+function eventMatchesFilter(event, filter) {
+  if (filter === 'Tất cả') return true;
+  return event.type === filter || event.status === filter;
 }
 
 function addMinutes(time, minutes) {
@@ -171,7 +173,7 @@ function AppointmentSummaryStrip({ appointments }) {
     .filter((key) => !usedSlots.has(key)).length;
   const summaryItems = [
     { label: 'Chờ xác nhận', value: pendingCount, description: 'Cần xử lý trước giờ khám', tone: 'warning' },
-    { label: 'Tổng lịch tuần này', value: appointments.length, description: 'Khám mới, tái khám, follow-up', tone: 'neutral' },
+    { label: 'Tổng lịch tuần này', value: appointments.length, description: 'Khám mới, tái khám, theo dõi', tone: 'neutral' },
     { label: 'Lịch hôm nay', value: todayCount, description: '1 ca sắp diễn ra', tone: 'success' },
     { label: 'Khung giờ trống', value: openSlots, description: 'Có thể nhận lịch mới', tone: 'mint' },
   ];
@@ -189,7 +191,7 @@ function AppointmentSummaryStrip({ appointments }) {
   );
 }
 
-function PendingAppointmentItem({ appointment, isActive, onActivate }) {
+function PendingAppointmentItem({ appointment, isActive, onActivate, onConfirm, onReject }) {
   return (
     <li className={`pending-appointment-item ${isActive ? 'active' : ''}`} onMouseEnter={() => onActivate(appointment.id)} onFocus={() => onActivate(appointment.id)}>
       <div className="pending-appointment-top">
@@ -205,11 +207,11 @@ function PendingAppointmentItem({ appointment, isActive, onActivate }) {
       <p className="pending-time">{getDayLabel(appointment.date)}, {appointment.startTime} - {appointment.endTime}</p>
       <p className="pending-reason">{appointment.note}</p>
       <div className="pending-actions">
-        <button className="btn-secondary btn-small" type="button" onClick={() => onActivate(appointment.id)}>
+        <button className="btn-secondary btn-small" type="button" onClick={() => onConfirm(appointment)}>
           <CheckCircle2 size={15} className="button-icon-inline" aria-hidden="true" />
           Xác nhận
         </button>
-        <button className="btn-secondary btn-small reject-action" type="button" onClick={() => onActivate(appointment.id)}>
+        <button className="btn-secondary btn-small reject-action" type="button" onClick={() => onReject(appointment)}>
           <XCircle size={15} className="button-icon-inline" aria-hidden="true" />
           Từ chối
         </button>
@@ -218,7 +220,7 @@ function PendingAppointmentItem({ appointment, isActive, onActivate }) {
   );
 }
 
-function PendingAppointmentsCard({ appointments, activeAppointmentId, setActiveAppointmentId }) {
+function PendingAppointmentsCard({ appointments, activeAppointmentId, setActiveAppointmentId, onConfirm, onReject }) {
   const pendingAppointments = appointments.filter((appointment) => appointment.status === 'Chờ xác nhận');
   return (
     <section className="card pending-card">
@@ -229,10 +231,68 @@ function PendingAppointmentsCard({ appointments, activeAppointmentId, setActiveA
       </div>
       <ul className="pending-appointments-list">
         {pendingAppointments.map((appointment) => (
-          <PendingAppointmentItem appointment={appointment} isActive={activeAppointmentId === appointment.id} key={appointment.id} onActivate={setActiveAppointmentId} />
+          <PendingAppointmentItem
+            appointment={appointment}
+            isActive={activeAppointmentId === appointment.id}
+            key={appointment.id}
+            onActivate={setActiveAppointmentId}
+            onConfirm={onConfirm}
+            onReject={onReject}
+          />
         ))}
+        {pendingAppointments.length === 0 ? (
+          <li className="pending-empty-state">Không còn lịch chờ xác nhận.</li>
+        ) : null}
       </ul>
     </section>
+  );
+}
+
+function RejectMessageDialog({ appointment, message, setMessage, onClose, onSend }) {
+  if (!appointment) return null;
+  return (
+    <div className="appointment-dialog-layer" role="presentation" onMouseDown={onClose}>
+      <section
+        className="appointment-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="reject-message-title"
+        onMouseDown={(event) => event.stopPropagation()}
+      >
+        <header className="appointment-dialog-header">
+          <div>
+            <span className="appointments-eyebrow">Gửi tin nhắn</span>
+            <h2 id="reject-message-title">Từ chối lịch của {appointment.patient}</h2>
+            <p>Thông báo lý do từ chối để khách hàng có thể đặt lại lịch phù hợp.</p>
+          </div>
+          <button className="btn-icon" type="button" aria-label="Đóng popup gửi tin nhắn" onClick={onClose}>
+            <X size={18} aria-hidden="true" />
+          </button>
+        </header>
+        <div className="appointment-dialog-body">
+          <div className="reject-appointment-summary">
+            <strong>{getDayLabel(appointment.date)}, {appointment.startTime} - {appointment.endTime}</strong>
+            <span>{appointment.type} · {appointment.note}</span>
+          </div>
+          <label className="drawer-field">
+            <span>Nội dung gửi khách hàng</span>
+            <textarea
+              rows="5"
+              value={message}
+              onChange={(event) => setMessage(event.target.value)}
+              placeholder="Nhập lý do từ chối hoặc đề xuất khung giờ khác."
+            />
+          </label>
+        </div>
+        <footer className="appointment-dialog-actions">
+          <button className="btn-secondary" type="button" onClick={onClose}>Hủy</button>
+          <button className="btn-primary" type="button" onClick={onSend} disabled={!message.trim()}>
+            <MessageSquare size={16} className="button-icon-inline" aria-hidden="true" />
+            Gửi và từ chối
+          </button>
+        </footer>
+      </section>
+    </div>
   );
 }
 
@@ -271,17 +331,24 @@ function MiniMonthCalendar({ appointments }) {
   );
 }
 
-function CalendarFilterBar() {
+function CalendarFilterBar({ activeFilter, onChangeFilter }) {
   return (
     <div className="calendar-filter-bar">
       <div className="calendar-filter-chips" aria-label="Bộ lọc nhanh">
         {filters.map((filter) => (
-          <button className={filter === 'Tất cả' ? 'filter-chip active' : 'filter-chip'} type="button" key={filter}>{filter}</button>
+          <button
+            className={activeFilter === filter ? 'filter-chip active' : 'filter-chip'}
+            type="button"
+            key={filter}
+            onClick={() => onChangeFilter(filter)}
+          >
+            {filter}
+          </button>
         ))}
       </div>
       <label className="filter-select-label">
         <Filter size={15} aria-hidden="true" />
-        <select className="filter-select" aria-label="Lọc loại lịch khám">
+        <select className="filter-select" aria-label="Lọc loại lịch khám" value={activeFilter} onChange={(event) => onChangeFilter(event.target.value)}>
           {filters.map((filter) => <option key={filter}>{filter}</option>)}
         </select>
       </label>
@@ -289,10 +356,10 @@ function CalendarFilterBar() {
   );
 }
 
-function WeeklyCalendarEvent({ event, isActive, onActivate }) {
+function WeeklyCalendarEvent({ event, isActive, isMuted, onActivate }) {
   return (
     <button
-      className={`weekly-event event-${event.statusTone} ${event.upcoming ? 'upcoming' : ''} ${isActive ? 'active' : ''}`}
+      className={`weekly-event event-${event.statusTone} ${event.upcoming ? 'upcoming' : ''} ${isActive ? 'active' : ''} ${isMuted ? 'muted' : ''}`}
       type="button"
       onMouseEnter={() => onActivate(event.id)}
       onFocus={() => onActivate(event.id)}
@@ -306,10 +373,11 @@ function WeeklyCalendarEvent({ event, isActive, onActivate }) {
   );
 }
 
-function AvailabilitySlot({ day, slot, event, activeAppointmentId, selectedSlot, setActiveAppointmentId, onCreateFromSlot }) {
+function AvailabilitySlot({ day, slot, event, activeAppointmentId, activeFilter, selectedSlot, setActiveAppointmentId, onCreateFromSlot }) {
   const isUnavailable = slot.unavailable || day.unavailable;
   const isOpen = !isUnavailable && !event;
   const isSelected = selectedSlot?.date === day.isoDate && selectedSlot?.startTime === slot.time;
+  const isMuted = event ? !eventMatchesFilter(event, activeFilter) : false;
 
   return (
     <div className={`calendar-slot ${isUnavailable ? 'unavailable' : ''} ${isOpen ? 'available' : ''} ${isSelected ? 'selected' : ''}`}>
@@ -320,12 +388,12 @@ function AvailabilitySlot({ day, slot, event, activeAppointmentId, selectedSlot,
           Trống
         </button>
       ) : null}
-      {event ? <WeeklyCalendarEvent event={event} isActive={activeAppointmentId === event.id} onActivate={setActiveAppointmentId} /> : null}
+      {event ? <WeeklyCalendarEvent event={event} isActive={activeAppointmentId === event.id} isMuted={isMuted} onActivate={setActiveAppointmentId} /> : null}
     </div>
   );
 }
 
-function WeeklyCalendarGrid({ appointments, activeAppointmentId, selectedSlot, setActiveAppointmentId, onCreateFromSlot }) {
+function WeeklyCalendarGrid({ activeFilter, appointments, activeAppointmentId, selectedSlot, setActiveAppointmentId, onChangeFilter, onCreateFromSlot }) {
   return (
     <section className="appointments-main card">
       <div className="weekly-calendar-header">
@@ -334,7 +402,7 @@ function WeeklyCalendarGrid({ appointments, activeAppointmentId, selectedSlot, s
           <h2>Tuần này (02/12 - 08/12)</h2>
           <p>Slot trống, nghỉ trưa và lịch chờ xác nhận được thể hiện trực tiếp trên grid.</p>
         </div>
-        <CalendarFilterBar />
+        <CalendarFilterBar activeFilter={activeFilter} onChangeFilter={onChangeFilter} />
       </div>
       <div className="weekly-calendar-grid" role="grid" aria-label="Lịch khám theo tuần">
         <div className="time-column">
@@ -361,6 +429,7 @@ function WeeklyCalendarGrid({ appointments, activeAppointmentId, selectedSlot, s
                   return (
                     <AvailabilitySlot
                       activeAppointmentId={activeAppointmentId}
+                      activeFilter={activeFilter}
                       day={day}
                       event={event}
                       key={`${day.key}-${slot.time}`}
@@ -418,7 +487,7 @@ function PatientSearchSelect({ form, setForm, error }) {
         </div>
       </label>
       {error ? <p className="field-error">{error}</p> : null}
-      <button className="inline-add-patient" type="button">+ Thêm bệnh nhân mới</button>
+      <Link className="inline-add-patient" to="/patients?create=1">+ Thêm bệnh nhân mới</Link>
       <div className="patient-result-list">
         {filteredPatients.map((patient) => (
           <button className="patient-result-item" type="button" key={patient.id} onClick={() => setForm((current) => ({ ...current, patientId: patient.id, patientSearch: patient.name }))}>
@@ -445,7 +514,7 @@ function AppointmentStatusSelector({ value, onChange }) {
       {['Chờ xác nhận', 'Đã xác nhận'].map((status) => (
         <button className={value === status ? 'active' : ''} type="button" key={status} onClick={() => onChange(status)}>
           <span>{status}</span>
-          <small>{status === 'Chờ xác nhận' ? 'Thêm vào danh sách pending' : 'Hiển thị là lịch đã duyệt'}</small>
+          <small>{status === 'Chờ xác nhận' ? 'Thêm vào danh sách chờ xác nhận' : 'Hiển thị là lịch đã duyệt'}</small>
         </button>
       ))}
     </div>
@@ -650,7 +719,7 @@ function CreateAppointmentDrawer({ isOpen, form, setForm, appointments, errors, 
   );
 }
 
-function SetupView() {
+function SetupView({ onSave }) {
   return (
     <section className="appointments-main card setup-view">
       <div className="setup-header">
@@ -693,7 +762,7 @@ function SetupView() {
           </div>
         </div>
         <div className="setup-footer">
-          <button className="btn-primary" type="button">Lưu cấu hình làm việc</button>
+          <button className="btn-primary" type="button" onClick={onSave}>Lưu cấu hình làm việc</button>
         </div>
       </div>
     </section>
@@ -701,25 +770,42 @@ function SetupView() {
 }
 
 export default function Appointments() {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const requestedPatientId = searchParams.get('patientId');
+  const requestedPatient = patients.find((patient) => patient.id === requestedPatientId);
+  const shouldOpenInitialDrawer = searchParams.get('create') === '1' || Boolean(requestedPatientId);
+  const initialAppointmentForm = {
+    ...initialFormState,
+    patientId: requestedPatient?.id || '',
+    patientSearch: requestedPatient?.name || requestedPatientId || '',
+  };
   const [activeTab, setActiveTab] = useState('calendar');
   const [appointments, setAppointments] = useState(initialAppointments);
   const [activeAppointmentId, setActiveAppointmentId] = useState('apt-p1');
+  const [activeFilter, setActiveFilter] = useState('Tất cả');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [form, setForm] = useState(initialFormState);
+  const [didDismissInitialDrawer, setDidDismissInitialDrawer] = useState(false);
+  const [form, setForm] = useState(initialAppointmentForm);
   const [errors, setErrors] = useState({});
   const [conflict, setConflict] = useState('');
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+  const [rejectTarget, setRejectTarget] = useState(null);
+  const [rejectMessage, setRejectMessage] = useState('');
+  const isCreateDrawerOpen = isDrawerOpen || (shouldOpenInitialDrawer && !didDismissInitialDrawer);
 
   const closeDrawer = () => {
     setIsDrawerOpen(false);
+    setDidDismissInitialDrawer(true);
     setErrors({});
     setConflict('');
   };
 
   const openCreateDrawer = (nextForm = initialFormState, slotContext = null) => {
     setActiveTab('calendar');
+    setDidDismissInitialDrawer(true);
     setForm(nextForm);
     setSelectedSlot(slotContext);
     setErrors({});
@@ -729,6 +815,51 @@ export default function Appointments() {
 
   const handleCreateFromSlot = (day, slot) => {
     openCreateDrawer(buildFormFromSlot(day, slot), { date: day.isoDate, startTime: slot.time });
+  };
+
+  const setAppointmentStatus = (appointmentId, nextStatus) => {
+    setAppointments((current) =>
+      current.map((appointment) =>
+        appointment.id === appointmentId
+          ? {
+              ...appointment,
+              status: nextStatus,
+              statusTone: getStatusTone(nextStatus),
+              priority: nextStatus === 'Đã hủy' ? 'Đã từ chối' : appointment.priority,
+            }
+          : appointment,
+      ),
+    );
+    setActiveAppointmentId(appointmentId);
+  };
+
+  const handleConfirmAppointment = (appointment) => {
+    setAppointmentStatus(appointment.id, 'Đã xác nhận');
+    navigate(`/patients/${appointment.patientId}`);
+  };
+
+  const handleOpenRejectDialog = (appointment) => {
+    setActiveAppointmentId(appointment.id);
+    setRejectTarget(appointment);
+    setRejectMessage(`Chào ${appointment.patient}, lịch ${appointment.type.toLowerCase()} vào ${getDayLabel(appointment.date)}, ${appointment.startTime} - ${appointment.endTime} hiện chưa thể xác nhận. Anh/chị vui lòng chọn khung giờ khác hoặc phản hồi lại để phòng khám hỗ trợ sắp xếp lịch mới.`);
+  };
+
+  const handleCloseRejectDialog = () => {
+    setRejectTarget(null);
+    setRejectMessage('');
+  };
+
+  const handleSendRejectMessage = () => {
+    if (!rejectTarget || !rejectMessage.trim()) return;
+    setAppointmentStatus(rejectTarget.id, 'Đã hủy');
+    setToastMessage('Đã gửi tin nhắn và từ chối lịch hẹn');
+    handleCloseRejectDialog();
+    window.setTimeout(() => setToastMessage(''), 3200);
+  };
+
+  const handleSaveSetup = () => {
+    setToastMessage('Đã lưu cấu hình ca khám mẫu');
+    window.setTimeout(() => setToastMessage(''), 3200);
   };
 
   const handleSubmit = (event) => {
@@ -773,19 +904,27 @@ export default function Appointments() {
       <AppointmentSummaryStrip appointments={appointments} />
       <div className="appointments-layout">
         <aside className="appointments-sidebar">
-          <PendingAppointmentsCard appointments={appointments} activeAppointmentId={activeAppointmentId} setActiveAppointmentId={setActiveAppointmentId} />
+          <PendingAppointmentsCard
+            appointments={appointments}
+            activeAppointmentId={activeAppointmentId}
+            onConfirm={handleConfirmAppointment}
+            onReject={handleOpenRejectDialog}
+            setActiveAppointmentId={setActiveAppointmentId}
+          />
           <MiniMonthCalendar appointments={appointments} />
         </aside>
         {activeTab === 'calendar' ? (
           <WeeklyCalendarGrid
+            activeFilter={activeFilter}
             activeAppointmentId={activeAppointmentId}
             appointments={appointments}
+            onChangeFilter={setActiveFilter}
             onCreateFromSlot={handleCreateFromSlot}
             selectedSlot={selectedSlot}
             setActiveAppointmentId={setActiveAppointmentId}
           />
         ) : (
-          <SetupView />
+          <SetupView onSave={handleSaveSetup} />
         )}
       </div>
       <CreateAppointmentDrawer
@@ -793,11 +932,18 @@ export default function Appointments() {
         conflict={conflict}
         errors={errors}
         form={form}
-        isOpen={isDrawerOpen}
+        isOpen={isCreateDrawerOpen}
         isSubmitting={isSubmitting}
         onClose={closeDrawer}
         onSubmit={handleSubmit}
         setForm={setForm}
+      />
+      <RejectMessageDialog
+        appointment={rejectTarget}
+        message={rejectMessage}
+        onClose={handleCloseRejectDialog}
+        onSend={handleSendRejectMessage}
+        setMessage={setRejectMessage}
       />
       <SuccessToast message={toastMessage} />
     </div>

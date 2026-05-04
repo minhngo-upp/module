@@ -52,7 +52,7 @@ export default function DoctorProfileWorkspace({ profile, onSave }) {
           <div className="view-grid">
             <div className="view-avatar">
               {profile.avatar?.startsWith('http') ? (
-                <img src={profile.avatar} alt="Avatar" />
+                <img src={profile.avatar} alt="Ảnh đại diện" />
               ) : (
                 <span>{profile.avatar || profile.fullName.charAt(0)}</span>
               )}
@@ -77,13 +77,13 @@ export default function DoctorProfileWorkspace({ profile, onSave }) {
             <div className="doctor-avatar-card">
               <div className="doctor-avatar-preview">
                 {draft.avatar?.startsWith('http') ? (
-                  <img src={draft.avatar} alt="Avatar" />
+                  <img src={draft.avatar} alt="Ảnh đại diện" />
                 ) : (
                   <span>{draft.avatar || draft.fullName.charAt(0)}</span>
                 )}
               </div>
               <label className="settings-field">
-                <span>Ảnh đại diện (Text hoặc Link)</span>
+                <span>Ảnh đại diện (chữ hoặc liên kết)</span>
                 <input
                   type="text"
                   value={draft.avatar}

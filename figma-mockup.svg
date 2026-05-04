@@ -1,0 +1,497 @@
+<svg width="3320" height="2240" viewBox="0 0 3320 2240" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="shadow-sm" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0F172A" flood-opacity="0.08"/>
+    </filter>
+    <filter id="shadow-md" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#0F172A" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      .bg { fill: #F6F8FB; }
+      .surface { fill: #FFFFFF; }
+      .muted-surface { fill: #F8FAFC; }
+      .primary { fill: #11906F; }
+      .primary-dark { fill: #075545; }
+      .primary-light { fill: #EEF9F5; }
+      .border { stroke: #DCE4EF; stroke-width: 1; }
+      .danger { fill: #D61F4C; }
+      .danger-light { fill: #FDF0F3; }
+      .warning { fill: #F59E0B; }
+      .warning-light { fill: #FFF7E8; }
+      .success { fill: #22C55E; }
+      .success-light { fill: #ECFDF3; }
+      .blue-light { fill: #EEF6FF; }
+      .text { fill: #0F172A; font-family: "Be Vietnam Pro", Arial, sans-serif; }
+      .muted { fill: #64748B; font-family: "Be Vietnam Pro", Arial, sans-serif; }
+      .white { fill: #FFFFFF; font-family: "Be Vietnam Pro", Arial, sans-serif; }
+      .title { font-weight: 800; font-size: 26px; letter-spacing: 0; }
+      .h2 { font-weight: 800; font-size: 18px; letter-spacing: 0; }
+      .h3 { font-weight: 700; font-size: 14px; letter-spacing: 0; }
+      .body { font-size: 13px; font-weight: 500; letter-spacing: 0; }
+      .small { font-size: 11px; font-weight: 600; letter-spacing: 0; }
+      .tiny { font-size: 10px; font-weight: 700; letter-spacing: 0; }
+      .label { font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+      .frame-label { fill: #334155; font-family: "Be Vietnam Pro", Arial, sans-serif; font-weight: 800; font-size: 20px; }
+      .icon { stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+      .nav-text { fill: #64748B; font-family: "Be Vietnam Pro", Arial, sans-serif; font-size: 13px; font-weight: 700; }
+      .nav-active-text { fill: #075545; font-family: "Be Vietnam Pro", Arial, sans-serif; font-size: 13px; font-weight: 800; }
+    </style>
+  </defs>
+
+  <rect width="3320" height="2240" fill="#E9EEF5"/>
+  <text x="80" y="54" class="frame-label">The Meal Clinic - Figma mockup generated from current React/Vite code</text>
+  <text x="80" y="82" class="muted body">Includes dashboard, patient list, patient detail, and messaging workflows. Import this SVG into Figma for editable text/vector layers.</text>
+
+  <!-- DASHBOARD FRAME -->
+  <g transform="translate(80,120)">
+    <text x="0" y="-24" class="frame-label">01. Dashboard / Tổng quan</text>
+    <rect width="1440" height="980" rx="16" class="bg" filter="url(#shadow-md)"/>
+
+    <!-- Sidebar -->
+    <rect width="260" height="980" rx="16" class="surface"/>
+    <rect x="259.5" width="1" height="980" fill="#DCE4EF"/>
+    <g transform="translate(24,20)">
+      <rect width="34" height="34" rx="10" class="primary"/>
+      <text x="17" y="23" text-anchor="middle" class="white h3">M</text>
+      <text x="48" y="23" class="text h2">The Meal Clinic</text>
+    </g>
+    <g transform="translate(16,92)">
+      <rect width="228" height="44" rx="12" class="primary-light"/>
+      <rect width="4" height="44" rx="4" class="primary"/>
+      <circle cx="28" cy="22" r="8" stroke="#075545" stroke-width="2"/>
+      <text x="48" y="27" class="nav-active-text">Tổng quan</text>
+      <text x="48" y="75" class="nav-text">Bệnh nhân</text>
+      <text x="48" y="123" class="nav-text">Lịch khám</text>
+      <text x="48" y="171" class="nav-text">Tin nhắn</text>
+      <text x="48" y="219" class="nav-text">Cài đặt</text>
+      <circle cx="28" cy="70" r="8" stroke="#64748B" stroke-width="2"/>
+      <circle cx="28" cy="118" r="8" stroke="#64748B" stroke-width="2"/>
+      <circle cx="28" cy="166" r="8" stroke="#64748B" stroke-width="2"/>
+      <circle cx="28" cy="214" r="8" stroke="#64748B" stroke-width="2"/>
+    </g>
+
+    <!-- Header -->
+    <g transform="translate(260,0)">
+      <rect width="1180" height="64" class="surface"/>
+      <rect y="63" width="1180" height="1" fill="#DCE4EF"/>
+      <rect x="32" y="14" width="740" height="36" rx="12" class="muted-surface"/>
+      <circle cx="52" cy="32" r="7" stroke="#64748B" stroke-width="2"/>
+      <text x="72" y="36" class="muted body">Tìm nhanh tên, mã BN, SĐT, bác sĩ phụ trách...</text>
+      <circle cx="1015" cy="32" r="19" class="muted-surface"/>
+      <circle cx="1026" cy="22" r="4" class="danger"/>
+      <circle cx="1074" cy="32" r="16" stroke="#64748B" stroke-width="2"/>
+      <text x="1102" y="29" class="text small">BS. Nguyễn Văn A</text>
+      <text x="1102" y="45" class="muted tiny">Trưởng khoa Dinh dưỡng</text>
+    </g>
+
+    <!-- Dashboard content -->
+    <g transform="translate(284,88)">
+      <rect width="694" height="158" rx="14" fill="#F4FBF8" stroke="#BFEADD"/>
+      <text x="24" y="34" class="label" fill="#075545">BẢNG ĐIỀU PHỐI LÂM SÀNG</text>
+      <text x="24" y="66" class="text title">Ưu tiên chăm sóc dinh dưỡng hôm nay</text>
+      <text x="24" y="94" class="muted body">Theo dõi bệnh nhân, lịch tư vấn và các cảnh báo cần can thiệp.</text>
+      <rect x="500" y="44" width="146" height="40" rx="12" class="primary"/>
+      <text x="573" y="69" text-anchor="middle" class="white body">Thêm bệnh nhân</text>
+      <rect x="500" y="94" width="146" height="40" rx="12" class="surface border"/>
+      <text x="573" y="119" text-anchor="middle" class="text body">Tạo lịch khám</text>
+
+      <g transform="translate(714,0)">
+        <rect width="398" height="330" rx="14" class="surface border" filter="url(#shadow-sm)"/>
+        <text x="20" y="32" class="text h2">Việc cần làm tiếp theo</text>
+        <text x="20" y="54" class="muted body">Danh sách ưu tiên trong ngày</text>
+        <g transform="translate(16,78)">
+          <rect width="366" height="70" rx="12" class="danger-light" stroke="#F6C8D3"/>
+          <rect width="5" height="70" rx="5" fill="#FB7185"/>
+          <text x="20" y="22" class="label" fill="#D61F4C">KHẨN CẤP</text>
+          <text x="20" y="42" class="text h3">3 bệnh nhân cần xử lý</text>
+          <text x="20" y="60" class="muted small">2 ca bỏ bữa · 1 xét nghiệm lệch</text>
+        </g>
+        <g transform="translate(16,156)">
+          <rect width="366" height="70" rx="12" class="warning-light" stroke="#F9D89B"/>
+          <rect width="5" height="70" rx="5" fill="#F59E0B"/>
+          <text x="20" y="22" class="label" fill="#A86400">SẮP DIỄN RA</text>
+          <text x="20" y="42" class="text h3">10:30 - Nguyễn Văn Bình</text>
+          <text x="20" y="60" class="muted small">Còn 45 phút</text>
+        </g>
+        <g transform="translate(16,234)">
+          <rect width="366" height="70" rx="12" class="primary-light" stroke="#BFEADD"/>
+          <rect width="5" height="70" rx="5" class="primary"/>
+          <text x="20" y="22" class="label" fill="#075545">CHỜ CAN THIỆP</text>
+          <text x="20" y="42" class="text h3">2 thực đơn cần hoàn thiện</text>
+          <text x="20" y="60" class="muted small">Cần duyệt trong hôm nay</text>
+        </g>
+      </g>
+
+      <g transform="translate(0,178)">
+        <rect width="164" height="122" rx="14" class="surface border"/>
+        <text x="18" y="32" class="muted small">Bệnh nhân theo dõi</text>
+        <text x="18" y="70" class="text title">124</text>
+        <text x="18" y="99" class="muted small">+6 hồ sơ trong tuần</text>
+        <rect x="180" width="164" height="122" rx="14" class="surface border"/>
+        <text x="198" y="32" class="muted small">Lịch hôm nay</text>
+        <text x="198" y="70" class="text title">8</text>
+        <text x="198" y="99" class="muted small">3 ca trong 2 giờ tới</text>
+        <rect x="360" width="164" height="122" rx="14" class="surface border"/>
+        <text x="378" y="32" class="muted small">Cần xử lý</text>
+        <text x="378" y="70" class="text title">3</text>
+        <text x="378" y="99" class="muted small">Ưu tiên trước 11:00</text>
+        <rect x="540" width="154" height="122" rx="14" class="surface border"/>
+        <text x="558" y="32" class="muted small">Tuân thủ</text>
+        <text x="558" y="70" class="text title">68%</text>
+        <text x="558" y="99" class="muted small">Cần cải thiện</text>
+      </g>
+
+      <g transform="translate(0,332)">
+        <rect width="540" height="260" rx="14" class="surface border" filter="url(#shadow-sm)"/>
+        <text x="22" y="34" class="text h2">Bệnh nhân ưu tiên</text>
+        <text x="22" y="58" class="muted body">Cảnh báo cần đánh giá và theo dõi</text>
+        <line x1="0" y1="78" x2="540" y2="78" stroke="#DCE4EF"/>
+        <text x="22" y="108" class="text h3">Nguyễn Thị Hoa</text>
+        <text x="22" y="128" class="muted small">Không ghi bữa ăn 3 ngày liên tiếp</text>
+        <rect x="398" y="96" width="96" height="24" rx="12" class="danger-light" stroke="#F6C8D3"/>
+        <text x="446" y="112" text-anchor="middle" class="tiny" fill="#D61F4C">Báo động đỏ</text>
+        <line x1="22" y1="146" x2="518" y2="146" stroke="#EEF2F7"/>
+        <text x="22" y="178" class="text h3">Trần Văn Nam</text>
+        <text x="22" y="198" class="muted small">Đường huyết tăng cao</text>
+        <rect x="398" y="166" width="96" height="24" rx="12" class="danger-light" stroke="#F6C8D3"/>
+        <text x="446" y="182" text-anchor="middle" class="tiny" fill="#D61F4C">Báo động đỏ</text>
+        <line x1="22" y1="216" x2="518" y2="216" stroke="#EEF2F7"/>
+        <text x="22" y="244" class="text h3">Lê Hoàng Anh</text>
+        <rect x="398" y="230" width="96" height="24" rx="12" class="warning-light" stroke="#F9D89B"/>
+        <text x="446" y="246" text-anchor="middle" class="tiny" fill="#A86400">Cần theo dõi</text>
+      </g>
+
+      <g transform="translate(568,332)">
+        <rect width="544" height="260" rx="14" class="surface border" filter="url(#shadow-sm)"/>
+        <text x="22" y="34" class="text h2">Lịch khám hôm nay</text>
+        <text x="22" y="58" class="muted body">Các buổi tư vấn và tái khám</text>
+        <g transform="translate(22,86)">
+          <text x="0" y="20" class="text h3">08:00</text>
+          <text x="80" y="18" class="text h3">Phạm Văn Đông</text>
+          <text x="80" y="38" class="muted small">Tái khám · Giảm cân, theo dõi mỡ máu</text>
+          <rect x="380" y="4" width="94" height="24" rx="12" class="success-light" stroke="#BFEFCC"/>
+          <text x="427" y="20" text-anchor="middle" class="tiny" fill="#15803D">Đã xác nhận</text>
+        </g>
+        <line x1="22" y1="142" x2="522" y2="142" stroke="#EEF2F7"/>
+        <g transform="translate(22,154)">
+          <text x="0" y="20" class="text h3">10:30</text>
+          <text x="80" y="18" class="text h3">Nguyễn Văn Bình</text>
+          <text x="80" y="38" class="muted small">Đang chờ xác nhận trước tư vấn</text>
+          <rect x="380" y="4" width="94" height="24" rx="12" class="warning-light" stroke="#F9D89B"/>
+          <text x="427" y="20" text-anchor="middle" class="tiny" fill="#A86400">Chờ xác nhận</text>
+        </g>
+        <line x1="22" y1="210" x2="522" y2="210" stroke="#EEF2F7"/>
+        <g transform="translate(22,220)">
+          <text x="0" y="20" class="text h3">13:30</text>
+          <text x="80" y="18" class="text h3">Đỗ Minh Quân</text>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- PATIENT LIST FRAME -->
+  <g transform="translate(1600,120)">
+    <text x="0" y="-24" class="frame-label">02. Patient Directory / Danh sách bệnh nhân</text>
+    <rect width="1440" height="980" rx="16" class="bg" filter="url(#shadow-md)"/>
+    <rect width="260" height="980" rx="16" class="surface"/>
+    <rect x="259.5" width="1" height="980" fill="#DCE4EF"/>
+    <g transform="translate(24,20)">
+      <rect width="34" height="34" rx="10" class="primary"/>
+      <text x="17" y="23" text-anchor="middle" class="white h3">M</text>
+      <text x="48" y="23" class="text h2">The Meal Clinic</text>
+    </g>
+    <g transform="translate(16,92)">
+      <text x="48" y="27" class="nav-text">Tổng quan</text>
+      <rect y="48" width="228" height="44" rx="12" class="primary-light"/>
+      <rect y="48" width="4" height="44" rx="4" class="primary"/>
+      <text x="48" y="75" class="nav-active-text">Bệnh nhân</text>
+      <text x="48" y="123" class="nav-text">Lịch khám</text>
+      <text x="48" y="171" class="nav-text">Tin nhắn</text>
+      <text x="48" y="219" class="nav-text">Cài đặt</text>
+    </g>
+    <g transform="translate(260,0)">
+      <rect width="1180" height="64" class="surface"/>
+      <rect y="63" width="1180" height="1" fill="#DCE4EF"/>
+      <rect x="32" y="14" width="740" height="36" rx="12" class="muted-surface"/>
+      <text x="72" y="36" class="muted body">Tìm nhanh tên, mã BN, SĐT, bác sĩ phụ trách...</text>
+    </g>
+    <g transform="translate(292,100)">
+      <text x="0" y="18" class="text title">Danh sách bệnh nhân</text>
+      <text x="0" y="44" class="muted body">Quản lý và theo dõi 124 bệnh nhân đang hoạt động trong hệ thống</text>
+      <rect x="912" y="-10" width="168" height="42" rx="12" class="primary"/>
+      <text x="996" y="17" text-anchor="middle" class="white body">Thêm bệnh nhân</text>
+
+      <g transform="translate(0,78)">
+        <rect width="260" height="92" rx="14" class="danger-light" stroke="#F6C8D3"/>
+        <text x="22" y="42" class="text title">3</text>
+        <text x="22" y="68" class="muted body">Cần chú ý</text>
+        <rect x="284" width="260" height="92" rx="14" class="warning-light" stroke="#F9D89B"/>
+        <text x="306" y="42" class="text title">2</text>
+        <text x="306" y="68" class="muted body">Quá hạn tái khám</text>
+        <rect x="568" width="260" height="92" rx="14" class="success-light" stroke="#BFEFCC"/>
+        <text x="590" y="42" class="text title">86</text>
+        <text x="590" y="68" class="muted body">Đang theo dõi</text>
+        <rect x="852" width="260" height="92" rx="14" class="surface border"/>
+        <text x="874" y="42" class="text title">124</text>
+        <text x="874" y="68" class="muted body">Kết quả bộ lọc</text>
+      </g>
+
+      <g transform="translate(0,202)">
+        <rect width="1112" height="610" rx="14" class="surface border" filter="url(#shadow-sm)"/>
+        <rect x="22" y="20" width="430" height="40" rx="12" class="muted-surface"/>
+        <text x="54" y="45" class="muted body">Tìm theo tên, mã BN...</text>
+        <rect x="660" y="20" width="210" height="40" rx="12" class="surface border"/>
+        <text x="680" y="45" class="muted body">Bác sĩ: Tất cả</text>
+        <rect x="886" y="20" width="204" height="40" rx="12" class="surface border"/>
+        <text x="906" y="45" class="muted body">Trạng thái: Tất cả</text>
+        <line x1="0" y1="82" x2="1112" y2="82" stroke="#DCE4EF"/>
+        <text x="22" y="114" class="muted tiny">MÃ BN</text>
+        <text x="142" y="114" class="muted tiny">HỌ TÊN</text>
+        <text x="404" y="114" class="muted tiny">BÁC SĨ</text>
+        <text x="610" y="114" class="muted tiny">TÁI KHÁM</text>
+        <text x="764" y="114" class="muted tiny">TRẠNG THÁI</text>
+        <text x="1010" y="114" class="muted tiny">HÀNH ĐỘNG</text>
+        <g transform="translate(0,132)">
+          <rect width="1112" height="70" fill="#FFFBFC"/>
+          <text x="22" y="42" class="text body">BN001</text>
+          <circle cx="154" cy="36" r="18" class="primary-light"/>
+          <text x="154" y="41" text-anchor="middle" class="text h3">H</text>
+          <text x="184" y="34" class="text h3">Nguyễn Thị Hoa</text>
+          <text x="184" y="54" class="muted small">Không ghi nhật ký 3 ngày</text>
+          <text x="404" y="42" class="text body">BS. Nguyễn Văn A</text>
+          <text x="610" y="42" fill="#D61F4C" font-family="Be Vietnam Pro, Arial" font-size="13" font-weight="700">Quá hạn</text>
+          <rect x="764" y="22" width="90" height="26" rx="13" class="danger-light" stroke="#F6C8D3"/>
+          <text x="809" y="39" text-anchor="middle" class="tiny" fill="#D61F4C">Cần chú ý</text>
+          <circle cx="1018" cy="35" r="15" class="muted-surface"/>
+          <circle cx="1058" cy="35" r="15" class="muted-surface"/>
+        </g>
+        <g transform="translate(0,204)">
+          <text x="22" y="42" class="text body">BN002</text>
+          <circle cx="154" cy="36" r="18" class="primary-light"/>
+          <text x="154" y="41" text-anchor="middle" class="text h3">N</text>
+          <text x="184" y="34" class="text h3">Trần Văn Nam</text>
+          <text x="404" y="42" class="text body">BS. Lê Minh</text>
+          <text x="610" y="42" class="muted body">Hôm nay</text>
+          <rect x="764" y="22" width="90" height="26" rx="13" class="danger-light" stroke="#F6C8D3"/>
+          <text x="809" y="39" text-anchor="middle" class="tiny" fill="#D61F4C">Cần chú ý</text>
+        </g>
+        <line x1="22" y1="274" x2="1090" y2="274" stroke="#EEF2F7"/>
+        <g transform="translate(0,276)">
+          <text x="22" y="42" class="text body">BN004</text>
+          <circle cx="154" cy="36" r="18" class="primary-light"/>
+          <text x="154" y="41" text-anchor="middle" class="text h3">A</text>
+          <text x="184" y="34" class="text h3">Lê Hoàng Anh</text>
+          <text x="404" y="42" class="text body">BS. Nguyễn Văn A</text>
+          <text x="610" y="42" class="muted body">Ngày mai</text>
+          <rect x="764" y="22" width="102" height="26" rx="13" class="success-light" stroke="#BFEFCC"/>
+          <text x="815" y="39" text-anchor="middle" class="tiny" fill="#15803D">Đang theo dõi</text>
+        </g>
+        <line x1="22" y1="346" x2="1090" y2="346" stroke="#EEF2F7"/>
+        <g transform="translate(0,348)">
+          <text x="22" y="42" class="text body">BN008</text>
+          <circle cx="154" cy="36" r="18" class="primary-light"/>
+          <text x="154" y="41" text-anchor="middle" class="text h3">T</text>
+          <text x="184" y="34" class="text h3">Mai Thu Trang</text>
+          <text x="404" y="42" class="text body">BS. Trần Hoàng</text>
+          <text x="610" y="42" class="muted body">Thứ sáu</text>
+          <rect x="764" y="22" width="86" height="26" rx="13" class="blue-light" stroke="#BFD9F8"/>
+          <text x="807" y="39" text-anchor="middle" class="tiny" fill="#075545">Mới khám</text>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- PATIENT DETAIL FRAME -->
+  <g transform="translate(80,1180)">
+    <text x="0" y="-24" class="frame-label">03. Patient Detail / Hồ sơ bệnh nhân</text>
+    <rect width="1440" height="900" rx="16" class="bg" filter="url(#shadow-md)"/>
+    <rect width="260" height="900" rx="16" class="surface"/>
+    <rect x="259.5" width="1" height="900" fill="#DCE4EF"/>
+    <g transform="translate(24,20)">
+      <rect width="34" height="34" rx="10" class="primary"/>
+      <text x="17" y="23" text-anchor="middle" class="white h3">M</text>
+      <text x="48" y="23" class="text h2">The Meal Clinic</text>
+    </g>
+    <g transform="translate(260,0)">
+      <rect width="1180" height="64" class="surface"/>
+      <rect y="63" width="1180" height="1" fill="#DCE4EF"/>
+    </g>
+    <g transform="translate(292,96)">
+      <text x="0" y="18" class="muted body">← Quay lại</text>
+      <rect x="760" y="-12" width="98" height="38" rx="12" class="surface border"/>
+      <text x="809" y="12" text-anchor="middle" class="text body">Chỉnh sửa</text>
+      <rect x="870" y="-12" width="98" height="38" rx="12" class="surface border"/>
+      <text x="919" y="12" text-anchor="middle" class="text body">Nhắn tin</text>
+      <rect x="980" y="-12" width="132" height="38" rx="12" class="primary"/>
+      <text x="1046" y="12" text-anchor="middle" class="white body">Tạo theo dõi</text>
+
+      <rect y="54" width="1112" height="150" rx="14" class="surface border" filter="url(#shadow-sm)"/>
+      <circle cx="54" cy="105" r="34" class="primary-light"/>
+      <text x="54" y="115" text-anchor="middle" class="text title">H</text>
+      <text x="104" y="94" class="text title">Nguyễn Thị Hoa</text>
+      <text x="104" y="122" class="muted body">Mã BN: BN001 · 42 tuổi, nữ · Nhân viên văn phòng · BS: Nguyễn Văn A</text>
+      <text x="104" y="150" class="muted body">Mục tiêu hiện tại: Giảm cân an toàn và cải thiện tuân thủ nhật ký ăn uống</text>
+      <line x1="0" y1="204" x2="1112" y2="204" stroke="#DCE4EF"/>
+
+      <g transform="translate(0,226)">
+        <rect width="1112" height="72" rx="14" class="surface border"/>
+        <text x="22" y="26" class="muted tiny">MỨC ĐỘ THEO DÕI</text>
+        <text x="22" y="52" fill="#D61F4C" font-family="Be Vietnam Pro, Arial" font-size="14" font-weight="800">Cao</text>
+        <text x="278" y="26" class="muted tiny">VẤN ĐỀ CHÍNH</text>
+        <text x="278" y="52" class="text h3">Thừa cân, bỏ bữa sáng</text>
+        <text x="586" y="26" class="muted tiny">ƯU TIÊN HÔM NAY</text>
+        <text x="586" y="52" class="text h3">Tăng năng lượng khẩu phần</text>
+        <text x="888" y="26" class="muted tiny">CẬP NHẬT</text>
+        <text x="888" y="52" class="text h3">Hôm nay, 08:30</text>
+      </g>
+
+      <g transform="translate(0,324)">
+        <rect width="1112" height="48" rx="12" class="surface border"/>
+        <rect x="8" y="8" width="126" height="32" rx="8" class="primary-light"/>
+        <text x="71" y="29" text-anchor="middle" class="nav-active-text">Tóm tắt</text>
+        <text x="174" y="29" class="nav-text">Đánh giá</text>
+        <text x="304" y="29" class="nav-text">Nhật ký</text>
+        <text x="420" y="29" class="nav-text">Can thiệp &amp; theo dõi</text>
+      </g>
+
+      <g transform="translate(0,396)">
+        <rect width="350" height="340" rx="14" class="surface border"/>
+        <text x="22" y="34" class="text h2">Tổng quan lâm sàng</text>
+        <text x="22" y="66" class="muted body">BMI</text>
+        <text x="260" y="66" class="text h3">28.4</text>
+        <line x1="22" y1="88" x2="328" y2="88" stroke="#EEF2F7"/>
+        <text x="22" y="120" class="muted body">Mỡ máu</text>
+        <text x="242" y="120" class="text h3">Cao</text>
+        <line x1="22" y1="142" x2="328" y2="142" stroke="#EEF2F7"/>
+        <text x="22" y="174" class="muted body">Tuân thủ</text>
+        <text x="236" y="174" class="text h3">45%</text>
+        <rect x="22" y="205" width="306" height="10" rx="5" fill="#E2E8F0"/>
+        <rect x="22" y="205" width="138" height="10" rx="5" class="danger"/>
+        <text x="22" y="252" class="muted body">Ghi chú</text>
+        <text x="22" y="278" class="text body">Cần nhắc nhập nhật ký bữa ăn và nước uống.</text>
+      </g>
+      <g transform="translate(374,396)">
+        <rect width="738" height="340" rx="14" class="surface border"/>
+        <text x="22" y="34" class="text h2">Kế hoạch &amp; diễn biến</text>
+        <rect x="22" y="62" width="212" height="92" rx="12" class="primary-light" stroke="#BFEADD"/>
+        <text x="42" y="94" class="text h3">Mục tiêu tuần</text>
+        <text x="42" y="120" class="muted body">1.500 kcal/ngày</text>
+        <rect x="258" y="62" width="212" height="92" rx="12" class="warning-light" stroke="#F9D89B"/>
+        <text x="278" y="94" class="text h3">Cần nhắc</text>
+        <text x="278" y="120" class="muted body">Bữa phụ buổi chiều</text>
+        <rect x="494" y="62" width="212" height="92" rx="12" class="success-light" stroke="#BFEFCC"/>
+        <text x="514" y="94" class="text h3">Theo dõi</text>
+        <text x="514" y="120" class="muted body">Đường huyết sau ăn</text>
+        <line x1="22" y1="190" x2="706" y2="190" stroke="#EEF2F7"/>
+        <text x="22" y="226" class="text h3">08:30 · Đã cập nhật nhật ký bữa sáng</text>
+        <text x="22" y="250" class="muted body">Thiếu protein, cần bổ sung sữa chua Hy Lạp hoặc trứng luộc.</text>
+        <text x="22" y="292" class="text h3">Hôm qua · Bỏ bữa tối</text>
+        <text x="22" y="316" class="muted body">Đã gửi nhắc nhở và lịch tái đánh giá.</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- MESSAGES FRAME -->
+  <g transform="translate(1600,1180)">
+    <text x="0" y="-24" class="frame-label">04. Messaging / Tin nhắn lâm sàng</text>
+    <rect width="1440" height="900" rx="16" class="bg" filter="url(#shadow-md)"/>
+    <rect width="260" height="900" rx="16" class="surface"/>
+    <rect x="259.5" width="1" height="900" fill="#DCE4EF"/>
+    <g transform="translate(24,20)">
+      <rect width="34" height="34" rx="10" class="primary"/>
+      <text x="17" y="23" text-anchor="middle" class="white h3">M</text>
+      <text x="48" y="23" class="text h2">The Meal Clinic</text>
+    </g>
+    <g transform="translate(16,92)">
+      <text x="48" y="27" class="nav-text">Tổng quan</text>
+      <text x="48" y="75" class="nav-text">Bệnh nhân</text>
+      <text x="48" y="123" class="nav-text">Lịch khám</text>
+      <rect y="144" width="228" height="44" rx="12" class="primary-light"/>
+      <rect y="144" width="4" height="44" rx="4" class="primary"/>
+      <text x="48" y="171" class="nav-active-text">Tin nhắn</text>
+      <text x="48" y="219" class="nav-text">Cài đặt</text>
+    </g>
+    <g transform="translate(260,0)">
+      <rect width="1180" height="64" class="surface"/>
+      <rect y="63" width="1180" height="1" fill="#DCE4EF"/>
+    </g>
+    <g transform="translate(292,94)">
+      <rect width="1112" height="746" rx="14" class="surface border" filter="url(#shadow-sm)"/>
+      <g>
+        <rect width="300" height="746" rx="14" fill="#FBFCFE"/>
+        <rect x="299" width="1" height="746" fill="#DCE4EF"/>
+        <text x="22" y="36" class="text h2">Hàng đợi hội thoại</text>
+        <rect x="22" y="58" width="256" height="38" rx="12" class="muted-surface"/>
+        <text x="48" y="82" class="muted body">Tìm bệnh nhân...</text>
+        <g transform="translate(14,120)">
+          <rect width="272" height="76" rx="12" class="primary-light" stroke="#BFEADD"/>
+          <circle cx="38" cy="38" r="19" class="primary"/>
+          <text x="38" y="44" text-anchor="middle" class="white h3">H</text>
+          <text x="70" y="32" class="text h3">Nguyễn Thị Hoa</text>
+          <text x="70" y="52" class="muted small">Cần xác nhận thực đơn</text>
+        </g>
+        <g transform="translate(14,208)">
+          <rect width="272" height="76" rx="12" class="surface border"/>
+          <circle cx="38" cy="38" r="19" class="primary-light"/>
+          <text x="38" y="44" text-anchor="middle" class="text h3">N</text>
+          <text x="70" y="32" class="text h3">Trần Văn Nam</text>
+          <text x="70" y="52" class="muted small">Đường huyết tăng</text>
+        </g>
+        <g transform="translate(14,296)">
+          <rect width="272" height="76" rx="12" class="surface border"/>
+          <circle cx="38" cy="38" r="19" class="primary-light"/>
+          <text x="38" y="44" text-anchor="middle" class="text h3">A</text>
+          <text x="70" y="32" class="text h3">Lê Hoàng Anh</text>
+          <text x="70" y="52" class="muted small">Cập nhật lịch tập</text>
+        </g>
+      </g>
+      <g transform="translate(300,0)">
+        <rect width="512" height="746" class="surface"/>
+        <rect x="0" y="0" width="512" height="72" fill="#FFFFFF"/>
+        <text x="24" y="30" class="text h2">Nguyễn Thị Hoa</text>
+        <text x="24" y="52" class="muted body">BN001 · đang theo dõi · ưu tiên cao</text>
+        <line x1="0" y1="72" x2="512" y2="72" stroke="#DCE4EF"/>
+        <g transform="translate(28,112)">
+          <rect width="340" height="68" rx="14" class="muted-surface"/>
+          <text x="18" y="28" class="text body">Em quên ghi nhật ký bữa tối hôm qua.</text>
+          <text x="18" y="50" class="muted small">08:12</text>
+        </g>
+        <g transform="translate(132,214)">
+          <rect width="340" height="86" rx="14" class="primary"/>
+          <text x="18" y="30" class="white body">Chị ghi lại khẩu phần gần đúng giúp bác sĩ nhé.</text>
+          <text x="18" y="54" class="white body">Hôm nay ưu tiên đủ nước và bữa phụ.</text>
+          <text x="18" y="74" fill="#DDF8EF" font-family="Be Vietnam Pro, Arial" font-size="11">08:18</text>
+        </g>
+        <g transform="translate(28,334)">
+          <rect width="358" height="86" rx="14" class="warning-light" stroke="#F9D89B"/>
+          <text x="18" y="30" class="text body">Bệnh nhân xác nhận đã bỏ bữa tối.</text>
+          <text x="18" y="54" class="muted body">Đề xuất tạo nhắc lịch theo dõi.</text>
+        </g>
+        <rect x="24" y="676" width="464" height="48" rx="14" class="muted-surface"/>
+        <text x="48" y="706" class="muted body">Nhập tin nhắn hoặc ghi chú nội bộ...</text>
+        <circle cx="462" cy="700" r="17" class="primary"/>
+      </g>
+      <g transform="translate(812,0)">
+        <rect x="0" width="300" height="746" rx="14" fill="#FBFCFE"/>
+        <rect width="1" height="746" fill="#DCE4EF"/>
+        <text x="24" y="36" class="text h2">Ngữ cảnh bệnh nhân</text>
+        <rect x="24" y="66" width="252" height="112" rx="14" class="surface border"/>
+        <text x="44" y="100" class="text h3">Nguyễn Thị Hoa</text>
+        <text x="44" y="124" class="muted body">BN001 · 42 tuổi</text>
+        <rect x="44" y="140" width="86" height="24" rx="12" class="danger-light" stroke="#F6C8D3"/>
+        <text x="87" y="156" text-anchor="middle" class="tiny" fill="#D61F4C">Ưu tiên cao</text>
+        <text x="24" y="220" class="muted tiny">HÀNH ĐỘNG NHANH</text>
+        <rect x="24" y="240" width="252" height="40" rx="12" class="primary"/>
+        <text x="150" y="265" text-anchor="middle" class="white body">Tạo lịch tái khám</text>
+        <rect x="24" y="292" width="252" height="40" rx="12" class="surface border"/>
+        <text x="150" y="317" text-anchor="middle" class="text body">Mở hồ sơ bệnh nhân</text>
+        <rect x="24" y="344" width="252" height="40" rx="12" class="surface border"/>
+        <text x="150" y="369" text-anchor="middle" class="text body">Gửi mẫu nhắc nhật ký</text>
+        <text x="24" y="430" class="muted tiny">CHỈ SỐ GẦN NHẤT</text>
+        <text x="24" y="466" class="text h3">Tuân thủ: 45%</text>
+        <text x="24" y="494" class="text h3">BMI: 28.4</text>
+        <text x="24" y="522" class="text h3">Cập nhật: hôm nay</text>
+      </g>
+    </g>
+  </g>
+</svg>

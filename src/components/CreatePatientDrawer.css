@@ -22,17 +22,18 @@
   top: 0;
   right: 0;
   width: 100%;
-  max-width: 600px; /* ~600px as requested */
+  max-width: 600px;
   height: 100vh;
-  background-color: hsl(var(--surface));
+  background: hsla(var(--surface) / 0.95);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   z-index: 1001;
-  box-shadow: -10px 0 30px hsla(var(--text-main) / 0.1);
+  box-shadow: -10px 0 40px -10px hsla(var(--text-main) / 0.15);
   transform: translateX(100%);
-  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
-  border-top-left-radius: var(--radius-lg);
-  border-bottom-left-radius: var(--radius-lg);
+  border-left: 1px solid hsla(var(--border) / 0.5);
 }
 
 .patient-drawer.open {
@@ -42,12 +43,11 @@
 /* Header */
 .drawer-header {
   padding: 1.5rem;
-  border-bottom: 1px solid hsl(var(--border));
+  border-bottom: 1px solid hsla(var(--border) / 0.5);
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  background-color: hsl(var(--surface));
-  border-top-left-radius: var(--radius-lg);
+  background: transparent;
 }
 
 .drawer-title {
@@ -82,6 +82,29 @@
   scroll-behavior: smooth;
 }
 
+.drawer-intake-note {
+  display: grid;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid hsla(var(--primary) / 0.16);
+  border-radius: 16px;
+  background: linear-gradient(180deg, hsla(var(--primary) / 0.06), hsl(var(--surface)));
+}
+
+.drawer-intake-note strong {
+  color: hsl(var(--primary-dark));
+  font-size: 0.86rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.drawer-intake-note span {
+  color: hsl(var(--text-muted));
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
 .drawer-section {
   margin-bottom: 2rem;
 }
@@ -107,6 +130,40 @@
   margin-bottom: 1.25rem;
 }
 
+.drawer-field-section {
+  display: grid;
+  gap: 0.1rem;
+  padding: 0.95rem;
+  border: 1px solid hsla(var(--border) / 0.8);
+  border-radius: var(--radius-lg);
+  background: hsla(var(--surface) / 0.8);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.drawer-field-section:hover,
+.drawer-field-section:focus-within {
+  border-color: hsla(var(--primary) / 0.3);
+  box-shadow: var(--shadow-sm);
+}
+
+.drawer-field-section + .drawer-field-section {
+  margin-top: 0.85rem;
+}
+
+.drawer-field-section .form-group:last-child {
+  margin-bottom: 0;
+}
+
+.drawer-field-section-title {
+  display: block;
+  margin-bottom: 0.8rem;
+  color: hsl(var(--primary-dark));
+  font-size: 0.76rem;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
 .form-group label {
   display: block;
   font-size: 0.875rem;
@@ -122,6 +179,7 @@
 
 /* Base input overrides for Drawer to ensure correct width */
 .drawer-body input[type="text"],
+.drawer-body input[type="number"],
 .drawer-body input[type="date"],
 .drawer-body select,
 .drawer-body textarea {
@@ -137,6 +195,16 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.25rem;
+}
+
+.two-col-grid.compact {
+  gap: 0.9rem 1rem;
+}
+
+.drawer-body input[readonly] {
+  background: hsl(var(--background));
+  color: hsl(var(--text-muted));
+  font-weight: 700;
 }
 
 .error-text {
@@ -197,8 +265,8 @@
 /* Sticky Footer */
 .drawer-footer {
   padding: 1.25rem 1.5rem;
-  border-top: 1px solid hsl(var(--border));
-  background-color: hsl(var(--surface));
+  border-top: 1px solid hsla(var(--border) / 0.5);
+  background: transparent;
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
@@ -232,6 +300,19 @@
   color: hsl(38 92% 25%);
   font-size: 0.8125rem;
   line-height: 1.4;
+}
+
+.duplicate-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.btn-small {
+  min-height: 34px;
+  padding: 0.45rem 0.7rem;
+  font-size: 0.82rem;
 }
 
 /* Lightweight Toast internally managed or outside */

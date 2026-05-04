@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   AlertTriangle,
   ArrowRight,
@@ -9,7 +9,12 @@ import {
 } from 'lucide-react';
 
 export default function OverviewTab({ patient, onNavigate, showToast }) {
-  const { nutritionAssessment, riskFlags, nextInterventionSummary, dietLogSummary } = patient;
+  const [expandedAlerts, setExpandedAlerts] = useState({});
+
+  const toggleAlert = (idx) => {
+    setExpandedAlerts(prev => ({ ...prev, [idx]: !prev[idx] }));
+  };
+  const { nutritionAssessment, riskFlags, nextInterventionSummary } = patient;
 
   // Map the goal metrics into an array
   const metrics = [
@@ -89,7 +94,22 @@ export default function OverviewTab({ patient, onNavigate, showToast }) {
                            {isHigh ? 'Ưu tiên cao' : 'Theo dõi tiếp'}
                          </span>
                       </div>
-                      <p className="alert-detail">{risk.detail}</p>
+                      <div className="alert-detail-container">
+                        <p 
+                          className="alert-detail" 
+                          style={!expandedAlerts[idx] ? { display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' } : {}}
+                        >
+                          {risk.detail}
+                        </p>
+                        {risk.detail && risk.detail.length > 70 && (
+                          <button 
+                            className="text-xs text-primary mt-1 hover:underline focus:outline-none"
+                            onClick={() => toggleAlert(idx)}
+                          >
+                            {expandedAlerts[idx] ? 'Thu gọn' : 'Xem thêm'}
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 );
@@ -115,7 +135,7 @@ export default function OverviewTab({ patient, onNavigate, showToast }) {
              </ul>
              <div className="next-actions-buttons">
                 <button className="btn-primary w-full" onClick={() => onNavigate('intervention-followup')}>Cập nhật kế hoạch</button>
-                <button className="btn-secondary w-full" onClick={() => showToast('Đã mở form đặt lịch theo dõi')}>Tạo follow-up</button>
+                <button className="btn-secondary w-full" onClick={() => showToast('Đã mở form đặt lịch theo dõi')}>Tạo theo dõi</button>
              </div>
           </section>
 

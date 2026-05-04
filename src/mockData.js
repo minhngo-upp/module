@@ -702,7 +702,7 @@ export const visitRecordsMock = [
   {
     id: 'vr_1',
     visitDate: '02/12/2024',
-    doctor: 'BS. Nguyen Hong Van',
+    doctor: 'BS. Nguyễn Hồng Vân',
     visitType: 'Đánh giá dinh dưỡng',
     summary:
       'Tổng năng lượng hiện tại thấp hơn mục tiêu, bệnh nhân ăn chậm và nhanh no. Chỉ định ưu tiên món mềm, tăng bữa phụ chiều và theo dõi lượng nước.',
@@ -719,7 +719,7 @@ export const visitRecordsMock = [
 
 export const doctorProfileMock = {
   doctorId: 'BS001',
-  fullName: 'Dr. Nguyễn Văn A',
+  fullName: 'BS. Nguyễn Văn A',
   avatar: 'A',
   title: 'Trưởng khoa Dinh dưỡng',
   specialty: 'Dinh dưỡng lâm sàng',
@@ -826,7 +826,7 @@ export const messageConversationsMock = [
     label: 'Cảnh báo',
     contextGoal: 'Giảm cường độ vận động và kiểm tra lại bữa phụ trước tập',
     contextAlert: 'Có dấu hiệu chóng mặt khi vận động cường độ cao',
-    latestReport: 'Nhật ký khẩu phần tuần này',
+    latestReport: 'Nhật ký tuần này',
     messages: [
       { id: 301, sender: 'doctor', text: 'Anh mô tả rõ hơn thời điểm bị chóng mặt giúp tôi nhé.', time: '08:20' },
       { id: 302, sender: 'patient', text: 'Tôi bị chóng mặt khi tập HIIT, kèm thêm buồn nôn.', time: 'Thứ 3' },

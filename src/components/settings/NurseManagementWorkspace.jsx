@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState } from 'react';
 import { PlusCircle, Search, ShieldCheck, UserRound, UserRoundCog, CheckCircle2, XCircle, AlertTriangle } from 'lucide-react';
 
 function getStatusClass(status) {
@@ -20,7 +20,6 @@ export default function NurseManagementWorkspace({ initialNurses, allPatients })
   
   // Permissions State
   const [pendingAssignedPatientIds, setPendingAssignedPatientIds] = useState(initialNurses[0]?.assignedPatientIds ?? []);
-  const [isDirty, setIsDirty] = useState(false);
   const [patientAccessSearchTerm, setPatientAccessSearchTerm] = useState('');
   const [patientFilter, setPatientFilter] = useState('all'); // 'all', 'Đang theo dõi', 'Cần chú ý'
   const [permissionMessage, setPermissionMessage] = useState('');
@@ -31,14 +30,11 @@ export default function NurseManagementWorkspace({ initialNurses, allPatients })
   const [nurseMessage, setNurseMessage] = useState('');
 
   const selectedNurse = useMemo(() => nurses.find((n) => n.nurseId === selectedNurseId) ?? null, [nurses, selectedNurseId]);
-
-  // Sync isDirty
-  useEffect(() => {
-    if (selectedNurse) {
-      const original = [...selectedNurse.assignedPatientIds].sort().join(',');
-      const current = [...pendingAssignedPatientIds].sort().join(',');
-      setIsDirty(original !== current);
-    }
+  const isDirty = useMemo(() => {
+    if (!selectedNurse) return false;
+    const original = [...selectedNurse.assignedPatientIds].sort().join(',');
+    const current = [...pendingAssignedPatientIds].sort().join(',');
+    return original !== current;
   }, [pendingAssignedPatientIds, selectedNurse]);
 
   // Watch for confirmation when changing tabs while dirty
@@ -51,7 +47,6 @@ export default function NurseManagementWorkspace({ initialNurses, allPatients })
     const nurse = nurses.find((item) => item.nurseId === nurseId);
     setSelectedNurseId(nurseId);
     setPendingAssignedPatientIds(nurse?.assignedPatientIds ?? []);
-    setIsDirty(false);
     setPermissionMessage('');
     setPatientAccessSearchTerm('');
   };
@@ -105,7 +100,6 @@ export default function NurseManagementWorkspace({ initialNurses, allPatients })
     setNurses(current =>
       current.map(n => n.nurseId === selectedNurse.nurseId ? { ...n, assignedPatientIds: pendingAssignedPatientIds } : n)
     );
-    setIsDirty(false);
     
     const now = new Date();
     const timeString = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} ngày ${now.toLocaleDateString('vi-VN')}`;
@@ -135,7 +129,6 @@ export default function NurseManagementWorkspace({ initialNurses, allPatients })
     setNewNurseDraft(createEmptyNurseDraft());
     
     // Auto select new
-    if(isDirty) setIsDirty(false); // Should we check here? if they add during dirty, it's a minor edge case but worth confirming. We assume they can't add nurse and be dirty easily but they can, so let's bypass for new creations.
     setSelectedNurseId(created.nurseId);
     setPendingAssignedPatientIds([]);
     setPermissionMessage('');
@@ -313,7 +306,7 @@ export default function NurseManagementWorkspace({ initialNurses, allPatients })
 
             <div className="settings-actions">
               <div className={`settings-inline-message flex-1 ${isDirty ? 'warning' : (permissionMessage ? 'success' : 'neutral')}`}>
-                {isDirty ? 'Bạn có thay đổi phân quyền chưa được lưu!' : (permissionMessage || 'Hệ thống đã đồng bộ với Cloud dữ liệu.')}
+                {isDirty ? 'Bạn có thay đổi phân quyền chưa được lưu!' : (permissionMessage || 'Hệ thống đã đồng bộ với kho dữ liệu nội bộ.')}
               </div>
               <div className="settings-actions-group">
                 <button className="btn-secondary" onClick={clearAllPermissions}>Bỏ trắng toàn bộ</button>

@@ -15,7 +15,7 @@ function QuickClinicalImpression({ showToast }) {
   const nextActions = [
     'Rà soát lượng đạm và khả năng dung nạp.',
     'Gắn bất thường xét nghiệm vào kế hoạch can thiệp.',
-    'Ưu tiên follow-up sau khi điều chỉnh khẩu phần.',
+    'Ưu tiên theo dõi sau khi điều chỉnh khẩu phần.',
   ];
 
   return (

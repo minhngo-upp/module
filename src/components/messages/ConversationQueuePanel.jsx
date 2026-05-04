@@ -1,11 +1,20 @@
 import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { Search, MessageSquarePlus, Pin, AlertCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 
+const queueFilters = [
+  { label: 'Tất cả', value: 'ALL' },
+  { label: 'Cần chú ý', value: 'URGENT' },
+  { label: 'Chờ phản hồi', value: 'WAITING' },
+  { label: 'Chưa đọc', value: 'UNREAD' },
+  { label: 'Đang theo dõi', value: 'FOLLOWING' },
+];
+
 export default function ConversationQueuePanel({ conversations, activeChatId, onSelectChat }) {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('ALL'); // ALL, UNREAD, URGENT, WAITING, FOLLOWING
   
   const filterScrollRef = useRef(null);
+  const searchInputRef = useRef(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
 
@@ -52,22 +61,21 @@ export default function ConversationQueuePanel({ conversations, activeChatId, on
     return result;
   }, [conversations, search, filter]);
 
-  const FilterButton = ({ label, value, active }) => (
-    <button
-      className={`queue-filter-chip ${active ? 'active' : ''}`}
-      onClick={() => setFilter(value)}
-      type="button"
-    >
-      {label}
-    </button>
-  );
-
   return (
     <div className="conversations-sidebar">
       <div className="conversations-header">
         <div className="messages-title-row">
           <h2>Tin nhắn</h2>
-          <button className="btn-icon" type="button" title="Tạo hội thoại mới">
+          <button
+            className="btn-icon"
+            type="button"
+            title="Tạo hội thoại mới"
+            aria-label="Tìm bệnh nhân để tạo hội thoại mới"
+            onClick={() => {
+              setSearch('');
+              searchInputRef.current?.focus();
+            }}
+          >
             <MessageSquarePlus size={18} />
           </button>
         </div>
@@ -77,6 +85,7 @@ export default function ConversationQueuePanel({ conversations, activeChatId, on
           <input
             type="text"
             placeholder="Tìm theo Mã BN, tên..."
+            ref={searchInputRef}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -91,11 +100,16 @@ export default function ConversationQueuePanel({ conversations, activeChatId, on
         )}
 
         <div className="conversations-filters" ref={filterScrollRef} onScroll={checkScroll}>
-          <FilterButton label="Tất cả" value="ALL" active={filter === 'ALL'} />
-          <FilterButton label="Cần chú ý" value="URGENT" active={filter === 'URGENT'} />
-          <FilterButton label="Chờ phản hồi" value="WAITING" active={filter === 'WAITING'} />
-          <FilterButton label="Chưa đọc" value="UNREAD" active={filter === 'UNREAD'} />
-          <FilterButton label="Đang theo dõi" value="FOLLOWING" active={filter === 'FOLLOWING'} />
+          {queueFilters.map((item) => (
+            <button
+              className={`queue-filter-chip ${filter === item.value ? 'active' : ''}`}
+              key={item.value}
+              onClick={() => setFilter(item.value)}
+              type="button"
+            >
+              {item.label}
+            </button>
+          ))}
         </div>
 
         {showRightArrow && (

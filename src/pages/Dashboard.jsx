@@ -1,14 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Row, Col, Space } from 'antd';
 import {
   AlertCircle,
   ArrowRight,
   Calendar,
-  CheckCircle2,
   ClipboardList,
   Clock3,
   MessageSquare,
-  PlusCircle,
   Send,
   TrendingUp,
   UserPlus,
@@ -40,7 +39,7 @@ const nextActions = [
     description: 'Thiếu bữa phụ hoặc chưa khớp mục tiêu kcal.',
     meta: 'Cần duyệt trong hôm nay',
     tone: 'mint',
-    to: '/patients/BN001',
+    to: '/patients/BN001?tab=intervention-followup',
   },
 ];
 
@@ -85,9 +84,9 @@ const kpiStats = [
 ];
 
 const quickActions = [
-  { label: 'Thêm bệnh nhân mới', icon: UserPlus, to: '/patients' },
-  { label: 'Tạo lịch khám', icon: Calendar, to: '/appointments' },
-  { label: 'Duyệt thực đơn', icon: Utensils, to: '/patients/BN001' },
+  { label: 'Thêm bệnh nhân mới', icon: UserPlus, to: '/patients?create=1' },
+  { label: 'Tạo lịch khám', icon: Calendar, to: '/appointments?create=1' },
+  { label: 'Duyệt thực đơn', icon: Utensils, to: '/patients/BN001?tab=intervention-followup' },
   { label: 'Gửi nhắc nhật ký', icon: Send, to: '/messages' },
   { label: 'Bệnh nhân bỏ theo dõi', icon: ClipboardList, to: '/patients' },
 ];
@@ -168,7 +167,7 @@ const todaySchedule = [
     time: '13:30',
     patientId: 'BN009',
     patientName: 'Đỗ Minh Quân',
-    visitType: 'Follow-up',
+    visitType: 'Theo dõi',
     status: 'Đã check-in',
     statusTone: 'success',
     focus: 'Cập nhật thực đơn tuần 2',
@@ -198,9 +197,11 @@ function MetricMetaRow({ items }) {
 function DashboardWelcomeCard() {
   return (
     <section className="dashboard-welcome-card">
-      <span className="dashboard-eyebrow">The Meal Clinic</span>
-      <h1>Điều phối dinh dưỡng hôm nay</h1>
-      <p>Hôm nay có 3 ca cần xử lý, 8 lịch khám và 2 thực đơn cần hoàn thiện.</p>
+      <div>
+        <span className="dashboard-eyebrow">Bảng trực lâm sàng</span>
+        <h1>Điều phối dinh dưỡng hôm nay</h1>
+        <p>Ưu tiên ca nguy cơ, lịch tư vấn sắp tới và các kế hoạch dinh dưỡng cần duyệt trước khi gặp bệnh nhân.</p>
+      </div>
 
       <div className="dashboard-welcome-actions">
         <Link className="btn-primary" to="/patients">
@@ -210,7 +211,7 @@ function DashboardWelcomeCard() {
         <Link className="btn-secondary" to="/appointments">
           Xem lịch hôm nay
         </Link>
-        <Link className="btn-secondary" to="/patients/BN001">
+        <Link className="btn-secondary" to="/patients/BN001?tab=intervention-followup">
           Tạo thực đơn
         </Link>
       </div>
@@ -385,24 +386,36 @@ function TodayScheduleCard() {
 
 export default function Dashboard() {
   return (
-    <div className="dashboard">
-      <div className="dashboard-top-zone">
-        <DashboardWelcomeCard />
-        <NextActionsCard />
-      </div>
+    <Space direction="vertical" size="large" style={{ width: '100%', display: 'flex' }} className="dashboard">
+      <Row gutter={[24, 24]} align="stretch" className="animate-in stagger-1">
+        <Col xs={24} lg={16} xl={17} style={{ display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', flex: 1, justifyContent: 'space-between' }}>
+            <DashboardWelcomeCard />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div className="kpi-grid kpi-grid-compact">
+                {kpiStats.map((stat) => (
+                  <KPIStatCard stat={stat} key={stat.label} />
+                ))}
+              </div>
+              <QuickActionsRow />
+            </div>
+          </div>
+        </Col>
+        <Col xs={24} lg={8} xl={7} style={{ display: 'flex', flexDirection: 'column' }}>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+            <NextActionsCard />
+          </div>
+        </Col>
+      </Row>
 
-      <div className="kpi-grid">
-        {kpiStats.map((stat) => (
-          <KPIStatCard stat={stat} key={stat.label} />
-        ))}
-      </div>
-
-      <QuickActionsRow />
-
-      <div className="dashboard-content-zone">
-        <PriorityPatientList />
-        <TodayScheduleCard />
-      </div>
-    </div>
+      <Row gutter={[24, 24]} className="animate-in stagger-4">
+        <Col xs={24} lg={14} xl={15}>
+          <PriorityPatientList />
+        </Col>
+        <Col xs={24} lg={10} xl={9}>
+          <TodayScheduleCard />
+        </Col>
+      </Row>
+    </Space>
   );
 }
